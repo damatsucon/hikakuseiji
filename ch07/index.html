@@ -343,6 +343,32 @@ h3.stp .st{display:inline-block;font-size:.8rem;background:var(--blue);color:#ff
 </header>
 
 <main>
+<style>
+/* 第7回：スライドビューアー */
+.sv{border:2px solid var(--ink);background:#fff;padding:10px;max-width:960px;margin:14px 0 10px;outline:none}
+.sv:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.sv-stage{position:relative;background:#f3f4f2;aspect-ratio:1600/893;touch-action:pan-y}
+.sv-stage img{width:100%;height:100%;object-fit:contain;display:block}
+.sv-bar{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+.sv-bar button{border:1.5px solid var(--ink);background:#fff;padding:5px 14px;cursor:pointer;font-size:.92rem;font-weight:700}
+.sv-bar button:hover:not(:disabled){background:var(--blue);border-color:var(--blue);color:#fff}
+.sv-bar button:disabled{opacity:.35;cursor:default}
+.sv-count{font-family:var(--font-math);font-weight:700;font-size:1.1rem;min-width:4.5em;text-align:center}
+.sv-full{margin-left:auto}
+.sv-title{font-weight:700;margin:8px 0 0}
+.sv-x{font-size:.88rem;margin:2px 0 6px;color:var(--sub)}
+.sv-thumbs{display:flex;gap:6px;overflow-x:auto;padding:6px 2px 4px}
+.sv-thumbs button{flex:none;border:2px solid transparent;padding:0;background:none;cursor:pointer;position:relative;width:96px}
+.sv-thumbs button img{width:96px;height:auto;display:block;opacity:.7}
+.sv-thumbs button span{position:absolute;left:2px;top:2px;background:var(--ink);color:#fff;font-size:.7rem;padding:0 4px;font-family:var(--font-math)}
+.sv-thumbs button[aria-current="true"]{border-color:var(--blue)}
+.sv-thumbs button[aria-current="true"] img{opacity:1}
+.sv:fullscreen{max-width:none;display:flex;flex-direction:column;justify-content:center;padding:16px;background:#111}
+.sv:fullscreen .sv-stage{background:#111;flex:1;aspect-ratio:auto}
+.sv:fullscreen .sv-title,.sv:fullscreen .sv-x,.sv:fullscreen .sv-thumbs{display:none}
+.sv:fullscreen .sv-count{color:#fff}
+</style>
+
 <!-- ===================== パート1 ===================== -->
 <div class="part" id="weber" data-title="官僚制とは" data-desc="官僚制の定義を押さえ、ヴェーバーの「支配の3類型」と近代的官僚制の特徴を見ます。官僚制がうまく働かなくなる「逆機能」も取り上げます。">
 
@@ -524,11 +550,33 @@ h3.stp .st{display:inline-block;font-size:.8rem;background:var(--blue);color:#ff
 </section>
 </div>
 
-<!-- ===================== パート4 ===================== -->
+<!-- ===================== パート4：スライド ===================== -->
+<div class="part" id="slide" data-title="スライドで見る" data-desc="執政制度（第6回）と官僚制（第7回）の内容を、13枚のスライドで絵とともにたどります。ボタン、左右キー、スワイプでめくれます。">
+
+<section id="s14" data-t="スライド（13枚）">
+<h2><span class="sn">14</span>スライドで見る：国を動かす「リーダー」と「裏方」たち</h2>
+<p>政治家（船長）と官僚（機関士）の関係をたとえにして、第6回の執政制度と第7回の官僚制をまとめたスライドです。下のボタンや左右キーでめくってください。小さな一覧を押すと、そのページに飛びます。</p>
+<div class="sv" id="sv" tabindex="0" aria-roledescription="スライドビューアー" aria-label="スライド 13枚">
+  <div class="sv-stage"><img id="svImg" alt="" width="1600" height="893"></div>
+  <div class="sv-bar">
+    <button type="button" id="svPrev" aria-label="前のスライド">← 前へ</button>
+    <span class="sv-count" id="svCount" aria-live="polite"></span>
+    <button type="button" id="svNext" aria-label="次のスライド">次へ →</button>
+    <button type="button" id="svFull" class="sv-full" aria-label="全画面で表示">全画面</button>
+  </div>
+  <p class="sv-title" id="svTitle"></p>
+  <p class="sv-x" id="svX"></p>
+  <div class="sv-thumbs" id="svThumbs" role="list"></div>
+</div>
+<div class="point"><p>スライドは、政治家を「船長」、官僚を「機関士」にたとえて、両者の力関係と、それを決めるルール（執政制度・選挙制度）の関係を描いている。</p></div>
+</section>
+</div>
+
+<!-- ===================== パート5 ===================== -->
 <div class="part" id="matome" data-title="まとめと確認" data-desc="第7回の流れを年表とキーワードで振り返り、確認問題で理解を確かめます。">
 
-<section id="s14" data-t="年表で振り返る">
-<h2><span class="sn">14</span>年表で振り返る</h2>
+<section id="s15" data-t="年表で振り返る">
+<h2><span class="sn">15</span>年表で振り返る</h2>
 <p class="legend"><span><i></i>欧米・世界・アジアの動き</span><span><i class="jp"></i>日本の動き</span></p>
 <ul class="tl">
 <li><span class="y">1922</span>ヴェーバー『経済と社会』<span class="tag">支配の3類型</span></li>
@@ -544,8 +592,8 @@ h3.stp .st{display:inline-block;font-size:.8rem;background:var(--blue);color:#ff
 <p class="legend">文献の年は原著の刊行年です。</p>
 </section>
 
-<section id="s15" data-t="キーワード一覧">
-<h2><span class="sn">15</span>キーワード一覧</h2>
+<section id="s16" data-t="キーワード一覧">
+<h2><span class="sn">16</span>キーワード一覧</h2>
 <div class="tw"><table>
 <thead><tr><th>キーワード</th><th>ひとことで</th><th>節</th></tr></thead>
 <tbody>
@@ -562,16 +610,16 @@ h3.stp .st{display:inline-block;font-size:.8rem;background:var(--blue);color:#ff
 </tbody></table></div>
 </section>
 
-<section id="s16" data-t="確認問題">
-<h2><span class="sn">16</span>確認問題</h2>
+<section id="s17" data-t="確認問題">
+<h2><span class="sn">17</span>確認問題</h2>
 <p>答えを考えてから「解答を見る」を押してください。</p>
 <div class="q"><div class="qq"><span class="qn">Q1</span><span>官僚制における「民主的統制」と「専門的自律性」の緊張とは何か。日本の1990年代以降の変化を例に説明しなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>選挙で選ばれていない官僚は国民の代表である政治家がコントロールすべきだが、専門知識をもつ官僚に任せた方がよい政策ができることもある、という緊張。日本ではかつて大蔵省が予算編成を主導し、官僚の裁量が大きかったが、1990年代以降は選挙制度改革などを背景に、経済財政諮問会議や内閣人事局を通じて首相官邸の政治主導が強まった。民主的統制は強まったが、官僚の専門性や中立性が損なわれないかという懸念も生じる。</div></div>
 <div class="q"><div class="qq"><span class="qn">Q2</span><span>第6回の執政制度の違いは、官僚制にどんな違いをもたらすか。日本とアメリカを例に説明しなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>議院内閣制の日本では、官僚は議会多数派・政党と密接に結びつき、長期のキャリアのもとで専門性を蓄積し、政策の継続性と裁量が保たれやすい。大統領制のアメリカでは、政治任命職が多く選挙ごとに上層部が入れ替わるため、官僚の自律性は弱く、実施を担う役割に傾く。ただし議会と大統領の対立時の仲介的自律性や、制約の強さによる専門能力の発達もありうる。</div></div>
 <div class="q"><div class="qq"><span class="qn">Q3</span><span>現代中国の党・国家体制は、ヴェーバーの近代的官僚制の特徴とどこが異なるか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>近代的官僚制では法規則にもとづく非人格的な秩序と、政治と行政の区別が前提となる。現代中国では共産党が人事と重要政策を通じて行政機構を指導し、政治指導者と行政官僚の境界が不明瞭であり、党組織への服従が行政を方向づける点で異なる。</div></div>
 </section>
 
-<section id="s17" data-t="考えてみよう">
-<h2><span class="sn">17</span>考えてみよう</h2>
+<section id="s18" data-t="考えてみよう">
+<h2><span class="sn">18</span>考えてみよう</h2>
 <div class="memo hint"><span class="who">問い1</span>内閣人事局による幹部人事は、民主的統制を強めたのだろうか、それとも官僚が政権の顔色をうかがう「忖度」を生んだのだろうか。両方の立場から考えてみよう。</div>
 <div class="memo hint"><span class="who">問い2</span>デジタル化が進んだ社会で、ヴェーバーの言う「文書主義」や「階層的な指揮命令系統」は、どう変わるべきだろうか。</div>
 <div class="memo hint"><span class="who">問い3</span>第1回から第7回までで学んだ「内在的視点」と「比較」の考え方を使うと、中国の官僚制を西洋の基準だけで評価することには、どんな問題があるだろうか。</div>
@@ -617,6 +665,51 @@ const ANSWERS_DEFAULT_ON=false;
   document.querySelectorAll('.gsw button[data-g="bur"]').forEach(b=>b.addEventListener("click",()=>{
     document.querySelectorAll('.gsw button[data-g="bur"]').forEach(z=>z.setAttribute("aria-pressed",z===b?"true":"false"));draw(+b.dataset.s);}));
   draw(0);
+})();
+
+/* 第7回：スライドビューアー（画像は slides/sNN.webp、一覧は slides/tNN.webp） */
+(function(){
+  const sv=document.getElementById("sv");if(!sv)return;
+  const S=[
+    ["国を動かす「リーダー」と「裏方」たち","表紙。政治家と官僚の力関係から、世界の仕組みと日本を読み解く。",null],
+    ["国という巨大な船は、誰がどうやって動かしているの？","方向を決める船長＝政治家（選挙で選ばれる）と、実際に動かす機関士＝官僚（試験に合格した専門家）。","#s1"],
+    ["政治のトップはどうやって決まる？（2つの基本ルール）","大統領制（権力の二元性）と議院内閣制（権力の融合）。","../ch06/#seido"],
+    ["ケーススタディ① ロシアはなぜ「超強力な大統領」を選んだ？","経済の大ピンチと議会との対立の中で、1993年の新憲法で強い大統領制ができた。","../ch06/#yoin"],
+    ["政治学者の大論争「どっちの制度が平和なの？」","リンスの大統領制批判と、ホロウィッツの反論。唯一の正解はない。","../ch06/#antei"],
+    ["そもそも「官僚」ってどんな人たち？","ヴェーバーの近代的官僚制：専門性、ピラミッド型、文書主義、非人格性。","#s2"],
+    ["官僚制のワナ（完璧なルールがポンコツを生む？）","マートンの逆機能：ルールを守ること自体が目的になる（目標の転移）。","#s3"],
+    ["永遠の綱引き「誰が官僚をコントロールすべき？」","民主的統制と専門的自律性の絶妙なバランス。","#s5"],
+    ["政治家はどうやって官僚に言うことを聞かせる？","政治家の4つの手段：予算、人事、ルールの決定権、権限の委任。","#s8"],
+    ["日本のケーススタディ（昭和編）：最強の官僚たち","1960〜80年代、族議員との調整のもとで官僚が経済成長をリードした。","#s8"],
+    ["変化の引き金（1990年代）：ルールの変更がもたらした革命","小選挙区制の導入で党のトップ（首相）が強くなり、政治主導が進んだ。","../ch05/#kiketsu"],
+    ["日本のケーススタディ（現代編）：政治家主導の光と影","2014年の内閣人事局の誕生。「忖度」などの新たな課題。","#s8"],
+    ["結び","絶対的な正解のルールはない。政治家と官僚の絶妙なバランスと、それを選ぶ私たち国民の役割。",null]];
+  const img=document.getElementById("svImg"),cnt=document.getElementById("svCount"),ti=document.getElementById("svTitle"),x=document.getElementById("svX"),th=document.getElementById("svThumbs");
+  const prev=document.getElementById("svPrev"),next=document.getElementById("svNext"),full=document.getElementById("svFull");
+  const src=i=>"slides/s"+String(i+1).padStart(2,"0")+".webp";
+  let cur=0;
+  S.forEach((s,i)=>{const b=document.createElement("button");b.type="button";b.setAttribute("role","listitem");b.setAttribute("aria-label",(i+1)+"枚目："+s[0]);
+    b.innerHTML='<img loading="lazy" alt="" src="slides/t'+String(i+1).padStart(2,"0")+'.webp"><span>'+(i+1)+'</span>';
+    b.addEventListener("click",()=>show(i));th.appendChild(b);});
+  function show(i){
+    cur=Math.max(0,Math.min(S.length-1,i));
+    img.src=src(cur);img.alt=(cur+1)+"枚目のスライド："+S[cur][0];
+    cnt.textContent=(cur+1)+" / "+S.length;ti.textContent=S[cur][0];
+    x.innerHTML=S[cur][1]+(S[cur][2]?' <a href="'+S[cur][2]+'"'+(S[cur][2][0]==="#"?' data-goto="'+S[cur][2].slice(1)+'"':"")+'>関連する解説 →</a>':"");
+    prev.disabled=cur===0;next.disabled=cur===S.length-1;
+    [...th.children].forEach((b,k)=>{b.setAttribute("aria-current",k===cur?"true":"false");if(k===cur)b.scrollIntoView({block:"nearest",inline:"nearest"});});
+    [cur+1,cur-1].forEach(k=>{if(k>=0&&k<S.length){const p=new Image();p.src=src(k);}});
+  }
+  prev.addEventListener("click",()=>show(cur-1));next.addEventListener("click",()=>show(cur+1));
+  sv.addEventListener("keydown",e=>{if(e.key==="ArrowRight"){show(cur+1);e.preventDefault();}if(e.key==="ArrowLeft"){show(cur-1);e.preventDefault();}});
+  let x0=null;const st=sv.querySelector(".sv-stage");
+  st.addEventListener("touchstart",e=>{x0=e.touches[0].clientX;},{passive:true});
+  st.addEventListener("touchend",e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>40)show(cur+(dx<0?1:-1));x0=null;});
+  st.addEventListener("click",e=>{const r=st.getBoundingClientRect();show(cur+(e.clientX-r.left>r.width/2?1:-1));});
+  if(!sv.requestFullscreen)full.hidden=true;
+  full.addEventListener("click",()=>{try{if(document.fullscreenElement)document.exitFullscreen();else sv.requestFullscreen().then(()=>sv.focus()).catch(()=>{});}catch(e){}});
+  document.addEventListener("fullscreenchange",()=>{full.textContent=document.fullscreenElement?"全画面を閉じる":"全画面";});
+  show(0);
 })();
 
 /* hikakuseiji 共通（lily から複製）：タブ・目次・前後ナビ・確認問題・内部タブ・解説スイッチ・相互リンク
