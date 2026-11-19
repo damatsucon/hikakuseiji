@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第1回 地域研究とは｜比較政治学</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* 設計: 方眼紙に書いた講義プリント。黒インクの本文、青ペンの強調、朱ペンの書き込み、黄色の蛍光ペン。上部に固定ヘッダーとパートのタブ、左からメニューが出る */
+:root{
+  --paper:#fdfdfb;
+  --grid:#e9eef3;
+  --ink:#22252b;
+  --sub:#5e6470;
+  --line:#c9cfd8;
+  --blue:#1f4e9c;
+  --red:#c8361f;
+  --teal:#0b6b5d;
+  --marker:#fff1a6;
+  --note:#fffbe3;
+  --font-body:"BIZ UDPGothic","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  --font-hand:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  --font-math:"Times New Roman",Times,serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.95;
+  -webkit-text-size-adjust:100%;
+}
+a{color:var(--blue)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+/* ヘッダー */
+.bar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:2px solid var(--ink)}
+.bar-in{max-width:960px;margin:0 auto;padding:10px 16px 0;display:flex;align-items:center;gap:12px}
+.burger{width:42px;height:42px;border:1.5px solid var(--ink);background:var(--paper);border-radius:6px;display:grid;place-items:center;cursor:pointer;flex:none}
+.burger span{display:block;width:20px;height:2px;background:var(--ink);box-shadow:0 -6px 0 var(--ink),0 6px 0 var(--ink)}
+.course{line-height:1.35;min-width:0}
+.course small{display:block;color:var(--sub);font-size:.78rem}
+.course b{font-size:1.05rem}
+.tabs{max-width:960px;margin:8px auto 0;padding:0 16px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:1.5px solid var(--ink);border-bottom:none;background:#eef1f5;border-radius:8px 8px 0 0;padding:6px 14px 5px;cursor:pointer;font-size:.92rem;line-height:1.5;color:var(--sub);position:relative;top:2px}
+.tab .n{font-family:var(--font-math);font-weight:700;margin-right:6px;color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--paper);color:var(--ink);font-weight:700;border-bottom:2px solid var(--paper);z-index:1}
+
+/* ドロワー */
+.scrim{position:fixed;inset:0;background:rgba(20,24,32,.35);z-index:30;opacity:0;pointer-events:none;transition:opacity .2s}
+.drawer{position:fixed;top:0;left:0;bottom:0;width:min(340px,86vw);background:var(--paper);z-index:31;border-right:2px solid var(--ink);transform:translateX(-102%);transition:transform .22s ease;overflow-y:auto;padding:16px 18px 40px}
+body.menu-open .scrim{opacity:1;pointer-events:auto}
+body.menu-open .drawer{transform:none}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1.5px solid var(--ink);padding-bottom:8px;margin-bottom:10px}
+.drawer-head b{font-size:1rem}
+.close{border:1.5px solid var(--ink);background:none;border-radius:6px;width:36px;height:36px;cursor:pointer;font-size:1.2rem;line-height:1}
+.drawer h4{margin:14px 0 2px;font-size:.95rem}
+.drawer h4 button{background:none;border:none;padding:0;cursor:pointer;text-align:left;font-weight:700}
+.drawer h4 .n{font-family:var(--font-math);margin-right:6px}
+.drawer ul{list-style:none;margin:0;padding:0 0 0 12px;border-left:1.5px solid var(--line)}
+.drawer li button{background:none;border:none;padding:3px 0;cursor:pointer;color:var(--sub);text-align:left;font-size:.9rem;line-height:1.5}
+.drawer li button:hover{color:var(--blue)}
+.drawer .cur>button{color:var(--blue)}
+
+/* 本文 */
+main{max-width:960px;margin:0 auto;padding:22px 16px 80px}
+.part{display:none}
+.part.on{display:block}
+.part-head{background:var(--paper);border:1.5px solid var(--ink);border-radius:4px;padding:16px 20px;margin-bottom:26px}
+.part-head .pn{font-family:var(--font-math);font-size:.95rem;color:var(--sub)}
+.part-head h1{font-size:clamp(1.5rem,3.6vw,2rem);line-height:1.4;margin:2px 0 6px;text-wrap:balance}
+.part-head p{margin:0;color:var(--sub);max-width:42em}
+.toc-mini{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:.9rem}
+.toc-mini button{background:none;border:none;padding:0;cursor:pointer;color:var(--blue);text-decoration:underline;text-underline-offset:3px}
+
+section{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:6px 22px 24px;margin-bottom:22px;scroll-margin-top:120px}
+@media (max-width:560px){section{padding:4px 14px 18px}}
+h2{font-size:1.4rem;line-height:1.5;margin:18px 0 12px;padding-bottom:6px;border-bottom:3px double var(--ink);text-wrap:balance}
+h2 .sn{display:inline-block;min-width:1.7em;height:1.7em;line-height:1.7em;text-align:center;border:1.5px solid var(--ink);border-radius:50%;font-family:var(--font-math);font-size:1rem;margin-right:10px;vertical-align:.12em}
+h3{font-size:1.1rem;margin:24px 0 6px;text-wrap:balance}
+h3::before{content:"";display:inline-block;width:10px;height:10px;background:var(--blue);margin-right:8px;vertical-align:.05em}
+p{margin:0 0 1em;max-width:44em}
+.mk{background:linear-gradient(transparent 58%,var(--marker) 58%);font-weight:700}
+.v{font-family:var(--font-math);font-style:italic;font-size:1.1em;white-space:nowrap}
+.plus{color:var(--teal);font-weight:700}
+.minus{color:var(--red);font-weight:700}
+ul.dots,ol.steps{margin:0 0 1em;padding-left:1.4em;max-width:44em}
+ul.dots li,ol.steps li{margin:3px 0}
+
+/* 数式ボックス（教科書風に式番号を右寄せ） */
+.eq{border:1.5px solid var(--ink);background:#fff;padding:12px 18px;margin:16px 0 6px;max-width:44rem;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.eq .f{font-family:var(--font-math);font-size:1.45rem;font-style:italic}
+.eq .f sub{font-size:.65em}
+.eq .no{margin-left:auto;font-size:.85rem;color:var(--sub)}
+.eq-read{max-width:44rem;margin:0 0 16px;padding-left:20px;font-size:.95rem;color:var(--sub)}
+.eq-read::before{content:"読み方　";color:var(--blue);font-weight:700}
+
+/* 先生のメモ */
+.memo{font-family:var(--font-hand);background:var(--note);border-left:4px solid var(--red);padding:12px 16px 12px 18px;margin:16px 0;max-width:44rem;font-size:1.05rem;line-height:1.85}
+.memo .who{display:block;color:var(--red);font-weight:600;font-size:.9rem}
+/* ポイント */
+.point{border:2px solid var(--blue);border-radius:2px;padding:10px 16px;margin:20px 0 4px;max-width:44rem;position:relative}
+.point::before{content:"ポイント";position:absolute;top:-.85em;left:12px;background:var(--paper);padding:0 6px;color:var(--blue);font-weight:700;font-size:.85rem}
+.point p{margin:0}
+
+/* 帯グラフ */
+.bars{background:#fff;border:1px solid var(--line);padding:14px 16px 10px;margin:14px 0 18px;max-width:44rem}
+.bars .sw{display:flex;gap:0;margin-bottom:12px;border:1.5px solid var(--ink);border-radius:6px;overflow:hidden;width:max-content}
+.bars .sw button{border:none;background:#fff;padding:3px 14px;cursor:pointer;font-size:.88rem}
+.bars .sw button+button{border-left:1.5px solid var(--ink)}
+.bars .sw button[aria-selected="true"]{background:var(--ink);color:#fff}
+.brow{display:grid;grid-template-columns:7.2em 1fr;align-items:center;gap:10px;margin:8px 0}
+.brow .lab{font-size:.88rem;line-height:1.35}
+.track{position:relative;height:34px}
+.seg{position:absolute;top:0;bottom:0;display:flex;align-items:center;justify-content:center;font-size:.8rem;border:1.5px solid var(--ink);white-space:nowrap;overflow:hidden;font-variant-numeric:tabular-nums}
+.seg.y{background:#dfe8f6}
+.seg.c{background:#f3f4f6}.seg.i{background:#e7eaee}.seg.g{background:#d9dde3}
+.seg.gap-p{background:repeating-linear-gradient(45deg,#d6efe9,#d6efe9 5px,#fff 5px,#fff 10px);color:var(--teal);font-weight:700;border-color:var(--teal);border-style:dashed}
+.seg.gap-m{background:repeating-linear-gradient(45deg,#f8ddd7,#f8ddd7 5px,#fff 5px,#fff 10px);color:var(--red);font-weight:700;border-color:var(--red);border-style:dashed}
+.seg.b{background:#e7eaee}.seg.ri{background:#fde9a8}.seg.nx{background:#d6efe9}
+.seg-lab{position:absolute;top:0;bottom:0;display:flex;align-items:center;font-size:.85rem;white-space:nowrap}
+.bars .cap{font-size:.88rem;color:var(--sub);margin:6px 0 0}
+
+/* 表 */
+.tw{overflow-x:auto;margin:12px 0 18px}
+table{border-collapse:collapse;background:#fff;font-size:.95rem;font-variant-numeric:tabular-nums}
+th,td{border:1px solid var(--ink);padding:7px 12px;text-align:left;vertical-align:top;line-height:1.6}
+thead th{background:#eef1f5}
+td.c{text-align:center;white-space:nowrap}
+td.r{text-align:right}
+table.calc-t td{border:none;border-bottom:1px dotted var(--line);padding:3px 14px 3px 0}
+table.calc-t tr:last-child td{border-bottom:2px solid var(--ink);font-weight:700}
+
+/* 図 */
+figure{margin:14px 0 20px}
+figcaption{font-size:.85rem;color:var(--sub);margin-top:4px}
+.figbox{background:#fff;border:1px solid var(--line);padding:8px;overflow-x:auto}
+svg text{font-family:var(--font-body);fill:var(--ink)}
+svg .m{font-family:var(--font-math);font-style:italic}
+
+/* シミュレーター */
+.sim{background:#fff;border:1.5px solid var(--ink);padding:14px;margin:16px 0;display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:860px){.sim{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}}
+.grp{margin-bottom:10px}
+.grp .gl{font-size:.78rem;color:var(--sub);display:block;margin-bottom:3px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chips button{border:1.5px solid var(--ink);background:#fff;padding:2px 10px;border-radius:4px;cursor:pointer;font-size:.85rem;line-height:1.6}
+.chips button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.explain{border-top:1px dashed var(--line);padding-top:10px;margin-top:6px}
+.explain .t{font-weight:700;margin:0}
+.explain .x{font-size:.95rem;margin:4px 0}
+.explain .f{font-size:.8rem;color:var(--sub);margin:0}
+.meter{display:grid;grid-template-columns:repeat(3,1fr);border:1.5px solid var(--ink);margin:10px 0}
+.meter div{padding:6px 8px;text-align:center}
+.meter div+div{border-left:1px solid var(--ink)}
+.meter small{display:block;font-size:.75rem;color:var(--sub);line-height:1.3}
+.meter strong{font-size:1.3rem;font-family:var(--font-math);font-variant-numeric:tabular-nums}
+.sl{display:grid;grid-template-columns:7.4em 1fr 3.6em;gap:8px;align-items:center;font-size:.88rem}
+.sl input{width:100%;accent-color:var(--blue)}
+.sl output{text-align:right;font-family:var(--font-math);font-variant-numeric:tabular-nums}
+.sm{font-size:.8rem;color:var(--sub);margin:6px 0 0}
+
+/* 内部タブ（ケース別） */
+.itabs{display:flex;gap:0;border-bottom:1.5px solid var(--ink);margin:14px 0 0;overflow-x:auto}
+.itabs button{border:none;background:none;padding:6px 14px;cursor:pointer;color:var(--sub);border-bottom:3px solid transparent;margin-bottom:-1.5px;white-space:nowrap}
+.itabs button[aria-selected="true"]{color:var(--ink);font-weight:700;border-bottom-color:var(--blue)}
+.ipanel{padding:12px 0 0}
+.ipanel[hidden]{display:none}
+.case{border-left:3px solid var(--line);padding:2px 0 2px 14px;margin:0 0 16px;max-width:44rem}
+.case b{display:block}
+.case .res{font-size:.9rem;margin:2px 0}
+.case p{margin:2px 0 0;font-size:.97rem}
+
+/* 手順 */
+.flow{display:grid;grid-template-columns:1fr;gap:8px;max-width:44rem;margin:12px 0 16px;counter-reset:f}
+@media (min-width:700px){.flow{grid-template-columns:repeat(3,1fr)}}
+.flow div{border:1.5px solid var(--ink);background:#fff;padding:10px 12px;font-size:.93rem;line-height:1.7;counter-increment:f}
+.flow div::before{content:"手順" counter(f);display:block;font-weight:700;color:var(--blue);font-size:.82rem}
+
+/* 計算機 */
+.calc{background:#fff;border:1.5px solid var(--ink);padding:14px 16px;margin:14px 0;max-width:44rem}
+.calc .out{font-size:.98rem;margin-top:10px}
+.calc .chk{color:var(--sub);font-size:.88rem}
+
+/* 確認問題 */
+.q{border:1px solid var(--ink);background:#fff;margin:10px 0;max-width:46rem}
+.q .qq{padding:10px 14px;display:flex;gap:10px}
+.q .qn{font-family:var(--font-math);font-weight:700;color:var(--blue)}
+.q button.show{margin:0 14px 10px;border:1.5px solid var(--ink);background:#fff;border-radius:4px;padding:2px 12px;cursor:pointer;font-size:.85rem}
+.q .ans{border-top:1px dashed var(--line);padding:8px 14px 10px;font-family:var(--font-hand);font-size:1.05rem;background:var(--note)}
+.q .ans[hidden]{display:none}
+.q .ans::before{content:"解答　";color:var(--red);font-weight:600}
+
+/* 前後ナビ */
+.pager{display:flex;justify-content:space-between;gap:10px;margin-top:28px;flex-wrap:wrap}
+.pager button{border:1.5px solid var(--ink);background:#fff;padding:10px 16px;cursor:pointer;border-radius:4px;text-align:left;line-height:1.4;max-width:48%}
+.pager button small{display:block;color:var(--sub);font-size:.78rem}
+.pager .next{margin-left:auto;text-align:right}
+.src{font-size:.82rem;color:var(--sub);margin-top:30px;border-top:1px solid var(--line);padding-top:10px}
+
+/* キャラクター */
+.talk{display:flex;align-items:flex-end;gap:12px;margin:14px 0 18px;max-width:44rem}
+.talk img{width:118px;height:auto;flex:none}
+.talk .bubble{position:relative;background:#fff;border:2px solid var(--ink);border-radius:14px;padding:10px 16px;font-family:var(--font-hand);font-size:1.08rem;line-height:1.75;margin-bottom:30px}
+.talk .bubble::before{content:"";position:absolute;left:-12px;bottom:16px;border:6px solid transparent;border-right:8px solid var(--ink)}
+.talk .bubble::after{content:"";position:absolute;left:-8px;bottom:17px;border:5px solid transparent;border-right:7px solid #fff}
+.talk.r{flex-direction:row-reverse;margin-left:auto}
+.talk.r .bubble::before{left:auto;right:-12px;border-right-color:transparent;border-left:8px solid var(--ink)}
+.talk.r .bubble::after{left:auto;right:-8px;border-right-color:transparent;border-left:7px solid #fff}
+.part-head{display:flex;gap:16px;align-items:flex-end}
+.part-head .ph-main{flex:1;min-width:0}
+.part-head .ph-fig{flex:none;width:150px;text-align:center;margin:-6px 0 -16px}
+.part-head .ph-say{font-family:var(--font-hand);font-size:.88rem;line-height:1.5;background:#fff;border:1.5px solid var(--ink);border-radius:10px;padding:5px 8px;margin-bottom:6px;text-align:left;position:relative}
+.part-head .ph-say::after{content:"";position:absolute;left:50%;bottom:-7px;width:10px;height:10px;background:#fff;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);transform:translateX(-50%) rotate(45deg)}
+.part-head .ph-fig img{width:100%;height:auto;display:block}
+@media (max-width:560px){.talk img{width:86px}.part-head .ph-fig{width:96px}.talk .bubble{font-size:1rem}}
+.memo.withfig{display:flex;gap:14px;align-items:center}
+.memo.withfig img{width:104px;height:auto;flex:none}
+@media (max-width:560px){.memo.withfig img{width:78px}}
+
+/* 課題パート */
+.dl{margin:10px 0 16px}
+.dlbtn{display:inline-flex;align-items:center;gap:12px;border:2px solid var(--ink);background:#fff;color:var(--ink);text-decoration:none;padding:8px 16px 8px 10px;border-radius:6px;line-height:1.4;box-shadow:3px 3px 0 var(--ink)}
+.dlbtn:hover{background:#eef2fa}
+.dlbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.dlbtn .dlico{width:34px;height:40px;background:#2b579a;color:#fff;font-weight:700;display:grid;place-items:center;border-radius:3px;font-family:var(--font-math);font-size:1.2rem}
+.dlbtn b{display:block}
+.dlbtn small{display:block;color:var(--sub);font-size:.8rem}
+
+.xref{font-size:.9rem;margin:6px 0 12px;max-width:44em}
+.xref::before{content:"→ ";color:var(--blue);font-weight:700}
+.xref a,.dots a{color:var(--blue);cursor:pointer}
+.kq{border:2px solid var(--ink);background:#fff;padding:12px 16px;margin:12px 0 14px;max-width:46rem}
+.kq .lab{display:inline-block;background:var(--ink);color:#fff;font-size:.8rem;padding:0 8px;border-radius:3px;margin-bottom:4px}
+.kq p{margin:4px 0}
+.memo.hint{border-left-color:var(--blue)}
+.memo.hint .who{color:var(--blue)}
+.locked{display:none;border:1.5px dashed var(--line);color:var(--sub);padding:8px 14px;max-width:44rem;font-size:.92rem;background:#fff}
+body.ans-off .locked{display:block}
+body.ans-off .sol{display:none}
+.solbtn{border:1.5px solid var(--ink);background:var(--ink);color:#fff;border-radius:4px;padding:6px 16px;cursor:pointer;margin:6px 0 10px}
+.solbtn[aria-expanded="true"]{background:#fff;color:var(--ink)}
+.step{border-top:1px dashed var(--line);padding-top:6px;margin-top:10px}
+h3.stp::before{display:none}
+h3.stp .st{display:inline-block;font-size:.8rem;background:var(--blue);color:#fff;padding:0 9px;border-radius:3px;margin-right:8px;vertical-align:.12em}
+.ansSwitch{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;border:2px solid var(--ink);background:#fff;padding:10px 14px;margin:14px 0 16px;max-width:46rem}
+.sw-l{display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:700}
+.sw-l input{position:absolute;opacity:0;width:1px;height:1px}
+.sw-ui{width:46px;height:26px;border-radius:13px;background:#c9cfd8;position:relative;flex:none;transition:background .15s}
+.sw-ui::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:left .15s}
+.sw-l input:checked+.sw-ui{background:var(--teal)}
+.sw-l input:checked+.sw-ui::after{left:23px}
+.sw-l input:focus-visible+.sw-ui{outline:2px solid var(--blue);outline-offset:2px}
+.sw-note{font-size:.88rem;color:var(--sub)}
+.gwrap{background:#fff;border:1.5px solid var(--ink);padding:12px;margin:14px 0 6px;max-width:46rem}
+.gsw{display:flex;border:1.5px solid var(--ink);border-radius:6px;overflow:hidden;width:max-content;max-width:100%;margin-bottom:8px;flex-wrap:wrap}
+.gsw button{border:none;background:#fff;padding:3px 14px;cursor:pointer;font-size:.88rem}
+.gsw button+button{border-left:1.5px solid var(--ink)}
+.gsw button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.gwrap svg{width:100%;max-width:560px;height:auto;display:block}
+.gcap{font-size:.88rem;color:var(--sub);margin:6px 0 0}
+.howto{font-size:.93rem;max-width:44rem;margin:6px 0 16px;padding-left:1.3em}
+.trap{border:2px dashed var(--red);padding:10px 16px;margin:16px 0;max-width:44rem;background:#fff}
+.trap b{color:var(--red)}
+.point.ketsu::before{content:"結論"}
+.answer{border:1.5px solid var(--ink);background:#fff;padding:14px 18px 6px;margin:20px 0 16px;max-width:46rem;position:relative}
+.answer::before{content:"答案の書き方の例";position:absolute;top:-.8em;left:12px;background:var(--ink);color:#fff;font-size:.8rem;padding:0 8px;border-radius:3px}
+.answer p{font-size:.97rem}
+.num{background:#fff;border:1px solid var(--line);padding:10px 16px;margin:14px 0;max-width:44rem}
+.num .h{font-size:.82rem;color:var(--sub);display:block}
+#kadai .brow{grid-template-columns:5.5em 1fr}
+#kadai .seg.g{background:#fde9a8}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+
+/* 数式（分数・Σ/Π/∫ の上下添字）— 全章共通 */
+.mx{font-family:var(--font-math);display:inline-flex;align-items:center;gap:.12em;vertical-align:middle;white-space:nowrap;font-size:1.08em}
+.mx i{font-style:italic}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .12em;line-height:1.25}
+.frac>span:first-child{border-bottom:1px solid currentColor;padding:0 .25em}
+.frac>span:last-child{padding:0 .25em}
+.bop{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1;margin:0 .12em}
+.bop .s{font-size:1.7em;line-height:1}
+.bop small{font-size:.62em;line-height:1.1}
+.eq .mx{font-size:1.25rem}
+.eq.mxeq .f{font-style:normal}
+.mxblock{display:block;overflow-x:auto;padding:4px 0}
+</style>
+</head>
+<body>
+
+<div class="scrim" id="scrim"></div>
+<nav class="drawer" id="drawer" aria-label="全体の目次" aria-hidden="true">
+  <div class="drawer-head"><b>目次</b><button class="close" id="closeBtn" aria-label="目次を閉じる">×</button></div>
+  <div id="drawerList"></div>
+</nav>
+
+<header class="bar">
+  <div class="bar-in">
+    <button class="burger" id="menuBtn" aria-label="目次を開く" aria-controls="drawer" aria-expanded="false"><span></span></button>
+    <div class="course"><small>比較政治学　地域研究・比較政治基礎</small><b>第1回　地域研究とは　解説プリント</b></div>
+  </div>
+  <div class="tabs" role="tablist" aria-label="パート" id="tabs"></div>
+</header>
+
+<main>
+<style>
+/* 第1回だけで使う部品：年表（2列）と文献カード */
+.tl{border-left:3px solid var(--ink);margin:14px 0 20px 6px;padding:0 0 0 18px;max-width:46rem}
+.tl li{list-style:none;position:relative;margin:0 0 10px;line-height:1.7}
+.tl li::before{content:"";position:absolute;left:-25px;top:.55em;width:11px;height:11px;background:var(--paper);border:2.5px solid var(--blue);border-radius:50%}
+.tl li.jp::before{border-color:var(--red)}
+.tl .y{font-family:var(--font-math);font-weight:700;color:var(--blue);margin-right:.6em}
+.tl li.jp .y{color:var(--red)}
+.tl .tag{font-size:.75rem;border:1px solid currentColor;padding:0 5px;margin-left:.4em;color:var(--sub);white-space:nowrap}
+.bk{border:1.5px solid var(--ink);background:#fff;padding:10px 14px 8px;margin:12px 0;max-width:46rem}
+.bk .who{font-weight:700}
+.bk .yr{font-family:var(--font-math);font-weight:700;color:var(--blue);margin-left:.4em}
+.bk .ti{display:block;font-size:.88rem;color:var(--sub);line-height:1.6}
+.bk p{margin:6px 0 0;font-size:.97rem}
+.legend{font-size:.85rem;color:var(--sub);margin:4px 0 0}
+.legend span{display:inline-block;margin-right:14px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;border:2.5px solid var(--blue);margin-right:5px;vertical-align:-1px}
+.legend i.jp{border-color:var(--red)}
+</style>
+
+<!-- ===================== パート1 ===================== -->
+<div class="part" id="kihon" data-title="地域研究とは" data-desc="政治学が何を扱う学問かを確かめ、そのなかで「地域研究」がどんな特徴をもつのかを押さえます。キーワードは「内在的視点」「言語」「学際性」の3つです。">
+
+<section id="s1" data-t="政治学は何を扱うか">
+<h2><span class="sn">1</span>政治学は何を扱うか</h2>
+<p>レジュメは政治学を、<span class="mk">公的な権力に関わる現象を対象とする学問</span>と説明しています。</p>
+<p>ここでいう「公的な権力」とは、社会全体に関わる決定を行い、それに人びとを従わせる力のことです。政府が税を集める、法律を作る、警察や軍を動かす、といったことが典型です。選挙、政党、議会、官僚、社会運動、革命なども、この権力をめぐる現象として政治学の対象になります。</p>
+<div class="memo"><span class="who">メモ：クラスの「ルール決め」で考えよう</span>文化祭の出し物を決めるとき、誰が決めるのか（担任？　学級委員？　多数決？）、決まったことに反対の人も従うのはなぜか。これを国のレベルに広げたものが政治学の問いです。</div>
+<div class="point"><p>政治学は「公的な権力」――社会全体の決定と、それに人を従わせる力――をめぐる現象を研究する。</p></div>
+</section>
+
+<section id="s2" data-t="地域研究の定義">
+<h2><span class="sn">2</span>地域研究（area studies）の定義</h2>
+<p>レジュメでは、地域研究を次のように定義しています。</p>
+<div class="kq"><span class="lab">定義</span><p>特定の地域において公的権力に関わる現象が生ずるメカニズムを、<b>当該地域の内在的視点</b>から分析する学問</p></div>
+<p>この定義を3つに分けて読むと分かりやすくなります。</p>
+<div class="tw"><table>
+<thead><tr><th>定義の言葉</th><th>言いかえ</th></tr></thead>
+<tbody>
+<tr><td>特定の地域において</td><td>中国、東南アジア、中東、ロシアなど、対象とする地域をしぼる</td></tr>
+<tr><td>現象が生ずるメカニズムを</td><td>何が起きたかを並べるだけでなく、「なぜ・どのようにして起きるのか」の仕組みを明らかにする</td></tr>
+<tr><td>当該地域の内在的視点から</td><td>外から自分の物差しを当てはめるのでなく、その地域の人びとの歴史・文化・考え方に入り込んで理解する</td></tr>
+</tbody></table></div>
+<p>なかでも大事なのが<span class="mk">内在的視点</span>です。このあと見ていくように、地域研究の歴史は「外から（とくに西洋の物差しで）見ること」への反省の歴史でもあります。</p>
+<div class="point"><p>地域研究は、特定の地域で権力をめぐる現象が起きる仕組みを、その地域の内側の視点から分析する。</p></div>
+</section>
+
+<section id="s3" data-t="言語と学際性">
+<h2><span class="sn">3</span>地域研究を支える2つの柱：言語と学際性</h2>
+<p>内在的視点に立つために、レジュメは2つのことを挙げています。</p>
+<div class="case"><b>① 言語の習得</b><p>現地の言葉ができなければ、人びとに話を聞くこと（<b>フィールド・ワーク</b>）も、現地の新聞・公文書・史料を読むこと（<b>資料の解読</b>）もできません。翻訳を通すと、翻訳者の物差しが入り込んでしまいます。</p></div>
+<div class="case"><b>② 学際性（interdisciplinarity）</b><p>ある地域の政治を理解するには、政治学だけでは足りません。歴史学、経済学、社会学、文化人類学、宗教学など、複数の学問分野（ディシプリン）を横断して使う必要があります。</p></div>
+<div class="memo"><span class="who">メモ：外国人が日本の選挙を調べるとしたら</span>統計だけを見ると「なぜ同じ党が長く勝ち続けるのか」が分からない。日本語で後援会の集まりに行き、地元の歴史や人間関係（社会学・歴史学の目）まで見て、初めて仕組みが見えてくる。これが言語と学際性の役割です。</div>
+<h3>補足：比較政治学との関係</h3>
+<p>この授業の名前にある<b>比較政治学</b>は、複数の国や地域の政治を比べて、共通する法則や違いが生まれる理由を探る分野です。一つの地域を深く掘る地域研究と、多くの事例を横に並べる比較政治学は、互いに支え合う関係にあります（この補足はレジュメにはなく、一般的な説明です）。</p>
+<div class="point"><p>内在的視点に立つには、現地の言語（フィールド・ワークと資料の解読）と、複数の学問を横断する学際性が欠かせない。</p></div>
+</section>
+
+<section id="s4" data-t="確認問題">
+<h2><span class="sn">4</span>確認問題</h2>
+<div class="q"><div class="qq"><span class="qn">Q1</span><span>地域研究の定義のうち、「外から自分の物差しを当てはめない」ことを表す言葉は何か。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>「当該地域の内在的視点」。その地域の内側から理解しようとする姿勢を指す。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q2</span><span>地域研究で言語の習得が重視されるのはなぜか。2つの場面を挙げて説明しなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>現地で人びとの話を聞くフィールド・ワークと、現地語で書かれた資料の解読に、言語が欠かせないから。翻訳に頼ると、外の物差しが入り込みやすい。</div></div>
+</section>
+</div>
+
+<!-- ===================== パート2 ===================== -->
+<div class="part" id="america" data-title="戦後アメリカの地域研究" data-desc="地域研究は、戦争と冷戦の中のアメリカで大きく育ちました。その中心にあった「近代化論」と、それに向けられた疑問・批判の流れをたどります。">
+
+<section id="s5" data-t="戦争・冷戦と地域研究の隆盛">
+<h2><span class="sn">5</span>戦争・冷戦と地域研究の隆盛</h2>
+<p>地域研究は、純粋な学問的関心だけから生まれたのではありません。レジュメが示すように、<span class="mk">戦争と冷戦</span>が地域研究を大きく育てました。理由は次の4つに整理できます。</p>
+<div class="tw"><table>
+<thead><tr><th>きっかけ</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td><b>敵国研究</b></td><td>戦う相手を知る必要があった。第二次世界大戦中の日本研究がその代表</td></tr>
+<tr><td><b>冷戦</b></td><td>対立する社会主義国、ソ連と中華人民共和国（中国）の研究が急がれた</td></tr>
+<tr><td><b>アジア・アフリカ諸国の独立</b></td><td>新しく生まれた多くの国が、資本主義と社会主義のどちらにつくのかが、米ソ対立の焦点になった</td></tr>
+<tr><td><b>財団の資金</b></td><td>民間の財団などが豊富な資金を出し、大学に地域研究の拠点や語学教育が広がった</td></tr>
+</tbody></table></div>
+<div class="bk"><span class="who">ルース・ベネディクト『菊と刀』</span><span class="yr">1946</span><span class="ti">Ruth Benedict, <i>The Chrysanthemum and the Sword: Patterns of Japanese Culture</i></span><p>文化人類学者のベネディクトが、戦時中にアメリカ政府の依頼で行った日本研究をもとに書いた本です。日本を訪れることなく、文献や日系人への聞き取りから日本人の行動の型を描きました。敵国研究から生まれた地域研究の代表例です。</p></div>
+<div class="memo"><span class="who">メモ：「知りたい」の裏に「必要」がある</span>相手国の言葉を話せる人、その国の政治や社会に詳しい人は、戦争や外交の場面で欠かせない人材になる。学問としての地域研究は、国家のこうした必要と近い場所で大きくなった。この「学問と国家の距離」は、日本の地域研究（パート3）でも大きなテーマになります。</div>
+<div class="point"><p>戦後アメリカの地域研究は、敵国研究・冷戦・新興国の独立・潤沢な資金を背景に隆盛した。</p></div>
+</section>
+
+<section id="s6" data-t="近代化論">
+<h2><span class="sn">6</span>「近代化論」：発展の道は一本</h2>
+<p>こうした中で提起されたのが<b>近代化論</b>です。レジュメはこれを「<span class="mk">単線的な発展段階論</span>」と説明しています。どの国も同じ一本の道を、同じ順番で進んでいく――という考え方です。</p>
+<div class="bk"><span class="who">W. W. ロストウ『経済成長の諸段階―一つの非共産主義宣言』</span><span class="yr">1960</span><span class="ti">W. W. Rostow, <i>The Stages of Economic Growth: A Non-Communist Manifesto</i></span><p>どの社会も、伝統社会からアメリカ型の高度大衆消費社会へと、決まった段階を順に上っていくと論じました。副題の「非共産主義宣言」は、マルクスとエンゲルスの『共産党宣言』を意識したものです。社会主義とは別の発展の道を示し、新興国を西側に引き寄せるねらいがありました。</p></div>
+<p>ロストウの段階は、一般に次の5つとして知られています（段階の名前はレジュメにはなく、補足です）。</p>
+<ol class="steps">
+<li><b>伝統社会</b>：農業中心で、生産力が伸びない</li>
+<li><b>離陸のための先行条件</b>：近代的な科学や制度が入りはじめる</li>
+<li><b>離陸（テイク・オフ）</b>：投資が増え、工業化が一気に進む</li>
+<li><b>成熟への前進</b>：技術が経済全体に広がる</li>
+<li><b>高度大衆消費</b>：耐久消費財が行きわたる（アメリカ型の社会）</li>
+</ol>
+<h3>経済発展が政治発展をもたらす</h3>
+<p>近代化論の研究者は、経済の発展が社会を変え、それが政治の発展（とくに民主化）につながると考えました。</p>
+<div class="tw"><table>
+<thead><tr><th>研究者</th><th>文献（年）</th><th>主な主張（要点）</th></tr></thead>
+<tbody>
+<tr><td>パーソンズ</td><td><i>The Social System</i>（1951）</td><td>社会を、互いに役割を果たし合う部分からなる一つのシステムとして捉える理論を示した。近代化論の理論的な土台になった</td></tr>
+<tr><td>リプセット</td><td>「民主主義の社会的要件」（1959）</td><td>経済発展の進んだ国ほど民主主義が安定しやすいと論じた</td></tr>
+<tr><td>ドイッチュ</td><td>「社会的動員と政治発展」（1961）</td><td>都市化や識字、マスメディアの広がりで人びとが政治に動員され、政治のあり方が変わると論じた</td></tr>
+</tbody></table></div>
+<div class="gwrap">
+  <div class="gsw" role="group" aria-label="発展の見方の切り替え"><button type="button" data-g="dev" data-s="0" aria-pressed="true">① 近代化論</button><button type="button" data-g="dev" data-s="1" aria-pressed="false">② ハンチントンの疑問</button><button type="button" data-g="dev" data-s="2" aria-pressed="false">③ 構造主義・オリエンタリズム批判</button></div>
+  <svg id="gDev" viewBox="0 0 640 300" role="img" aria-label="発展の見方の図"></svg>
+  <p class="gcap" id="gDev-cap"></p>
+</div>
+<p class="legend">ボタンで、近代化論の見方（①）と、それへの疑問・批判（②③）を切り替えられます。②は <a href="#s7" data-goto="s7">7節</a>、③は <a href="#s8" data-goto="s8">8節</a> で説明します。</p>
+<div class="point"><p>近代化論は、どの国も「経済発展 → 社会発展 → 政治発展」という一本の道をたどり、最後はアメリカ型の社会に行き着くと考えた。</p></div>
+</section>
+
+<section id="s7" data-t="近代化論への疑問">
+<h2><span class="sn">7</span>「近代化論」への疑問</h2>
+<p>1960年代半ばになると、近代化論の予想どおりに進まない国が目立ってきました。経済が伸びても政治が不安定になる国、クーデターや内戦が続く国が多かったのです。</p>
+<div class="bk"><span class="who">アプター『近代化の政治学』</span><span class="yr">1965</span><span class="ti">David E. Apter, <i>The Politics of Modernization</i></span><p>近代化を進める主体としての政治、とくに新興国の政府や指導者の役割に注目しました。</p></div>
+<div class="bk"><span class="who">パイ『政治発展の諸側面』（原題を直訳した仮の題）</span><span class="yr">1966</span><span class="ti">Lucian W. Pye, <i>Aspects of Political Development</i></span><p>「政治発展」という言葉がさまざまな意味で使われていることを整理し、その中身が一つに定まらないことを示しました。</p></div>
+<div class="bk"><span class="who">ハンチントン『変革期の政治秩序』</span><span class="yr">1968</span><span class="ti">Samuel P. Huntington, <i>Political Order in Changing Societies</i></span><p>レジュメの要点は「<span class="mk">急速な経済成長や社会的動員 → 混沌と崩壊</span>」です。人びとが政治に参加しようとする動きが、それを受け止める政党や議会などの制度が育つより速く広がると、政治は安定するどころか混乱する、と論じました。</p></div>
+<div class="memo"><span class="who">メモ：小さな体育館に人が殺到すると</span>入りたい人（政治参加の要求）が急に増えても、入口や会場（政治制度）がそのままなら、押し合いになって混乱する。発展すれば自然に安定する、とは限らないということです。</div>
+<p>同じ1968年、アメリカでは「<b>憂慮するアジア研究者委員会</b>（Committee of Concerned Asian Scholars, CCAS）」が発足しました。ベトナム戦争のさなか、アジア研究が戦争や政府の政策に協力していることを、若手の研究者たちが批判したのです。</p>
+<p class="xref">学問と国策の距離は、日本の地域研究でも問われました → <a href="#s11" data-goto="s11">11節</a></p>
+<div class="point"><p>1960年代後半には、発展が安定をもたらすとは限らない（ハンチントン）という疑問や、地域研究と国策の結びつきへの批判（CCAS）が出てきた。</p></div>
+</section>
+
+<section id="s8" data-t="近代化論のアンチテーゼ">
+<h2><span class="sn">8</span>「近代化論」のアンチテーゼ</h2>
+<p>さらに根本から、「西洋を到達点とする物差し」そのものを問い直す議論が現れました。アンチテーゼとは、ある主張に真っ向から対立する主張のことです。</p>
+<div class="bk"><span class="who">レヴィ＝ストロース『野生の思考』</span><span class="yr">1962</span><span class="ti">Claude Lévi-Strauss, <i>La Pensée sauvage</i></span><p><b>構造主義</b>の代表作です。人間は自分の意志で自由に歴史を作る（<b>実存主義</b>の考え方）のではなく、気づかないうちに社会や文化の構造に形づくられている、と考えます。西洋人も「未開」とされた人びとも、それぞれの構造に規定されている。だから、<span class="mk">地域の発展のあり方は必然的に異なる</span>――「遅れた社会」が西洋の後を追うという見方は成り立たなくなります。</p></div>
+<div class="bk"><span class="who">サイード『オリエンタリズム』</span><span class="yr">1978</span><span class="ti">Edward W. Said, <i>Orientalism</i></span><p>西洋の学問や文学が、「東洋（オリエント）」を、自分たちとは違う遅れた・神秘的な他者として描いてきたことを分析しました。そうした描き方は、西洋が東洋を支配することと結びついていた、と論じます。地域を「知る」こと自体が、権力と無縁ではないという指摘です。</p></div>
+<div class="bk"><span class="who">コーエン『知の帝国主義―オリエンタリズムと中国像』</span><span class="yr">1984</span><span class="ti">Paul A. Cohen, <i>Discovering History in China</i></span><p>アメリカの中国史研究で主流だった「<b>西洋の衝撃 ― 中国の反応</b>」アプローチを批判しました。中国の近代を、西洋から刺激を受けて初めて動き出したものと見るのでなく、中国社会の内側から生まれた変化（<span class="mk">内発的発展</span>）として捉えるべきだと主張しました。</p></div>
+<div class="tw"><table>
+<thead><tr><th></th><th>近代化論</th><th>アンチテーゼの側</th></tr></thead>
+<tbody>
+<tr><td>発展の道</td><td>一本道（単線的）</td><td>地域ごとに異なる</td></tr>
+<tr><td>到達点</td><td>アメリカ型の社会</td><td>決まった到達点はない</td></tr>
+<tr><td>変化の原動力</td><td>西洋からの影響・経済成長</td><td>その地域の内側（内発的発展）</td></tr>
+<tr><td>研究者の立ち位置</td><td>外から物差しを当てる</td><td>外から見ること自体を問い直す</td></tr>
+</tbody></table></div>
+<p class="xref">この右の列が、<a href="#s2" data-goto="s2">2節</a>の「内在的視点」につながっています</p>
+<h3>冷戦の終焉と地域研究の周縁化</h3>
+<p>冷戦が終わると、地域研究を支えてきた「敵を知る」必要が薄れました。レジュメは、地域研究が<b>周縁化</b>（学問の中心から外れていくこと）したと指摘しています。補足すると、アメリカの政治学では、一つの地域を深く知ることよりも、多くの国に当てはまる理論や統計分析を重んじる傾向が強まったことも背景にあると言われます。</p>
+<div class="point"><p>構造主義、オリエンタリズム批判、「西洋の衝撃―中国の反応」批判は、西洋を到達点とする物差しを問い直し、地域の内側から見る視点を後押しした。冷戦後、地域研究は周縁化した。</p></div>
+</section>
+
+<section id="s9" data-t="確認問題">
+<h2><span class="sn">9</span>確認問題</h2>
+<div class="q"><div class="qq"><span class="qn">Q1</span><span>近代化論を「単線的な発展段階論」と呼ぶのはなぜか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>どの社会も、伝統社会からアメリカ型の高度大衆消費社会まで、同じ一本の道を同じ順番の段階で進むと考えるから。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q2</span><span>ロストウの著書の副題「非共産主義宣言」には、どんな意図が込められていたか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>『共産党宣言』を意識し、社会主義とは別の発展の道（資本主義による経済成長）を示すことで、冷戦下の新興国を西側に引き寄せる意図。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q3</span><span>ハンチントンは、急速な経済成長や社会的動員が何をもたらすと論じたか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>政治参加の要求が政治制度の発達を上回り、政治の混沌と崩壊（不安定化）をもたらすと論じた。発展が自動的に安定や民主化につながるという近代化論への疑問。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q4</span><span>コーエンが批判した中国史研究のアプローチを何というか。また、彼はそれに代えてどんな見方を主張したか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>「西洋の衝撃―中国の反応」アプローチ。中国の変化を中国社会の内側から生まれたもの（内発的発展）として捉える見方を主張した。</div></div>
+</section>
+</div>
+
+<!-- ===================== パート3 ===================== -->
+<div class="part" id="nihon" data-title="戦後日本の地域研究" data-desc="日本の地域研究は、戦前・戦中に国策と結びついていたことへの「悔恨」から再出発しました。研究機関の設立、学問と国策の距離、近代化論やマルクス主義との関係、慶應義塾大学法学部の取り組みを見ます。">
+
+<section id="s10" data-t="戦前・戦中の地域研究">
+<h2><span class="sn">10</span>戦前・戦中の地域研究</h2>
+<p>日本でも、戦前・戦中から大規模な地域研究が行われていました。レジュメが挙げるのは次の2つです。</p>
+<div class="case"><b>東亜同文書院（上海）</b><p>中国の上海に置かれた日本の高等教育機関です。学生たちは中国各地を歩いて調べる大がかりな調査旅行を行い、多くの記録を残しました。</p></div>
+<div class="case"><b>南満州鉄道株式会社（満鉄）調査部</b><p>日本が中国東北部（満州）で経営した国策会社・満鉄の調査機関です。経済・社会・政治にわたる大規模な調査を行い、日本の大陸政策を支える役割を担いました。</p></div>
+<p>どちらも高い水準の調査を残した一方で、<span class="mk">日本の大陸進出という国策と深く結びついていた</span>点が、戦後に大きな問題として意識されます。</p>
+<div class="point"><p>戦前・戦中の日本の地域研究（東亜同文書院、満鉄調査部）は、国策と密接に結びついていた。</p></div>
+</section>
+
+<section id="s11" data-t="戦後の再出発と学問・国策の距離">
+<h2><span class="sn">11</span>戦後の再出発：「悔恨」と学問・国策の距離</h2>
+<p>戦後、地域研究の拠点が次々に作られました。</p>
+<div class="tw"><table>
+<thead><tr><th>設立年</th><th>機関</th></tr></thead>
+<tbody>
+<tr><td class="c">1955</td><td>北海道大学スラブ研究センター</td></tr>
+<tr><td class="c">1958</td><td>アジア経済研究所</td></tr>
+<tr><td class="c">1958</td><td>同志社大学アメリカ研究所</td></tr>
+<tr><td class="c">1959</td><td>日本国際問題研究所</td></tr>
+<tr><td class="c">1963</td><td>京都大学東南アジア研究センター</td></tr>
+</tbody></table></div>
+<p>この再出発の根っこにあったのが、戦前・戦中の学問に対する<b>悔恨</b>（くやみ、反省）です。研究が国策に奉仕し、侵略や支配に役立ってしまったことへの反省から、<span class="mk">学問は国策から距離をとるべきだ</span>という姿勢が打ち出されました。</p>
+<div class="case"><b>東畑精一（アジア経済研究所所長）、『アジア経済』創刊の辞（1960）</b><p>日本のこれまでのアジア研究・調査の多くは「国策」をきっかけに始まり、一時的で偏った日本の「利害」論に終わってしまった。アジア経済研究所はその反省に立ち、真摯な研究に徹する――という趣旨を述べています。</p></div>
+<div class="case"><b>平澤興（京都大学総長）、東南アジア研究センターの発足にあたって（1963）</b><p>東南アジア研究は、あくまでその地域を科学的に明らかにすることを目指すもので、「いかなる場合にも政治的立場はとらない」と確認しています。</p></div>
+<div class="memo"><span class="who">メモ：アメリカとの対比</span>同じ時期のアメリカでは、地域研究は冷戦の必要と近いところで伸びた（5節）。日本では逆に、国策と結びついた過去への反省が出発点になった。同じ「地域研究」でも、生まれた事情がまったく違います。</div>
+<p class="xref">アメリカでも、のちに国策との結びつきが批判されました → <a href="#s7" data-goto="s7">7節（CCAS）</a></p>
+<div class="point"><p>戦後日本の地域研究は、戦前・戦中の国策協力への悔恨から、「学問と国策の距離」を強く意識して再出発した。</p></div>
+</section>
+
+<section id="s12" data-t="近代化論批判とマルクス主義">
+<h2><span class="sn">12</span>近代化論への批判的視点とマルクス主義の影響</h2>
+<h3>林武の指摘</h3>
+<p>東京外国語大学の林武は、戦中期に世界の諸民族・諸地域への理解が弱まった理由として、次の2つを挙げました。</p>
+<ol class="steps">
+<li><b>社会科学の専門化・細分化</b>：学問が細かく分かれた結果、自分たちの生きる時代と社会を<span class="mk">全体として捉える力</span>が弱まった。</li>
+<li><b>社会科学が西欧中心だったこと</b>：近代の社会科学の理論や体系は西欧をもとに作られていたため、<span class="mk">非西欧の世界を解き明かすには役に立たなかった</span>。</li>
+</ol>
+<p>①は地域研究の<b>学際性</b>（<a href="#s3" data-goto="s3">3節</a>）の必要につながり、②は近代化論の西洋中心の物差しへの批判（<a href="#s8" data-goto="s8">8節</a>）と重なります。</p>
+<h3>マルクス主義の影響</h3>
+<p>戦後日本の学界では、社会の発展を階級や生産のあり方から説明する<b>マルクス主義</b>が大きな影響力をもちました。レジュメは、その影響で<span class="mk">中国研究の学界が分断</span>されたことを挙げ、<b>現代中国学会</b>と<b>アジア政経学会</b>の2つの学会を示しています。社会主義の中国をどう評価するかをめぐって、研究者の立場が分かれたと理解しておくとよいでしょう（詳しくは授業での説明を確認してください）。</p>
+<div class="point"><p>林武は、社会科学の細分化と西欧中心性を、地域理解が弱まった原因として指摘した。日本ではマルクス主義の影響で、中国研究の学界が分断された。</p></div>
+</section>
+
+<section id="s13" data-t="慶應義塾大学法学部の地域研究">
+<h2><span class="sn">13</span>慶應義塾大学法学部の地域研究</h2>
+<p>レジュメの最後は、慶應義塾大学法学部の地域研究の歩みです。</p>
+<ul class="dots">
+<li>中国政治の研究者で、塾長も務めた<b>石川忠雄</b>が、「<b>地域圏研究</b>」を導入した。</li>
+<li><b>1984年</b>に<b>地域研究センター</b>が開設され、<b>2003年</b>に<b>東アジア研究所</b>となった。</li>
+</ul>
+<div class="point"><p>慶應義塾大学法学部では、石川忠雄の「地域圏研究」の導入を起点に、地域研究センター（1984年）、東アジア研究所（2003年）へと拠点が整えられた。</p></div>
+</section>
+</div>
+
+<!-- ===================== パート4 ===================== -->
+<div class="part" id="matome" data-title="まとめと確認" data-desc="第1回の流れを年表とキーワードで振り返り、確認問題で理解を確かめます。">
+
+<section id="s14" data-t="年表で振り返る">
+<h2><span class="sn">14</span>年表で振り返る</h2>
+<p class="legend"><span><i></i>アメリカ・世界の動き</span><span><i class="jp"></i>日本の動き</span></p>
+<ul class="tl">
+<li class="jp"><span class="y">戦前・戦中</span>東亜同文書院（上海）、満鉄調査部による調査<span class="tag">国策と結びつく</span></li>
+<li><span class="y">1946</span>ベネディクト『菊と刀』<span class="tag">敵国研究</span></li>
+<li><span class="y">1951</span>パーソンズ <i>The Social System</i></li>
+<li class="jp"><span class="y">1955</span>北海道大学スラブ研究センター</li>
+<li class="jp"><span class="y">1958</span>アジア経済研究所、同志社大学アメリカ研究所</li>
+<li><span class="y">1959</span>リプセット「民主主義の社会的要件」<span class="tag">近代化論</span></li>
+<li class="jp"><span class="y">1959</span>日本国際問題研究所</li>
+<li><span class="y">1960</span>ロストウ『経済成長の諸段階』<span class="tag">近代化論</span></li>
+<li class="jp"><span class="y">1960</span>東畑精一『アジア経済』創刊の辞<span class="tag">国策との距離</span></li>
+<li><span class="y">1961</span>ドイッチュ「社会的動員と政治発展」<span class="tag">近代化論</span></li>
+<li><span class="y">1962</span>レヴィ＝ストロース『野生の思考』<span class="tag">アンチテーゼ</span></li>
+<li class="jp"><span class="y">1963</span>京都大学東南アジア研究センター（平澤興）</li>
+<li><span class="y">1965–66</span>アプター『近代化の政治学』、パイ <i>Aspects of Political Development</i><span class="tag">疑問</span></li>
+<li><span class="y">1968</span>ハンチントン『変革期の政治秩序』、CCAS 発足<span class="tag">疑問</span></li>
+<li><span class="y">1978</span>サイード『オリエンタリズム』<span class="tag">アンチテーゼ</span></li>
+<li><span class="y">1984</span>コーエン『知の帝国主義』<span class="tag">アンチテーゼ</span></li>
+<li class="jp"><span class="y">1984</span>慶應義塾大学 地域研究センター開設</li>
+<li><span class="y">冷戦後</span>地域研究の周縁化</li>
+<li class="jp"><span class="y">2003</span>地域研究センターが東アジア研究所に</li>
+</ul>
+<p class="legend">年は原著の刊行年です。</p>
+</section>
+
+<section id="s15" data-t="キーワード一覧">
+<h2><span class="sn">15</span>キーワード一覧</h2>
+<div class="tw"><table>
+<thead><tr><th>キーワード</th><th>ひとことで</th><th>節</th></tr></thead>
+<tbody>
+<tr><td><b>地域研究</b></td><td>特定地域の権力をめぐる現象の仕組みを、その地域の内在的視点から分析する学問</td><td class="c"><a href="#s2" data-goto="s2">2</a></td></tr>
+<tr><td><b>学際性</b></td><td>複数の学問分野を横断して使うこと</td><td class="c"><a href="#s3" data-goto="s3">3</a></td></tr>
+<tr><td><b>敵国研究</b></td><td>戦う相手を知るための研究。『菊と刀』が代表</td><td class="c"><a href="#s5" data-goto="s5">5</a></td></tr>
+<tr><td><b>近代化論</b></td><td>どの国も同じ段階を経てアメリカ型社会に向かうとする単線的な発展段階論</td><td class="c"><a href="#s6" data-goto="s6">6</a></td></tr>
+<tr><td><b>社会的動員</b></td><td>都市化・識字・メディアなどで人びとが政治に引き込まれること</td><td class="c"><a href="#s6" data-goto="s6">6</a></td></tr>
+<tr><td><b>政治秩序</b>（ハンチントン）</td><td>急速な成長や動員は、制度が追いつかないと混乱と崩壊を招く</td><td class="c"><a href="#s7" data-goto="s7">7</a></td></tr>
+<tr><td><b>CCAS</b></td><td>アジア研究と国策・戦争の結びつきを批判した研究者の会（1968）</td><td class="c"><a href="#s7" data-goto="s7">7</a></td></tr>
+<tr><td><b>構造主義</b></td><td>人は社会・文化の構造に規定される。発展のあり方は地域ごとに異なる</td><td class="c"><a href="#s8" data-goto="s8">8</a></td></tr>
+<tr><td><b>オリエンタリズム</b></td><td>西洋が東洋を「遅れた他者」として描き、それが支配と結びついていたこと</td><td class="c"><a href="#s8" data-goto="s8">8</a></td></tr>
+<tr><td><b>内発的発展</b></td><td>地域の内側から生まれる変化として発展を捉える見方</td><td class="c"><a href="#s8" data-goto="s8">8</a></td></tr>
+<tr><td><b>学問と国策の距離</b></td><td>戦前・戦中の反省から、戦後日本の地域研究が強く意識した姿勢</td><td class="c"><a href="#s11" data-goto="s11">11</a></td></tr>
+</tbody></table></div>
+</section>
+
+<section id="s16" data-t="確認問題">
+<h2><span class="sn">16</span>確認問題</h2>
+<p>答えを考えてから「解答を見る」を押してください。</p>
+<div class="q"><div class="qq"><span class="qn">Q1</span><span>戦後アメリカで地域研究が隆盛した背景を、3つ以上挙げなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>敵国研究の必要（例：『菊と刀』）、冷戦下のソ連・中国研究の必要、アジア・アフリカ諸国の独立、財団などによる潤沢な資金提供。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q2</span><span>リプセットとハンチントンは、経済発展と政治の関係について、どのように異なる見方を示したか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>リプセットは、経済発展が民主主義の安定を支えると論じた（近代化論）。ハンチントンは、急速な経済成長や社会的動員は、政治制度が追いつかなければ混沌と崩壊を招くと論じ、発展が自動的に政治の安定をもたらすという見方に疑問を投げかけた。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q3</span><span>サイードの『オリエンタリズム』は、地域研究のどんな姿勢に反省を迫ったか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>西洋が自分たちの物差しで東洋を「遅れた他者」として描くこと、そしてそれが支配と結びついていたこと。地域を外から描くこと自体に権力が関わっていることを示し、内在的な視点の必要を強めた。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q4</span><span>戦後日本の地域研究が「学問と国策の距離」を強く意識したのはなぜか。具体的な機関や人物の言葉に触れて説明しなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>戦前・戦中の地域研究（東亜同文書院、満鉄調査部など）が国策と結びつき、偏った日本の利害論に終わったことへの悔恨があったから。アジア経済研究所の東畑精一は、その反省に立って真摯な研究に徹すると述べ、京都大学の平澤興は、東南アジア研究は政治的立場をとらないと確認した。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q5</span><span>林武が挙げた、戦中期に地域への理解が弱まった2つの理由は何か。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>①社会科学の専門化・細分化で、時代と社会の全体像をつかむ力が弱まったこと。②近代の社会科学の理論が西欧中心で、非西欧世界の解明に役立たなかったこと。</div></div>
+</section>
+
+<section id="s17" data-t="考えてみよう">
+<h2><span class="sn">17</span>考えてみよう</h2>
+<p>正解が一つに決まらない問いです。授業の後で、自分の考えをまとめてみましょう。</p>
+<div class="memo hint"><span class="who">問い1</span>地域研究が国家の必要（戦争・外交）から資金や人材を得ることには、どんな利点と危うさがあるだろうか。アメリカと日本の経験を比べて考えてみよう。</div>
+<div class="memo hint"><span class="who">問い2</span>あなたが関心をもつ国・地域を一つ選び、その政治を「内在的視点」から理解するには、何を学び、何を読み、誰に話を聞く必要があるか、書き出してみよう。</div>
+<div class="memo hint"><span class="who">問い3</span>近代化論の「経済が発展すれば民主化する」という見方は、冷戦後の世界にも当てはまるだろうか。具体的な国の例を挙げて考えてみよう。</div>
+<p class="src">このページは、第1回レジュメ「地域研究とは」の内容を、初学者向けに言いかえて解説したものです。「補足」と書いた箇所は、レジュメにない一般的な説明です。文献の年は原著の刊行年です。</p>
+</section>
+</div>
+
+<div class="pager" id="pager"></div>
+</main>
+
+<script>
+/* 解説と答案例を最初から表示するときは true に変える */
+const ANSWERS_DEFAULT_ON=false;
+/* 第1回：発展の見方の図（近代化論／ハンチントン／アンチテーゼ） */
+(function(){
+  const C={ink:"#22252b",sub:"#5e6470",blue:"#1f4e9c",red:"#c8361f",grn:"#0b6b5d",line:"#c9cfd8",mk:"#fff1a6"};
+  const svg=document.getElementById("gDev"),cap=document.getElementById("gDev-cap");
+  if(!svg)return;
+  const t=(x,y,s,o={})=>`<text x="${x}" y="${y}" font-size="${o.fs||14}" text-anchor="${o.a||"start"}" ${o.w?'font-weight="700"':""} style="fill:${o.c||C.ink}">${s}</text>`;
+  const defs=`<defs>${["ink","blue","red","grn"].map(k=>`<marker id="ar-${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="${C[k]}"/></marker>`).join("")}</defs>`;
+
+  function modern(){
+    const names=["伝統社会","離陸の先行条件","離陸","成熟への前進","高度大衆消費"];
+    let s="";
+    names.forEach((n,i)=>{const x=40+i*112,y=240-i*40;
+      s+=`<rect x="${x}" y="${y}" width="112" height="${280-y}" fill="${i===4?C.mk:"#fff"}" stroke="${C.ink}" stroke-width="1.5"/>`;
+      s+=t(x+56,y+22,n,{a:"middle",fs:13,w:i===4});});
+    s+=t(600,40,"アメリカ型社会",{a:"end",fs:13,c:C.blue,w:1});
+    s+=`<path d="M60,226 L560,58" stroke="${C.blue}" stroke-width="2.5" fill="none" marker-end="url(#ar-blue)"/>`;
+    [["A国",120,199],["B国",260,152],["C国",400,105]].forEach(([n,x,y])=>{s+=`<circle cx="${x}" cy="${y}" r="7" fill="${C.red}"/>`+t(x-10,y-12,n,{a:"end",fs:13,c:C.red,w:1});});
+    s+=t(40,30,"経済発展 → 社会発展 → 政治発展",{fs:14,w:1});
+    return {svg:s,cap:"近代化論：どの国も同じ階段を同じ順番で上り、アメリカ型の高度大衆消費社会に行き着く。国による違いは「どの段まで来たか」だけ（段階はロストウ。国は架空の例）。"};
+  }
+  function hunt(){
+    let s="";
+    s+=`<line x1="60" y1="260" x2="600" y2="260" stroke="${C.ink}" stroke-width="1.5" marker-end="url(#ar-ink)"/>`+t(600,284,"時間",{a:"end",fs:13,c:C.sub});
+    s+=`<line x1="60" y1="260" x2="60" y2="30" stroke="${C.ink}" stroke-width="1.5" marker-end="url(#ar-ink)"/>`;
+    s+=`<path d="M60,250 C180,240 290,140 470,50" stroke="${C.red}" stroke-width="3" fill="none"/>`+t(478,50,"政治参加の要求",{fs:13,c:C.red,w:1});
+    s+=t(478,68,"（経済成長・社会的動員）",{fs:12,c:C.red});
+    s+=`<path d="M60,252 C200,245 320,220 470,192" stroke="${C.blue}" stroke-width="3" fill="none"/>`+t(478,198,"政治制度の発達",{fs:13,c:C.blue,w:1});
+        s+=`<line x1="430" y1="74" x2="430" y2="196" stroke="${C.ink}" stroke-width="1.5" stroke-dasharray="4 3" marker-start="url(#ar-ink)" marker-end="url(#ar-ink)"/>`;
+    s+=`<rect x="262" y="118" width="158" height="46" fill="${C.mk}" stroke="${C.ink}"/>`+t(341,138,"すき間が広がると",{a:"middle",fs:13})+t(341,156,"混沌と崩壊",{a:"middle",fs:14,w:1,c:C.red});
+    s+=t(40,26,"ハンチントン：発展は安定を約束しない",{fs:14,w:1});
+    return {svg:s,cap:"ハンチントン：政治に参加したいという要求（朱）が、それを受け止める政党や議会などの制度（青）より速く伸びると、そのすき間から政治の混乱が生まれる。線の形は説明のための模式図。"};
+  }
+  function anti(){
+    let s="";
+    s+=t(40,26,"構造主義・オリエンタリズム批判：道は一本ではない",{fs:14,w:1});
+    const paths=[
+      ["M60,250 C180,230 260,120 380,110 S540,80 590,70",C.blue,"地域A","ar-blue",590,62],
+      ["M60,250 C200,250 300,200 420,190 S540,200 590,160",C.grn,"地域B","ar-grn",590,152],
+      ["M60,250 C160,260 260,270 360,240 S520,250 590,240",C.red,"地域C","ar-red",590,232]];
+    paths.forEach(([d,c,n,m,x,y])=>{s+=`<path d="${d}" stroke="${c}" stroke-width="3" fill="none" marker-end="url(#${m})"/>`+t(x,y,n,{a:"end",fs:13,c,w:1});});
+    s+=`<circle cx="60" cy="250" r="6" fill="${C.ink}"/>`+t(70,280,"それぞれの社会・文化の構造から出発",{fs:12,c:C.sub});
+    s+=`<rect x="190" y="52" width="190" height="44" fill="#fff" stroke="${C.ink}" stroke-dasharray="5 4"/>`+t(285,70,"「アメリカ型社会」は",{a:"middle",fs:13,c:C.sub})+t(285,88,"共通のゴールではない",{a:"middle",fs:13,c:C.sub,w:1});
+    return {svg:s,cap:"レヴィ＝ストロース、サイード、コーエンらの見方：発展のあり方は地域ごとに異なり、その原動力も地域の内側にある（内発的発展）。西洋を到達点とする物差しそのものが問い直された。"};
+  }
+  const R=[modern,hunt,anti];
+  function draw(i){const r=R[i]();svg.innerHTML=defs+r.svg;cap.textContent=r.cap;}
+  document.querySelectorAll('.gsw button[data-g="dev"]').forEach(b=>b.addEventListener("click",()=>{
+    document.querySelectorAll('.gsw button[data-g="dev"]').forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));
+    draw(+b.dataset.s);}));
+  draw(0);
+})();
+
+/* hikakuseiji 共通（lily から複製）：タブ・目次・前後ナビ・確認問題・内部タブ・解説スイッチ・相互リンク
+   各章のHTMLは、.part（data-title, data-desc）と section（data-t, h2 .sn）を並べるだけでよい。
+   パートが表示されたときに "partshown" イベント（detail.id）を発行する。 */
+(function(){
+  const parts=[...document.querySelectorAll(".part")];
+  const tabs=document.getElementById("tabs");
+  const drawerList=document.getElementById("drawerList");
+  const body=document.body, menuBtn=document.getElementById("menuBtn"), drawer=document.getElementById("drawer");
+  let current=0;
+
+  parts.forEach((p,i)=>{
+    p.setAttribute("role","tabpanel");
+    const secs=[...p.querySelectorAll("section")];
+    const head=document.createElement("div");head.className="part-head";
+    head.innerHTML='<div class="ph-main"><div class="pn">Part '+(i+1)+' / '+parts.length+'</div><h1>'+p.dataset.title+'</h1><p>'+p.dataset.desc+'</p></div>';
+    const mini=document.createElement("div");mini.className="toc-mini";
+    secs.forEach(s=>{const b=document.createElement("button");b.type="button";b.textContent=s.querySelector(".sn").textContent+". "+s.dataset.t;b.addEventListener("click",()=>s.scrollIntoView({behavior:"smooth",block:"start"}));mini.appendChild(b);});
+    head.querySelector(".ph-main").appendChild(mini);p.prepend(head);
+
+    const t=document.createElement("button");t.type="button";t.className="tab";t.setAttribute("role","tab");t.id="tab-"+p.id;t.setAttribute("aria-controls",p.id);
+    t.innerHTML='<span class="n">'+(i+1)+'</span>'+p.dataset.title;
+    t.addEventListener("click",()=>go(i,true));
+    t.addEventListener("keydown",e=>{if(e.key==="ArrowRight"){const k=(i+1)%parts.length;go(k,true);tabs.children[k].focus();}if(e.key==="ArrowLeft"){const k=(i-1+parts.length)%parts.length;go(k,true);tabs.children[k].focus();}});
+    tabs.appendChild(t);p.setAttribute("aria-labelledby",t.id);
+
+    const h=document.createElement("h4");const hb=document.createElement("button");hb.type="button";hb.innerHTML='<span class="n">'+(i+1)+'</span>'+p.dataset.title;hb.addEventListener("click",()=>{go(i,true);closeMenu();});h.appendChild(hb);drawerList.appendChild(h);
+    const ul=document.createElement("ul");
+    secs.forEach(s=>{const li=document.createElement("li");const b=document.createElement("button");b.type="button";b.textContent=s.querySelector(".sn").textContent+". "+s.dataset.t;b.addEventListener("click",()=>{go(i,false);closeMenu();setTimeout(()=>s.scrollIntoView({block:"start"}),30);});li.appendChild(b);ul.appendChild(li);});
+    drawerList.appendChild(ul);
+  });
+
+  function go(i,top){
+    current=i;
+    parts.forEach((p,k)=>p.classList.toggle("on",k===i));
+    [...tabs.children].forEach((t,k)=>{t.setAttribute("aria-selected",k===i?"true":"false");t.tabIndex=k===i?0:-1;});
+    [...drawerList.querySelectorAll("h4")].forEach((h,k)=>h.classList.toggle("cur",k===i));
+    tabs.children[i].scrollIntoView({block:"nearest",inline:"nearest"});
+    const pg=document.getElementById("pager");pg.innerHTML="";
+    if(i>0){const b=document.createElement("button");b.type="button";b.innerHTML="<small>前のパート</small>← "+parts[i-1].dataset.title;b.addEventListener("click",()=>go(i-1,true));pg.appendChild(b);}
+    if(i<parts.length-1){const b=document.createElement("button");b.type="button";b.className="next";b.innerHTML="<small>次のパート</small>"+parts[i+1].dataset.title+" →";b.addEventListener("click",()=>go(i+1,true));pg.appendChild(b);}
+    try{if(location.hash!=="#"+parts[i].id)history.replaceState(null,"","#"+parts[i].id);}catch(e){}
+    if(top)window.scrollTo(0,0);
+    document.dispatchEvent(new CustomEvent("partshown",{detail:{id:parts[i].id}}));
+  }
+  function openMenu(){body.classList.add("menu-open");drawer.setAttribute("aria-hidden","false");menuBtn.setAttribute("aria-expanded","true");document.getElementById("closeBtn").focus();}
+  function closeMenu(){body.classList.remove("menu-open");drawer.setAttribute("aria-hidden","true");menuBtn.setAttribute("aria-expanded","false");}
+  menuBtn.addEventListener("click",openMenu);
+  document.getElementById("closeBtn").addEventListener("click",()=>{closeMenu();menuBtn.focus();});
+  document.getElementById("scrim").addEventListener("click",closeMenu);
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&body.classList.contains("menu-open")){closeMenu();menuBtn.focus();}});
+  window.addEventListener("hashchange",()=>{const k=parts.findIndex(p=>"#"+p.id===location.hash);if(k>=0&&k!==current)go(k,true);});
+
+  /* 内部タブ（.itabs の button[aria-controls]） */
+  document.querySelectorAll(".itabs").forEach(box=>{
+    const bs=[...box.querySelectorAll("button")];
+    const sel=i=>bs.forEach((b,k)=>{b.setAttribute("aria-selected",k===i?"true":"false");b.tabIndex=k===i?0:-1;document.getElementById(b.getAttribute("aria-controls")).hidden=k!==i;});
+    bs.forEach((b,i)=>{b.addEventListener("click",()=>sel(i));b.addEventListener("keydown",e=>{if(e.key==="ArrowRight"){const k=(i+1)%bs.length;sel(k);bs[k].focus();}if(e.key==="ArrowLeft"){const k=(i-1+bs.length)%bs.length;sel(k);bs[k].focus();}});});
+    sel(0);
+  });
+
+  /* 確認問題・ヒント（.q の .show で .ans を開閉） */
+  document.querySelectorAll(".q").forEach(q=>{const b=q.querySelector(".show"),a=q.querySelector(".ans");if(!b||!a)return;const lab=b.textContent;b.setAttribute("aria-expanded","false");b.addEventListener("click",()=>{a.hidden=!a.hidden;b.textContent=a.hidden?lab:"閉じる";b.setAttribute("aria-expanded",a.hidden?"false":"true");});});
+
+  /* 解説と答案例の表示スイッチ */
+  const tg=document.getElementById("ansToggle"),note=document.getElementById("ansNote");
+  if(tg){
+    const setAns=on=>{document.body.classList.toggle("ans-off",!on);tg.checked=on;if(note)note.textContent=on?"オン：解説と答案例を表示しています。":"オフ：問題とヒントだけを表示しています。";};
+    tg.addEventListener("change",()=>setAns(tg.checked));
+    setAns(typeof ANSWERS_DEFAULT_ON!=="undefined"&&ANSWERS_DEFAULT_ON);
+  }
+
+  /* 解説の開閉 */
+  document.querySelectorAll(".solbtn").forEach(b=>b.addEventListener("click",()=>{const bd=b.nextElementSibling;bd.hidden=!bd.hidden;b.setAttribute("aria-expanded",bd.hidden?"false":"true");b.textContent=bd.hidden?"解説を読む（手順を追って説明）":"解説を閉じる";document.dispatchEvent(new CustomEvent("solopen"));}));
+
+  /* 相互リンク */
+  document.addEventListener("click",e=>{const a=e.target.closest("[data-goto]");if(!a)return;e.preventDefault();const t=document.getElementById(a.dataset.goto);if(!t)return;const k=parts.findIndex(p=>p.contains(t));if(k<0)return;go(k,false);setTimeout(()=>t.scrollIntoView({block:"start"}),30);});
+
+  const start=parts.findIndex(p=>"#"+p.id===location.hash);
+  go(start>=0?start:0,false);
+})();
+
+</script>
+</body>
+</html>
