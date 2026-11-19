@@ -316,6 +316,13 @@ h3.stp .st{display:inline-block;font-size:.8rem;background:var(--blue);color:#ff
 .vv .ar{border:none;background:none;font-size:1.6rem;color:var(--blue);padding:0}
 .ref{border-left:3px solid var(--red);background:#fff;padding:8px 14px;margin:12px 0;max-width:46rem;font-size:.95rem}
 .ref .h{display:block;font-size:.8rem;color:var(--red);font-weight:700}
+/* トップページ（目次）に戻るボタン */
+.home{margin-left:auto;flex:none;border:1.5px solid var(--ink);border-radius:6px;padding:6px 12px;font-size:.88rem;font-weight:700;color:var(--ink);text-decoration:none;background:var(--paper);white-space:nowrap}
+.home:hover{background:var(--blue);border-color:var(--blue);color:#fff}
+.home-foot{text-align:center;margin:8px 0 0}
+.home-foot a{display:inline-block;border:2px solid var(--blue);color:var(--blue);font-weight:700;text-decoration:none;padding:8px 20px;background:#fff}
+.home-foot a:hover{background:var(--blue);color:#fff}
+@media (max-width:560px){.home{padding:5px 8px;font-size:.8rem}}
 </style>
 </head>
 <body>
@@ -330,6 +337,7 @@ h3.stp .st{display:inline-block;font-size:.8rem;background:var(--blue);color:#ff
   <div class="bar-in">
     <button class="burger" id="menuBtn" aria-label="目次を開く" aria-controls="drawer" aria-expanded="false"><span></span></button>
     <div class="course"><small>比較政治学　地域研究・比較政治基礎</small><b>第2回　比較政治学とは　解説プリント</b></div>
+    <a class="home" href="../">← 目次へ</a>
   </div>
   <div class="tabs" role="tablist" aria-label="パート" id="tabs"></div>
 </header>
@@ -703,6 +711,7 @@ h3.stp .st{display:inline-block;font-size:.8rem;background:var(--blue);color:#ff
 </div>
 
 <div class="pager" id="pager"></div>
+<p class="home-foot"><a href="../">トップページ（全7回の目次）に戻る</a></p>
 </main>
 
 <script>

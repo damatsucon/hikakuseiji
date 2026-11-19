@@ -37,6 +37,7 @@ html = f'''<!DOCTYPE html>
   <div class="bar-in">
     <button class="burger" id="menuBtn" aria-label="目次を開く" aria-controls="drawer" aria-expanded="false"><span></span></button>
     <div class="course"><small>{COURSE}</small><b>第{num}回　{title}　{suffix}</b></div>
+    <a class="home" href="../">← 目次へ</a>
   </div>
   <div class="tabs" role="tablist" aria-label="パート" id="tabs"></div>
 </header>
@@ -44,6 +45,7 @@ html = f'''<!DOCTYPE html>
 <main>
 {body}
 <div class="pager" id="pager"></div>
+<p class="home-foot"><a href="../">トップページ（全7回の目次）に戻る</a></p>
 </main>
 
 <script>
