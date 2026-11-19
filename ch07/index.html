@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第7回 官僚制度｜比較政治学</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* hikakuseiji の配色：lily（青・朱・黄）と区別するため、深緑・琥珀・若草に変更 */
+/* 設計: 方眼紙に書いた講義プリント。黒インクの本文、青ペンの強調、朱ペンの書き込み、黄色の蛍光ペン。上部に固定ヘッダーとパートのタブ、左からメニューが出る */
+:root{
+  --paper:#fdfdfb;
+  --grid:#e7ede8;
+  --ink:#22252b;
+  --sub:#5e6470;
+  --line:#c9cfd8;
+  --blue:#1e5b4f;
+  --red:#b0601c;
+  --teal:#3d6a94;
+  --marker:#cce6b8;
+  --note:#f5f8ee;
+  --font-body:"BIZ UDPGothic","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  --font-hand:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  --font-math:"Times New Roman",Times,serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.95;
+  -webkit-text-size-adjust:100%;
+}
+a{color:var(--blue)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+/* ヘッダー */
+.bar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:2px solid var(--ink)}
+.bar-in{max-width:960px;margin:0 auto;padding:10px 16px 0;display:flex;align-items:center;gap:12px}
+.burger{width:42px;height:42px;border:1.5px solid var(--ink);background:var(--paper);border-radius:6px;display:grid;place-items:center;cursor:pointer;flex:none}
+.burger span{display:block;width:20px;height:2px;background:var(--ink);box-shadow:0 -6px 0 var(--ink),0 6px 0 var(--ink)}
+.course{line-height:1.35;min-width:0}
+.course small{display:block;color:var(--sub);font-size:.78rem}
+.course b{font-size:1.05rem}
+.tabs{max-width:960px;margin:8px auto 0;padding:0 16px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:1.5px solid var(--ink);border-bottom:none;background:#eef1f5;border-radius:8px 8px 0 0;padding:6px 14px 5px;cursor:pointer;font-size:.92rem;line-height:1.5;color:var(--sub);position:relative;top:2px}
+.tab .n{font-family:var(--font-math);font-weight:700;margin-right:6px;color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--paper);color:var(--ink);font-weight:700;border-bottom:2px solid var(--paper);z-index:1}
+
+/* ドロワー */
+.scrim{position:fixed;inset:0;background:rgba(20,24,32,.35);z-index:30;opacity:0;pointer-events:none;transition:opacity .2s}
+.drawer{position:fixed;top:0;left:0;bottom:0;width:min(340px,86vw);background:var(--paper);z-index:31;border-right:2px solid var(--ink);transform:translateX(-102%);transition:transform .22s ease;overflow-y:auto;padding:16px 18px 40px}
+body.menu-open .scrim{opacity:1;pointer-events:auto}
+body.menu-open .drawer{transform:none}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1.5px solid var(--ink);padding-bottom:8px;margin-bottom:10px}
+.drawer-head b{font-size:1rem}
+.close{border:1.5px solid var(--ink);background:none;border-radius:6px;width:36px;height:36px;cursor:pointer;font-size:1.2rem;line-height:1}
+.drawer h4{margin:14px 0 2px;font-size:.95rem}
+.drawer h4 button{background:none;border:none;padding:0;cursor:pointer;text-align:left;font-weight:700}
+.drawer h4 .n{font-family:var(--font-math);margin-right:6px}
+.drawer ul{list-style:none;margin:0;padding:0 0 0 12px;border-left:1.5px solid var(--line)}
+.drawer li button{background:none;border:none;padding:3px 0;cursor:pointer;color:var(--sub);text-align:left;font-size:.9rem;line-height:1.5}
+.drawer li button:hover{color:var(--blue)}
+.drawer .cur>button{color:var(--blue)}
+
+/* 本文 */
+main{max-width:960px;margin:0 auto;padding:22px 16px 80px}
+.part{display:none}
+.part.on{display:block}
+.part-head{background:var(--paper);border:1.5px solid var(--ink);border-radius:4px;padding:16px 20px;margin-bottom:26px}
+.part-head .pn{font-family:var(--font-math);font-size:.95rem;color:var(--sub)}
+.part-head h1{font-size:clamp(1.5rem,3.6vw,2rem);line-height:1.4;margin:2px 0 6px;text-wrap:balance}
+.part-head p{margin:0;color:var(--sub);max-width:42em}
+.toc-mini{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:.9rem}
+.toc-mini button{background:none;border:none;padding:0;cursor:pointer;color:var(--blue);text-decoration:underline;text-underline-offset:3px}
+
+section{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:6px 22px 24px;margin-bottom:22px;scroll-margin-top:120px}
+@media (max-width:560px){section{padding:4px 14px 18px}}
+h2{font-size:1.4rem;line-height:1.5;margin:18px 0 12px;padding-bottom:6px;border-bottom:3px double var(--ink);text-wrap:balance}
+h2 .sn{display:inline-block;min-width:1.7em;height:1.7em;line-height:1.7em;text-align:center;border:1.5px solid var(--ink);border-radius:50%;font-family:var(--font-math);font-size:1rem;margin-right:10px;vertical-align:.12em}
+h3{font-size:1.1rem;margin:24px 0 6px;text-wrap:balance}
+h3::before{content:"";display:inline-block;width:10px;height:10px;background:var(--blue);margin-right:8px;vertical-align:.05em}
+p{margin:0 0 1em;max-width:44em}
+.mk{background:linear-gradient(transparent 58%,var(--marker) 58%);font-weight:700}
+.v{font-family:var(--font-math);font-style:italic;font-size:1.1em;white-space:nowrap}
+.plus{color:var(--teal);font-weight:700}
+.minus{color:var(--red);font-weight:700}
+ul.dots,ol.steps{margin:0 0 1em;padding-left:1.4em;max-width:44em}
+ul.dots li,ol.steps li{margin:3px 0}
+
+/* 数式ボックス（教科書風に式番号を右寄せ） */
+.eq{border:1.5px solid var(--ink);background:#fff;padding:12px 18px;margin:16px 0 6px;max-width:44rem;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.eq .f{font-family:var(--font-math);font-size:1.45rem;font-style:italic}
+.eq .f sub{font-size:.65em}
+.eq .no{margin-left:auto;font-size:.85rem;color:var(--sub)}
+.eq-read{max-width:44rem;margin:0 0 16px;padding-left:20px;font-size:.95rem;color:var(--sub)}
+.eq-read::before{content:"読み方　";color:var(--blue);font-weight:700}
+
+/* 先生のメモ */
+.memo{font-family:var(--font-hand);background:var(--note);border-left:4px solid var(--red);padding:12px 16px 12px 18px;margin:16px 0;max-width:44rem;font-size:1.05rem;line-height:1.85}
+.memo .who{display:block;color:var(--red);font-weight:600;font-size:.9rem}
+/* ポイント */
+.point{border:2px solid var(--blue);border-radius:2px;padding:10px 16px;margin:20px 0 4px;max-width:44rem;position:relative}
+.point::before{content:"ポイント";position:absolute;top:-.85em;left:12px;background:var(--paper);padding:0 6px;color:var(--blue);font-weight:700;font-size:.85rem}
+.point p{margin:0}
+
+/* 帯グラフ */
+.bars{background:#fff;border:1px solid var(--line);padding:14px 16px 10px;margin:14px 0 18px;max-width:44rem}
+.bars .sw{display:flex;gap:0;margin-bottom:12px;border:1.5px solid var(--ink);border-radius:6px;overflow:hidden;width:max-content}
+.bars .sw button{border:none;background:#fff;padding:3px 14px;cursor:pointer;font-size:.88rem}
+.bars .sw button+button{border-left:1.5px solid var(--ink)}
+.bars .sw button[aria-selected="true"]{background:var(--ink);color:#fff}
+.brow{display:grid;grid-template-columns:7.2em 1fr;align-items:center;gap:10px;margin:8px 0}
+.brow .lab{font-size:.88rem;line-height:1.35}
+.track{position:relative;height:34px}
+.seg{position:absolute;top:0;bottom:0;display:flex;align-items:center;justify-content:center;font-size:.8rem;border:1.5px solid var(--ink);white-space:nowrap;overflow:hidden;font-variant-numeric:tabular-nums}
+.seg.y{background:#d9ebe2}
+.seg.c{background:#f3f4f6}.seg.i{background:#e7eaee}.seg.g{background:#d9dde3}
+.seg.gap-p{background:repeating-linear-gradient(45deg,#dde6f0,#dde6f0 5px,#fff 5px,#fff 10px);color:var(--teal);font-weight:700;border-color:var(--teal);border-style:dashed}
+.seg.gap-m{background:repeating-linear-gradient(45deg,#f5e5d3,#f5e5d3 5px,#fff 5px,#fff 10px);color:var(--red);font-weight:700;border-color:var(--red);border-style:dashed}
+.seg.b{background:#e7eaee}.seg.ri{background:#e3efd6}.seg.nx{background:#dde6f0}
+.seg-lab{position:absolute;top:0;bottom:0;display:flex;align-items:center;font-size:.85rem;white-space:nowrap}
+.bars .cap{font-size:.88rem;color:var(--sub);margin:6px 0 0}
+
+/* 表 */
+.tw{overflow-x:auto;margin:12px 0 18px}
+table{border-collapse:collapse;background:#fff;font-size:.95rem;font-variant-numeric:tabular-nums}
+th,td{border:1px solid var(--ink);padding:7px 12px;text-align:left;vertical-align:top;line-height:1.6}
+thead th{background:#eef1f5}
+td.c{text-align:center;white-space:nowrap}
+td.r{text-align:right}
+table.calc-t td{border:none;border-bottom:1px dotted var(--line);padding:3px 14px 3px 0}
+table.calc-t tr:last-child td{border-bottom:2px solid var(--ink);font-weight:700}
+
+/* 図 */
+figure{margin:14px 0 20px}
+figcaption{font-size:.85rem;color:var(--sub);margin-top:4px}
+.figbox{background:#fff;border:1px solid var(--line);padding:8px;overflow-x:auto}
+svg text{font-family:var(--font-body);fill:var(--ink)}
+svg .m{font-family:var(--font-math);font-style:italic}
+
+/* シミュレーター */
+.sim{background:#fff;border:1.5px solid var(--ink);padding:14px;margin:16px 0;display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:860px){.sim{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}}
+.grp{margin-bottom:10px}
+.grp .gl{font-size:.78rem;color:var(--sub);display:block;margin-bottom:3px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chips button{border:1.5px solid var(--ink);background:#fff;padding:2px 10px;border-radius:4px;cursor:pointer;font-size:.85rem;line-height:1.6}
+.chips button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.explain{border-top:1px dashed var(--line);padding-top:10px;margin-top:6px}
+.explain .t{font-weight:700;margin:0}
+.explain .x{font-size:.95rem;margin:4px 0}
+.explain .f{font-size:.8rem;color:var(--sub);margin:0}
+.meter{display:grid;grid-template-columns:repeat(3,1fr);border:1.5px solid var(--ink);margin:10px 0}
+.meter div{padding:6px 8px;text-align:center}
+.meter div+div{border-left:1px solid var(--ink)}
+.meter small{display:block;font-size:.75rem;color:var(--sub);line-height:1.3}
+.meter strong{font-size:1.3rem;font-family:var(--font-math);font-variant-numeric:tabular-nums}
+.sl{display:grid;grid-template-columns:7.4em 1fr 3.6em;gap:8px;align-items:center;font-size:.88rem}
+.sl input{width:100%;accent-color:var(--blue)}
+.sl output{text-align:right;font-family:var(--font-math);font-variant-numeric:tabular-nums}
+.sm{font-size:.8rem;color:var(--sub);margin:6px 0 0}
+
+/* 内部タブ（ケース別） */
+.itabs{display:flex;gap:0;border-bottom:1.5px solid var(--ink);margin:14px 0 0;overflow-x:auto}
+.itabs button{border:none;background:none;padding:6px 14px;cursor:pointer;color:var(--sub);border-bottom:3px solid transparent;margin-bottom:-1.5px;white-space:nowrap}
+.itabs button[aria-selected="true"]{color:var(--ink);font-weight:700;border-bottom-color:var(--blue)}
+.ipanel{padding:12px 0 0}
+.ipanel[hidden]{display:none}
+.case{border-left:3px solid var(--line);padding:2px 0 2px 14px;margin:0 0 16px;max-width:44rem}
+.case b{display:block}
+.case p b{display:inline}
+.case .res{font-size:.9rem;margin:2px 0}
+.case p{margin:2px 0 0;font-size:.97rem}
+
+/* 手順 */
+.flow{display:grid;grid-template-columns:1fr;gap:8px;max-width:44rem;margin:12px 0 16px;counter-reset:f}
+@media (min-width:700px){.flow{grid-template-columns:repeat(3,1fr)}}
+.flow div{border:1.5px solid var(--ink);background:#fff;padding:10px 12px;font-size:.93rem;line-height:1.7;counter-increment:f}
+.flow div::before{content:"手順" counter(f);display:block;font-weight:700;color:var(--blue);font-size:.82rem}
+
+/* 計算機 */
+.calc{background:#fff;border:1.5px solid var(--ink);padding:14px 16px;margin:14px 0;max-width:44rem}
+.calc .out{font-size:.98rem;margin-top:10px}
+.calc .chk{color:var(--sub);font-size:.88rem}
+
+/* 確認問題 */
+.q{border:1px solid var(--ink);background:#fff;margin:10px 0;max-width:46rem}
+.q .qq{padding:10px 14px;display:flex;gap:10px}
+.q .qn{font-family:var(--font-math);font-weight:700;color:var(--blue)}
+.q button.show{margin:0 14px 10px;border:1.5px solid var(--ink);background:#fff;border-radius:4px;padding:2px 12px;cursor:pointer;font-size:.85rem}
+.q .ans{border-top:1px dashed var(--line);padding:8px 14px 10px;font-family:var(--font-hand);font-size:1.05rem;background:var(--note)}
+.q .ans[hidden]{display:none}
+.q .ans::before{content:"解答　";color:var(--red);font-weight:600}
+
+/* 前後ナビ */
+.pager{display:flex;justify-content:space-between;gap:10px;margin-top:28px;flex-wrap:wrap}
+.pager button{border:1.5px solid var(--ink);background:#fff;padding:10px 16px;cursor:pointer;border-radius:4px;text-align:left;line-height:1.4;max-width:48%}
+.pager button small{display:block;color:var(--sub);font-size:.78rem}
+.pager .next{margin-left:auto;text-align:right}
+.src{font-size:.82rem;color:var(--sub);margin-top:30px;border-top:1px solid var(--line);padding-top:10px}
+
+/* キャラクター */
+.talk{display:flex;align-items:flex-end;gap:12px;margin:14px 0 18px;max-width:44rem}
+.talk img{width:118px;height:auto;flex:none}
+.talk .bubble{position:relative;background:#fff;border:2px solid var(--ink);border-radius:14px;padding:10px 16px;font-family:var(--font-hand);font-size:1.08rem;line-height:1.75;margin-bottom:30px}
+.talk .bubble::before{content:"";position:absolute;left:-12px;bottom:16px;border:6px solid transparent;border-right:8px solid var(--ink)}
+.talk .bubble::after{content:"";position:absolute;left:-8px;bottom:17px;border:5px solid transparent;border-right:7px solid #fff}
+.talk.r{flex-direction:row-reverse;margin-left:auto}
+.talk.r .bubble::before{left:auto;right:-12px;border-right-color:transparent;border-left:8px solid var(--ink)}
+.talk.r .bubble::after{left:auto;right:-8px;border-right-color:transparent;border-left:7px solid #fff}
+.part-head{display:flex;gap:16px;align-items:flex-end}
+.part-head .ph-main{flex:1;min-width:0}
+.part-head .ph-fig{flex:none;width:150px;text-align:center;margin:-6px 0 -16px}
+.part-head .ph-say{font-family:var(--font-hand);font-size:.88rem;line-height:1.5;background:#fff;border:1.5px solid var(--ink);border-radius:10px;padding:5px 8px;margin-bottom:6px;text-align:left;position:relative}
+.part-head .ph-say::after{content:"";position:absolute;left:50%;bottom:-7px;width:10px;height:10px;background:#fff;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);transform:translateX(-50%) rotate(45deg)}
+.part-head .ph-fig img{width:100%;height:auto;display:block}
+@media (max-width:560px){.talk img{width:86px}.part-head .ph-fig{width:96px}.talk .bubble{font-size:1rem}}
+.memo.withfig{display:flex;gap:14px;align-items:center}
+.memo.withfig img{width:104px;height:auto;flex:none}
+@media (max-width:560px){.memo.withfig img{width:78px}}
+
+/* 課題パート */
+.dl{margin:10px 0 16px}
+.dlbtn{display:inline-flex;align-items:center;gap:12px;border:2px solid var(--ink);background:#fff;color:var(--ink);text-decoration:none;padding:8px 16px 8px 10px;border-radius:6px;line-height:1.4;box-shadow:3px 3px 0 var(--ink)}
+.dlbtn:hover{background:#eaf3ee}
+.dlbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.dlbtn .dlico{width:34px;height:40px;background:#1e5b4f;color:#fff;font-weight:700;display:grid;place-items:center;border-radius:3px;font-family:var(--font-math);font-size:1.2rem}
+.dlbtn b{display:block}
+.dlbtn small{display:block;color:var(--sub);font-size:.8rem}
+
+.xref{font-size:.9rem;margin:6px 0 12px;max-width:44em}
+.xref::before{content:"→ ";color:var(--blue);font-weight:700}
+.xref a,.dots a{color:var(--blue);cursor:pointer}
+.kq{border:2px solid var(--ink);background:#fff;padding:12px 16px;margin:12px 0 14px;max-width:46rem}
+.kq .lab{display:inline-block;background:var(--ink);color:#fff;font-size:.8rem;padding:0 8px;border-radius:3px;margin-bottom:4px}
+.kq p{margin:4px 0}
+.memo.hint{border-left-color:var(--blue)}
+.memo.hint .who{color:var(--blue)}
+.locked{display:none;border:1.5px dashed var(--line);color:var(--sub);padding:8px 14px;max-width:44rem;font-size:.92rem;background:#fff}
+body.ans-off .locked{display:block}
+body.ans-off .sol{display:none}
+.solbtn{border:1.5px solid var(--ink);background:var(--ink);color:#fff;border-radius:4px;padding:6px 16px;cursor:pointer;margin:6px 0 10px}
+.solbtn[aria-expanded="true"]{background:#fff;color:var(--ink)}
+.step{border-top:1px dashed var(--line);padding-top:6px;margin-top:10px}
+h3.stp::before{display:none}
+h3.stp .st{display:inline-block;font-size:.8rem;background:var(--blue);color:#fff;padding:0 9px;border-radius:3px;margin-right:8px;vertical-align:.12em}
+.ansSwitch{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;border:2px solid var(--ink);background:#fff;padding:10px 14px;margin:14px 0 16px;max-width:46rem}
+.sw-l{display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:700}
+.sw-l input{position:absolute;opacity:0;width:1px;height:1px}
+.sw-ui{width:46px;height:26px;border-radius:13px;background:#c9cfd8;position:relative;flex:none;transition:background .15s}
+.sw-ui::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:left .15s}
+.sw-l input:checked+.sw-ui{background:var(--teal)}
+.sw-l input:checked+.sw-ui::after{left:23px}
+.sw-l input:focus-visible+.sw-ui{outline:2px solid var(--blue);outline-offset:2px}
+.sw-note{font-size:.88rem;color:var(--sub)}
+.gwrap{background:#fff;border:1.5px solid var(--ink);padding:12px;margin:14px 0 6px;max-width:46rem}
+.gsw{display:flex;border:1.5px solid var(--ink);border-radius:6px;overflow:hidden;width:max-content;max-width:100%;margin-bottom:8px;flex-wrap:wrap}
+.gsw button{border:none;background:#fff;padding:3px 14px;cursor:pointer;font-size:.88rem}
+.gsw button+button{border-left:1.5px solid var(--ink)}
+.gsw button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.gwrap svg{width:100%;max-width:560px;height:auto;display:block}
+.gcap{font-size:.88rem;color:var(--sub);margin:6px 0 0}
+.howto{font-size:.93rem;max-width:44rem;margin:6px 0 16px;padding-left:1.3em}
+.trap{border:2px dashed var(--red);padding:10px 16px;margin:16px 0;max-width:44rem;background:#fff}
+.trap b{color:var(--red)}
+.point.ketsu::before{content:"結論"}
+.answer{border:1.5px solid var(--ink);background:#fff;padding:14px 18px 6px;margin:20px 0 16px;max-width:46rem;position:relative}
+.answer::before{content:"答案の書き方の例";position:absolute;top:-.8em;left:12px;background:var(--ink);color:#fff;font-size:.8rem;padding:0 8px;border-radius:3px}
+.answer p{font-size:.97rem}
+.num{background:#fff;border:1px solid var(--line);padding:10px 16px;margin:14px 0;max-width:44rem}
+.num .h{font-size:.82rem;color:var(--sub);display:block}
+#kadai .brow{grid-template-columns:5.5em 1fr}
+#kadai .seg.g{background:#e3efd6}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+
+/* 数式（分数・Σ/Π/∫ の上下添字）— 全章共通 */
+.mx{font-family:var(--font-math);display:inline-flex;align-items:center;gap:.12em;vertical-align:middle;white-space:nowrap;font-size:1.08em}
+.mx i{font-style:italic}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .12em;line-height:1.25}
+.frac>span:first-child{border-bottom:1px solid currentColor;padding:0 .25em}
+.frac>span:last-child{padding:0 .25em}
+.bop{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1;margin:0 .12em}
+.bop .s{font-size:1.7em;line-height:1}
+.bop small{font-size:.62em;line-height:1.1}
+.eq .mx{font-size:1.25rem}
+.eq.mxeq .f{font-style:normal}
+.mxblock{display:block;overflow-x:auto;padding:4px 0}
+
+/* ===== hikakuseiji：回共通の部品（第1・2回で本文に書いていたものを共通化） ===== */
+.tl{border-left:3px solid var(--ink);margin:14px 0 20px 6px;padding:0 0 0 18px;max-width:46rem}
+.tl li{list-style:none;position:relative;margin:0 0 10px;line-height:1.7}
+.tl li::before{content:"";position:absolute;left:-25px;top:.55em;width:11px;height:11px;background:var(--paper);border:2.5px solid var(--blue);border-radius:50%}
+.tl li.jp::before{border-color:var(--red)}
+.tl .y{font-family:var(--font-math);font-weight:700;color:var(--blue);margin-right:.6em}
+.tl li.jp .y{color:var(--red)}
+.tl .tag{font-size:.75rem;border:1px solid currentColor;padding:0 5px;margin-left:.4em;color:var(--sub);white-space:nowrap}
+.bk{border:1.5px solid var(--ink);background:#fff;padding:10px 14px 8px;margin:12px 0;max-width:46rem}
+.bk .who{font-weight:700}
+.bk .yr{font-family:var(--font-math);font-weight:700;color:var(--blue);margin-left:.4em}
+.bk .ti{display:block;font-size:.88rem;color:var(--sub);line-height:1.6}
+.bk p{margin:6px 0 0;font-size:.97rem}
+.legend{font-size:.85rem;color:var(--sub);margin:4px 0 0}
+.legend span{display:inline-block;margin-right:14px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;border:2.5px solid var(--blue);margin-right:5px;vertical-align:-1px}
+.legend i.jp{border-color:var(--red)}
+.vv{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;max-width:44rem;margin:14px 0 18px}
+.vv div{border:1.5px solid var(--ink);background:#fff;padding:10px 12px;text-align:center;line-height:1.6}
+.vv div small{display:block;color:var(--sub);font-size:.8rem}
+.vv .ar{border:none;background:none;font-size:1.6rem;color:var(--blue);padding:0}
+.ref{border-left:3px solid var(--red);background:#fff;padding:8px 14px;margin:12px 0;max-width:46rem;font-size:.95rem}
+.ref .h{display:block;font-size:.8rem;color:var(--red);font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="scrim" id="scrim"></div>
+<nav class="drawer" id="drawer" aria-label="全体の目次" aria-hidden="true">
+  <div class="drawer-head"><b>目次</b><button class="close" id="closeBtn" aria-label="目次を閉じる">×</button></div>
+  <div id="drawerList"></div>
+</nav>
+
+<header class="bar">
+  <div class="bar-in">
+    <button class="burger" id="menuBtn" aria-label="目次を開く" aria-controls="drawer" aria-expanded="false"><span></span></button>
+    <div class="course"><small>比較政治学　地域研究・比較政治基礎</small><b>第7回　官僚制度　解説プリント</b></div>
+  </div>
+  <div class="tabs" role="tablist" aria-label="パート" id="tabs"></div>
+</header>
+
+<main>
+<!-- ===================== パート1 ===================== -->
+<div class="part" id="weber" data-title="官僚制とは" data-desc="官僚制の定義を押さえ、ヴェーバーの「支配の3類型」と近代的官僚制の特徴を見ます。官僚制がうまく働かなくなる「逆機能」も取り上げます。">
+
+<section id="s1" data-t="官僚制の定義">
+<h2><span class="sn">1</span>官僚制とは</h2>
+<div class="kq"><span class="lab">定義</span><p><b>官僚制</b>（bureaucracy）：選挙を通じてではなく<b>任命</b>によって行政機関の職位に就いている公務員と、その活動を規定する、<b>公式および非公式のルール</b>。</p><p><b>官僚</b>（bureaucrat）：中央政府と地方政府の行政活動を担う個人、または複数の公務員。</p></div>
+<div class="tw"><table>
+<thead><tr><th>定義の言葉</th><th>言いかえ</th></tr></thead>
+<tbody>
+<tr><td>選挙ではなく任命</td><td>政治家は選挙で選ばれるが、官僚は試験や採用・人事によってポストに就く</td></tr>
+<tr><td>公式および非公式のルール</td><td>法律や規則（公式）だけでなく、慣行や暗黙の了解（非公式）も含む</td></tr>
+</tbody></table></div>
+<p>第6回では、行政の<b>トップ</b>（首相・大統領）の選び方を学びました。今回は、そのトップのもとで実際に行政を動かす、<span class="mk">選挙で選ばれていない人々の組織</span>がテーマです。</p>
+<p class="xref">執政制度 → <a href="../ch06/#seido">第6回のパート1</a></p>
+<div class="point"><p>官僚制とは、選挙ではなく任命で行政の職に就く公務員と、その活動を規定する公式・非公式のルールのこと。</p></div>
+</section>
+
+<section id="s2" data-t="ヴェーバーの支配の3類型">
+<h2><span class="sn">2</span>ヴェーバーの「支配の3類型」と近代的官僚制</h2>
+<p>ドイツの社会学者<b>マックス・ヴェーバー</b>（1864–1920）は、『経済と社会』（1922年）で、人々がなぜ支配に従うのか（<b>正統性</b>）によって、支配を3つに分けました（「正統性」という言葉は補足）。</p>
+<div class="tw"><table>
+<thead><tr><th>支配の類型</th><th>人々が従う理由（補足）</th><th>レジュメの内容</th></tr></thead>
+<tbody>
+<tr><td><b>1. 合法的支配</b></td><td>正しい手続きで定められた法や規則だから</td><td>これにもとづく組織が<b>近代的官僚制</b></td></tr>
+<tr><td><b>2. 伝統的支配</b></td><td>昔からそうだったから、代々の支配者だから</td><td>第一次類型：長老制・家父長制<br>第二次類型：家産制・スルタン制</td></tr>
+<tr><td><b>3. カリスマ的支配</b></td><td>指導者個人に、並外れた力や魅力があるから</td><td>―</td></tr>
+</tbody></table></div>
+<h3>近代的官僚制の特徴</h3>
+<p>ヴェーバーは、近代的官僚制を「純技術的にみて優秀」で、支配の形として形式的には「最も合理的」だと評価しました。その特徴は次のとおりです。</p>
+<div class="tw"><table>
+<thead><tr><th>特徴</th><th>意味（補足）</th></tr></thead>
+<tbody>
+<tr><td>明確な権限分担</td><td>誰がどの仕事を担当するかが規則で決まっている</td></tr>
+<tr><td>階層的な指揮命令系統</td><td>上司から部下へ、ピラミッド型に命令が伝わる</td></tr>
+<tr><td>専門性の原則</td><td>専門の知識や訓練をもつ人が職に就く</td></tr>
+<tr><td>文書主義</td><td>決定や手続きを文書で記録し、それにもとづいて仕事をする</td></tr>
+<tr><td>非人格性</td><td>相手が誰であっても、個人的な感情や関係をまじえず規則どおりに扱う</td></tr>
+<tr><td>公私の分離</td><td>職務と私生活、公のお金と私のお金をはっきり分ける</td></tr>
+</tbody></table></div>
+<div class="gwrap">
+  <div class="gsw" role="group" aria-label="官僚制の型の切り替え"><button type="button" data-g="bur" data-s="0" aria-pressed="true">近代的官僚制</button><button type="button" data-g="bur" data-s="1" aria-pressed="false">家産官僚制</button></div>
+  <svg id="gBur" viewBox="0 0 640 300" role="img" aria-label="近代的官僚制と家産官僚制の模式図"></svg>
+  <p class="gcap" id="gBur-cap"></p>
+</div>
+<p class="xref">家産官僚制の詳しい説明 → <a href="#s10" data-goto="s10">10節</a>　／　スルタン主義 → <a href="../ch04/#ruikei">第4回の2節</a></p>
+<div class="point"><p>ヴェーバーは支配を合法的・伝統的・カリスマ的の3つに分けた。合法的支配にもとづく近代的官僚制は、権限分担、階層制、専門性、文書主義、非人格性、公私の分離を特徴とし、形式的に最も合理的だとされた。</p></div>
+</section>
+
+<section id="s3" data-t="官僚制の逆機能">
+<h2><span class="sn">3</span>マートン：官僚制の逆機能</h2>
+<p>アメリカの社会学者<b>マートン</b>は『社会理論と社会構造』（1949年）で、官僚制の特徴がかえって悪い結果を生むことを「<b>官僚制の逆機能</b>」と呼びました。</p>
+<div class="case"><b>目標の転移（goal displacement）</b><p>規則は、本来は仕事の目的を達成するための<b>手段</b>のはずなのに、規則を守ること自体が<b>目的</b>になってしまう。</p></div>
+<div class="case"><b>柔軟性の欠如</b><p>規則どおりに処理することにこだわるあまり、規則が想定していない状況に対応できなくなる。</p></div>
+<div class="memo"><span class="who">メモ：書類の不備で受け付けられない</span>窓口で「印鑑が1つ足りないので受け付けられません」と言われ、また出直す。規則は「本人の意思を確かめる」ためのものなのに、印鑑がそろっているかどうかが目的になっている――いわゆる「お役所仕事」は、逆機能の身近な例です。</div>
+<div class="point"><p>マートンは、規則の遵守が自己目的化する「目標の転移」や柔軟性の欠如を、官僚制の逆機能と呼んだ。</p></div>
+</section>
+
+<section id="s4" data-t="確認問題">
+<h2><span class="sn">4</span>確認問題</h2>
+<div class="q"><div class="qq"><span class="qn">Q1</span><span>ヴェーバーの支配の3類型を挙げ、近代的官僚制がどれにもとづくかを答えなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>合法的支配、伝統的支配、カリスマ的支配。近代的官僚制は合法的支配にもとづく。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q2</span><span>「目標の転移」とは何か。例を挙げて説明しなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>本来は目的を達成する手段である規則の遵守が、それ自体目的になってしまうこと。たとえば、本人確認のための書類の形式にこだわり、困っている人を助けるという本来の目的が後回しになる場合。</div></div>
+</section>
+</div>
+
+<!-- ===================== パート2 ===================== -->
+<div class="part" id="tosei" data-title="民主的統制と専門性" data-desc="選挙で選ばれていない官僚を、民主主義はどうコントロールするのか。専門性・自律性との緊張関係を、開発型国家、日米の比較、日本の政治主導の歩みから考えます。">
+
+<section id="s5" data-t="民主的統制と自律性の緊張">
+<h2><span class="sn">5</span>民主的統制と専門的自律性の緊張</h2>
+<p>官僚制をめぐる大きな論点は、<span class="mk">民主的な統制</span>と、官僚の<span class="mk">専門的な自律性</span>のあいだの緊張です。官僚は選挙で選ばれていないので、国民の代表である政治家がコントロールすべきです。一方で、専門知識をもつ官僚に任せた方がよい政策ができることもあります。</p>
+<div class="bk"><span class="who">ローウィ『自由主義の終焉―現代政府の問題性』</span><span class="yr">1969</span><span class="ti">Theodore J. Lowi, <i>The End of Liberalism</i>（村松岐夫監訳、木鐸社、1981年）</span><p>アメリカの政治を「<b>利益集団自由主義</b>」として批判しました。議会があいまいな法律しか作らず、具体的なことを行政の<b>裁量</b>に任せると、行政機関と利益集団の交渉で政策が決まってしまう。その結果、<b>公共の利益</b>や<b>民主的な統制</b>が損なわれる危険がある、と論じました。</p></div>
+<div class="point"><p>官僚制には、民主的統制と専門的自律性の緊張がある。ローウィは、行政裁量の拡大と利益集団との交渉が、公共の利益と民主的統制を損なうと批判した。</p></div>
+</section>
+
+<section id="s6" data-t="開発型国家と官僚制">
+<h2><span class="sn">6</span>開発型国家と官僚制</h2>
+<p>官僚の自律性が経済発展を導いたとされる例が、<b>開発型国家</b>（developmental state）です。</p>
+<div class="case"><b>戦後日本：通商産業省（通産省）と高度経済成長</b><p>通産省が産業政策を主導し、重点産業を育てたことが、高度経済成長につながったという見方です。アメリカの政治学者チャルマーズ・ジョンソンの研究（1982年）で広く知られるようになりました（研究者名と年は補足）。ただし、レジュメが注意しているように、<b>通産省の役割については異論もあります</b>。民間企業の力や市場の働きの方が大きかったという見方です（異論の中身は補足）。</p></div>
+<div class="case"><b>アジアの「近代化志向官僚政体国家」</b><p>官僚と軍が中心となって国家を近代化しようとした体制です。例として、1932年の立憲革命後のタイ、スハルト政権下のインドネシアが挙げられています。</p></div>
+<p class="xref">開発独裁と民主化の逆流 → <a href="../ch04/#ikou">第4回の6節</a></p>
+<div class="point"><p>戦後日本の通産省や、タイ・インドネシアの官僚政体のように、官僚が経済発展や近代化を主導したとされる例がある。ただしその役割には異論もある。</p></div>
+</section>
+
+<section id="s7" data-t="執政制度と官僚制">
+<h2><span class="sn">7</span>執政制度と官僚制：日本とアメリカ</h2>
+<p>官僚の自律性と専門性は、執政制度によっても変わります。レジュメは、議院内閣制の日本と、大統領制のアメリカを比べています。</p>
+<div class="tw"><table>
+<thead><tr><th></th><th>議院内閣制（日本）</th><th>大統領制（アメリカ）</th></tr></thead>
+<tbody>
+<tr><td><b>自律性</b></td><td>官僚は議会多数派・政党と密接に結びつき、政策立案を継続的に支える。政策の継続性と官僚の裁量が比較的保たれやすい</td><td>政治任命職が多く、上層部の人事が選挙ごとに入れ替わるため、自律性は弱く政治への依存が強い。ただし議会と大統領が対立するときは、官僚が「<b>仲介的自律性</b>」を発揮して行政を維持することもある</td></tr>
+<tr><td><b>専門性</b></td><td>長期のキャリアを前提に採用・昇進するので、専門性や制度の知識が蓄積しやすい</td><td>政治任命職が政策を指導するので、官僚は政策の<b>実施</b>を担う役割に傾く。専門性より忠誠が重視されることがある。ただし議会・監査制度・裁判所の制約が強い場合、専門機関としての能力が独自に発達することもある</td></tr>
+</tbody></table></div>
+<p class="xref">議院内閣制と大統領制 → <a href="../ch06/#seido">第6回のパート1</a></p>
+<div class="point"><p>議院内閣制の日本では官僚の自律性と専門性が保たれやすく、大統領制のアメリカでは政治任命職が多いため官僚の政治的依存が強い。ただし条件によって例外もある。</p></div>
+</section>
+
+<section id="s8" data-t="政治家による官僚のコントロール">
+<h2><span class="sn">8</span>民主主義体制での、政治家による官僚のコントロール</h2>
+<p>政治家が官僚をコントロールする手段は、次の4つに整理されます。</p>
+<div class="tw"><table>
+<thead><tr><th>手段</th><th>具体例（補足）</th></tr></thead>
+<tbody>
+<tr><td>① 予算や組織編制など、<b>資源</b>のコントロール</td><td>省庁の予算や定員を増やしたり減らしたりする</td></tr>
+<tr><td>② <b>人事</b>のコントロール</td><td>幹部の任命、政治任命職（political appointees）</td></tr>
+<tr><td>③ 行政官庁の<b>意思決定手続き</b>のコントロール</td><td>決定の前に意見公募や審議会の手続きを義務づける</td></tr>
+<tr><td>④ 官僚への<b>権限委譲の程度</b>を通じたコントロール</td><td>法律を細かく書くか、行政に任せる部分を大きくするか</td></tr>
+</tbody></table></div>
+<h3>日本の事例</h3>
+<ul class="tl">
+<li class="jp"><span class="y">1960〜80年代</span>大蔵省が予算編成の主導権を握る。政治任用のポストはごく限られ、政策の執行で官僚は比較的大きな裁量をもった。一方で、<b>族議員</b>や業界団体とのインフォーマルな政策調整・統制があった。</li>
+<li class="jp"><span class="y">1990年代以降</span>小選挙区比例代表並立制への移行などで、党執行部と内閣（首相官邸）の権限が強まった。予算編成では内閣府の<b>経済財政諮問会議</b>が、人事では<b>内閣人事局</b>（2014年設置）が使われ、<b>政治主導</b>が強まった。</li>
+</ul>
+<p class="xref">選挙制度改革が政党を変えた → <a href="../ch05/#kiketsu">第5回の11節</a></p>
+<div class="memo"><span class="who">メモ：第5回とのつながり</span>中選挙区制の時代は、議員が個人で後援会を抱え、族議員として官僚と個別に結びついていた。小選挙区制になると、党の公認や執行部の力が強まり、首相官邸が予算や人事で官僚を動かすようになった。選挙制度の変化が、政治家と官僚の関係まで変えたのです。</div>
+<div class="point"><p>政治家は、資源、人事、意思決定手続き、権限委譲の程度を通じて官僚をコントロールする。日本では1990年代以降、選挙制度改革などを背景に、予算と人事の面で政治主導が強まった。</p></div>
+</section>
+
+<section id="s9" data-t="確認問題">
+<h2><span class="sn">9</span>確認問題</h2>
+<div class="q"><div class="qq"><span class="qn">Q1</span><span>ローウィの「利益集団自由主義」批判とは何か。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>議会が行政に大きな裁量を任せ、行政機関と利益集団の交渉で政策が決まるようになると、公共の利益や民主的統制が損なわれる、という批判。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q2</span><span>アメリカの官僚の自律性が日本より弱いとされるのはなぜか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>大統領制のもとで政治任命職が多く、上層部の人事が選挙ごとに入れ替わるため、官僚が政治に依存しやすいから。</div></div>
+</section>
+</div>
+
+<!-- ===================== パート3 ===================== -->
+<div class="part" id="kasan" data-title="家産官僚制と中国" data-desc="近代的官僚制とは違う、支配者への人格的な服従にもとづく「家産官僚制」を見ます。中国の伝統的な官僚制から現代の党・国家体制までをたどり、最後に「ポスト官僚制」の問いを考えます。">
+
+<section id="s10" data-t="家産官僚制">
+<h2><span class="sn">10</span>家産官僚制</h2>
+<div class="kq"><span class="lab">定義</span><p><b>家産官僚制</b>（patrimonial bureaucracy）：家産制支配のもとで、支配者（首長）に<b>人格的に従属する</b>行政幹部によって担われる官僚制</p></div>
+<p>「家産」とは家の財産のことです。国を支配者の家の財産のように扱う支配が「家産制」です（言葉の説明は補足）。</p>
+<div class="tw"><table>
+<thead><tr><th></th><th>近代的官僚制</th><th>家産官僚制</th></tr></thead>
+<tbody>
+<tr><td>何に従うか</td><td>法規則にもとづく、非人格的な秩序</td><td>支配者個人への人格的な服従</td></tr>
+<tr><td>公私の区別</td><td>官職や権限の公私を分離する</td><td>公私の分離が不徹底</td></tr>
+</tbody></table></div>
+<p>例として、古代エジプト、中国の歴代王朝、オスマン帝国、ヨーロッパの絶対王政期が挙げられます。日本の前近代の支配体制にも家産制的な要素が見られます。</p>
+<p>ただし、家産官僚制でも、組織が大きくなるにつれて、規則や職務分担にもとづく非人格的な行政の仕組みが発達することがあります。</p>
+<p class="xref">2つの型の図 → <a href="#s2" data-goto="s2">2節</a></p>
+<div class="point"><p>家産官僚制は、支配者への人格的な服従にもとづき、公私の分離が不徹底な官僚制。ただし組織の拡大とともに非人格的な仕組みが育つこともある。</p></div>
+</section>
+
+<section id="s11" data-t="中国の官僚制">
+<h2><span class="sn">11</span>中国の官僚制：伝統的な家産官僚制から現代の党・国家体制へ</h2>
+<h3>ヴェーバーが論じた中国の官僚制</h3>
+<ul class="dots">
+<li>ヴェーバーは、中国の官僚制を<b>家産官僚制</b>の具体例として論じた。官僚を選ぶ<b>科挙</b>についても、近代的な専門行政官僚の養成とは違うものと評価した。</li>
+<li>支配者への恭順（つつしんで従うこと）の土台は「<b>孝</b>」であり、君主と臣下の関係は、親子関係になぞらえたもの（擬制的な親子関係）だった。</li>
+<li>皇帝は「<b>天子</b>」とされた。天は、理にかなった規範の支配によって保証される平穏の守り手とされた。</li>
+<li>皇帝個人の支配を支える<b>側近勢力</b>（宦官・将軍・寵臣・後宮など）と、科挙を経て登用された<b>士大夫官僚</b>とのあいだには、対立があった。</li>
+</ul>
+<div class="memo"><span class="who">メモ：科挙は何を試したのか</span>科挙では、主に儒教の古典の知識や詩文の力が試された（補足）。財政や土木の専門知識ではなく、教養ある人格者であることが求められたのです。ヴェーバーが「近代的な専門官僚の養成とは違う」と見たのは、このためです。</div>
+<h3>現代：中国共産党一党独裁下の党・国家体制</h3>
+<ul class="dots">
+<li>中国共産党が国家の行政機構を<b>領導</b>（指導）している。</li>
+<li>党の組織を通じて、幹部の人事や重要な政策を統制している。</li>
+<li>政治指導者と行政官僚の<b>境界がはっきりしない</b>。</li>
+</ul>
+<p class="xref">中国政治に根づくエリート的な考え方 → <a href="../ch03/#elite">第3回の8節</a></p>
+<div class="point"><p>ヴェーバーは中国を家産官僚制の例とした（孝、天子、側近と士大夫の対立）。現代中国では、共産党が人事と政策を通じて行政を指導し、政治と行政の境界が不明瞭である。</p></div>
+</section>
+
+<section id="s12" data-t="ポスト官僚制？">
+<h2><span class="sn">12</span>ポスト官僚制？</h2>
+<p>レジュメは最後に、官僚制の将来についての問いを示しています。</p>
+<ul class="dots">
+<li>グローバル化、情報化、デジタル化にともなって、組織についての考え方（組織哲学）が急速に変わっている。</li>
+<li>従来型の官僚の採用・養成の仕組みを見直す必要が出てきている。</li>
+</ul>
+<p>たとえば、ピラミッド型の階層組織よりも、専門家が分野を越えてチームを組む柔軟な組織が求められたり、民間から専門人材を中途採用したりする動きがあります（例は補足）。ヴェーバーが描いた近代的官僚制の特徴（階層制、文書主義、長期のキャリア）が、これからも最も合理的と言えるのかが問われています。</p>
+<div class="point"><p>グローバル化・デジタル化のなかで、ヴェーバー型の官僚制や従来の官僚の採用・養成のあり方が見直しを迫られている。</p></div>
+</section>
+
+<section id="s13" data-t="確認問題">
+<h2><span class="sn">13</span>確認問題</h2>
+<div class="q"><div class="qq"><span class="qn">Q1</span><span>家産官僚制と近代的官僚制の違いを2点挙げなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>①近代的官僚制は法規則にもとづく非人格的な秩序に従うが、家産官僚制は支配者への人格的な服従にもとづく。②近代的官僚制は官職や権限の公私を分離するが、家産官僚制ではそれが不徹底である。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q2</span><span>ヴェーバーが、中国の科挙を近代的な専門官僚の養成とは違うと評価したのはなぜか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>科挙は主に儒教の古典の教養を試すもので、行政の専門知識や技術をもつ官僚を養成するものではなかったから（理由の説明は補足を含む）。</div></div>
+</section>
+</div>
+
+<!-- ===================== パート4 ===================== -->
+<div class="part" id="matome" data-title="まとめと確認" data-desc="第7回の流れを年表とキーワードで振り返り、確認問題で理解を確かめます。">
+
+<section id="s14" data-t="年表で振り返る">
+<h2><span class="sn">14</span>年表で振り返る</h2>
+<p class="legend"><span><i></i>欧米・世界・アジアの動き</span><span><i class="jp"></i>日本の動き</span></p>
+<ul class="tl">
+<li><span class="y">1922</span>ヴェーバー『経済と社会』<span class="tag">支配の3類型</span></li>
+<li><span class="y">1932</span>タイの立憲革命、のち官僚政体国家へ<span class="tag">近代化志向官僚政体</span></li>
+<li><span class="y">1949</span>マートン『社会理論と社会構造』<span class="tag">逆機能</span></li>
+<li class="jp"><span class="y">1950〜70年代</span>通産省主導の産業政策と高度経済成長（役割には異論もある）<span class="tag">開発型国家</span></li>
+<li class="jp"><span class="y">1960〜80年代</span>大蔵省が予算編成を主導、族議員による調整<span class="tag">官僚の裁量</span></li>
+<li><span class="y">1969</span>ローウィ『自由主義の終焉』<span class="tag">民主的統制</span></li>
+<li><span class="y">1960年代後半〜1998</span>インドネシアのスハルト政権（期間は補足）<span class="tag">近代化志向官僚政体</span></li>
+<li class="jp"><span class="y">1994</span>小選挙区比例代表並立制の導入<span class="tag">政治主導へ</span></li>
+<li class="jp"><span class="y">2014</span>内閣人事局の設置<span class="tag">政治主導</span></li>
+</ul>
+<p class="legend">文献の年は原著の刊行年です。</p>
+</section>
+
+<section id="s15" data-t="キーワード一覧">
+<h2><span class="sn">15</span>キーワード一覧</h2>
+<div class="tw"><table>
+<thead><tr><th>キーワード</th><th>ひとことで</th><th>節</th></tr></thead>
+<tbody>
+<tr><td><b>官僚制</b></td><td>任命で職に就く公務員と、その活動を規定するルール</td><td class="c"><a href="#s1" data-goto="s1">1</a></td></tr>
+<tr><td><b>合法的・伝統的・カリスマ的支配</b></td><td>ヴェーバーの支配の3類型</td><td class="c"><a href="#s2" data-goto="s2">2</a></td></tr>
+<tr><td><b>近代的官僚制</b></td><td>権限分担、階層制、専門性、文書主義、非人格性、公私の分離</td><td class="c"><a href="#s2" data-goto="s2">2</a></td></tr>
+<tr><td><b>官僚制の逆機能・目標の転移</b></td><td>規則の遵守が自己目的化する（マートン）</td><td class="c"><a href="#s3" data-goto="s3">3</a></td></tr>
+<tr><td><b>利益集団自由主義</b></td><td>行政裁量と利益集団の交渉で政策が決まる状態への批判（ローウィ）</td><td class="c"><a href="#s5" data-goto="s5">5</a></td></tr>
+<tr><td><b>開発型国家</b></td><td>官僚が産業政策で経済発展を主導する国家</td><td class="c"><a href="#s6" data-goto="s6">6</a></td></tr>
+<tr><td><b>政治任命職</b></td><td>政治家が任命する行政の幹部ポスト。アメリカに多い</td><td class="c"><a href="#s7" data-goto="s7">7</a></td></tr>
+<tr><td><b>政治主導</b></td><td>予算や人事で、首相官邸・内閣が官僚を主導すること</td><td class="c"><a href="#s8" data-goto="s8">8</a></td></tr>
+<tr><td><b>家産官僚制</b></td><td>支配者への人格的な服従にもとづく官僚制</td><td class="c"><a href="#s10" data-goto="s10">10</a></td></tr>
+<tr><td><b>党・国家体制</b></td><td>共産党が国家の行政を指導する体制（中国）</td><td class="c"><a href="#s11" data-goto="s11">11</a></td></tr>
+</tbody></table></div>
+</section>
+
+<section id="s16" data-t="確認問題">
+<h2><span class="sn">16</span>確認問題</h2>
+<p>答えを考えてから「解答を見る」を押してください。</p>
+<div class="q"><div class="qq"><span class="qn">Q1</span><span>官僚制における「民主的統制」と「専門的自律性」の緊張とは何か。日本の1990年代以降の変化を例に説明しなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>選挙で選ばれていない官僚は国民の代表である政治家がコントロールすべきだが、専門知識をもつ官僚に任せた方がよい政策ができることもある、という緊張。日本ではかつて大蔵省が予算編成を主導し、官僚の裁量が大きかったが、1990年代以降は選挙制度改革などを背景に、経済財政諮問会議や内閣人事局を通じて首相官邸の政治主導が強まった。民主的統制は強まったが、官僚の専門性や中立性が損なわれないかという懸念も生じる。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q2</span><span>第6回の執政制度の違いは、官僚制にどんな違いをもたらすか。日本とアメリカを例に説明しなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>議院内閣制の日本では、官僚は議会多数派・政党と密接に結びつき、長期のキャリアのもとで専門性を蓄積し、政策の継続性と裁量が保たれやすい。大統領制のアメリカでは、政治任命職が多く選挙ごとに上層部が入れ替わるため、官僚の自律性は弱く、実施を担う役割に傾く。ただし議会と大統領の対立時の仲介的自律性や、制約の強さによる専門能力の発達もありうる。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q3</span><span>現代中国の党・国家体制は、ヴェーバーの近代的官僚制の特徴とどこが異なるか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>近代的官僚制では法規則にもとづく非人格的な秩序と、政治と行政の区別が前提となる。現代中国では共産党が人事と重要政策を通じて行政機構を指導し、政治指導者と行政官僚の境界が不明瞭であり、党組織への服従が行政を方向づける点で異なる。</div></div>
+</section>
+
+<section id="s17" data-t="考えてみよう">
+<h2><span class="sn">17</span>考えてみよう</h2>
+<div class="memo hint"><span class="who">問い1</span>内閣人事局による幹部人事は、民主的統制を強めたのだろうか、それとも官僚が政権の顔色をうかがう「忖度」を生んだのだろうか。両方の立場から考えてみよう。</div>
+<div class="memo hint"><span class="who">問い2</span>デジタル化が進んだ社会で、ヴェーバーの言う「文書主義」や「階層的な指揮命令系統」は、どう変わるべきだろうか。</div>
+<div class="memo hint"><span class="who">問い3</span>第1回から第7回までで学んだ「内在的視点」と「比較」の考え方を使うと、中国の官僚制を西洋の基準だけで評価することには、どんな問題があるだろうか。</div>
+<p class="src">このページは、第7回レジュメ「官僚制度」の内容を、初学者向けに言いかえて解説したものです。「補足」と書いた箇所は、レジュメにない一般的な説明です。文献の年は原著の刊行年です。</p>
+</section>
+</div>
+
+<div class="pager" id="pager"></div>
+</main>
+
+<script>
+/* 解説と答案例を最初から表示するときは true に変える */
+const ANSWERS_DEFAULT_ON=false;
+/* 第7回：近代的官僚制と家産官僚制（模式図） */
+(function(){
+  const C={ink:"#22252b",sub:"#5e6470",blue:"#1e5b4f",red:"#b0601c",grn:"#3d6a94",line:"#c9cfd8",mk:"#cce6b8",pale:"#eef3ee"};
+  const t=(x,y,s,o={})=>`<text x="${x}" y="${y}" font-size="${o.fs||14}" text-anchor="${o.a||"start"}" ${o.w?'font-weight="700"':""} style="fill:${o.c||C.ink}">${s}</text>`;
+  const svg=document.getElementById("gBur"),cap=document.getElementById("gBur-cap");
+  if(!svg)return;
+  const node=(x,y,w,lab,fill,st)=>`<rect x="${x-w/2}" y="${y-16}" width="${w}" height="32" fill="${fill||"#fff"}" stroke="${st||C.ink}" stroke-width="1.8"/>`+t(x,y+5,lab,{a:"middle",fs:13,w:1});
+  const ln=(x1,y1,x2,y2,c,d)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c||C.ink}" stroke-width="1.8" ${d?`stroke-dasharray="${d}"`:""}/>`;
+  function draw(k){
+    let s="";
+    if(k===0){
+      s+=`<rect x="60" y="14" width="520" height="34" fill="${C.mk}" stroke="${C.blue}" stroke-width="2"/>`+t(320,37,"法規則（誰に対しても同じルール）",{a:"middle",fs:14,w:1,c:C.blue});
+      s+=ln(320,48,320,74,C.blue,"4 3");
+      s+=node(320,90,130,"長官（局長）");
+      [[200,"課長A"],[440,"課長B"]].forEach(([x,l])=>{s+=ln(320,106,x,144)+node(x,160,110,l);});
+      [[130,"係員"],[270,"係員"],[370,"係員"],[510,"係員"]].forEach(([x,l],i)=>{s+=ln(i<2?200:440,176,x,214)+node(x,230,90,l);});
+      s+=t(320,280,"権限分担・階層制・文書主義・非人格性・公私の分離",{a:"middle",fs:13,c:C.sub,w:1});
+    }else{
+      const P=[[140,50,"側近"],[500,50,"寵臣"],[110,180,"官僚"],[530,180,"官僚"],[230,240,"官僚"],[410,240,"官僚"]];
+      P.forEach(([x,y,l])=>{s+=ln(320,120,x,y,C.red,"5 4")+node(x,y,84,l);});
+      s+=`<circle cx="320" cy="120" r="44" fill="${C.mk}" stroke="${C.red}" stroke-width="2.5"/>`+t(320,116,"支配者",{a:"middle",fs:15,w:1})+t(320,136,"（首長・皇帝）",{a:"middle",fs:11,c:C.sub});
+      s+=t(320,24,"人格的な服従（恩顧・忠誠・「孝」）",{a:"middle",fs:13,w:1,c:C.red});
+      s+=t(320,288,"公私の分離が不徹底。支配者との個人的な関係が地位を左右する",{a:"middle",fs:13,c:C.sub,w:1});
+    }
+    svg.innerHTML=s;
+    cap.textContent=k===0?"近代的官僚制（模式図）：全員が同じ法規則に従い、権限と階層が規則で決まる。誰がその職にいても同じように仕事が進む。":
+      "家産官僚制（模式図）：官僚や側近は、法規則ではなく支配者個人への人格的な服従で結びつく。国家は支配者の「家の財産」のように扱われる。";
+  }
+  document.querySelectorAll('.gsw button[data-g="bur"]').forEach(b=>b.addEventListener("click",()=>{
+    document.querySelectorAll('.gsw button[data-g="bur"]').forEach(z=>z.setAttribute("aria-pressed",z===b?"true":"false"));draw(+b.dataset.s);}));
+  draw(0);
+})();
+
+/* hikakuseiji 共通（lily から複製）：タブ・目次・前後ナビ・確認問題・内部タブ・解説スイッチ・相互リンク
+   各章のHTMLは、.part（data-title, data-desc）と section（data-t, h2 .sn）を並べるだけでよい。
+   パートが表示されたときに "partshown" イベント（detail.id）を発行する。 */
+(function(){
+  const parts=[...document.querySelectorAll(".part")];
+  const tabs=document.getElementById("tabs");
+  const drawerList=document.getElementById("drawerList");
+  const body=document.body, menuBtn=document.getElementById("menuBtn"), drawer=document.getElementById("drawer");
+  let current=0;
+
+  parts.forEach((p,i)=>{
+    p.setAttribute("role","tabpanel");
+    const secs=[...p.querySelectorAll("section")];
+    const head=document.createElement("div");head.className="part-head";
+    head.innerHTML='<div class="ph-main"><div class="pn">Part '+(i+1)+' / '+parts.length+'</div><h1>'+p.dataset.title+'</h1><p>'+p.dataset.desc+'</p></div>';
+    const mini=document.createElement("div");mini.className="toc-mini";
+    secs.forEach(s=>{const b=document.createElement("button");b.type="button";b.textContent=s.querySelector(".sn").textContent+". "+s.dataset.t;b.addEventListener("click",()=>s.scrollIntoView({behavior:"smooth",block:"start"}));mini.appendChild(b);});
+    head.querySelector(".ph-main").appendChild(mini);p.prepend(head);
+
+    const t=document.createElement("button");t.type="button";t.className="tab";t.setAttribute("role","tab");t.id="tab-"+p.id;t.setAttribute("aria-controls",p.id);
+    t.innerHTML='<span class="n">'+(i+1)+'</span>'+p.dataset.title;
+    t.addEventListener("click",()=>go(i,true));
+    t.addEventListener("keydown",e=>{if(e.key==="ArrowRight"){const k=(i+1)%parts.length;go(k,true);tabs.children[k].focus();}if(e.key==="ArrowLeft"){const k=(i-1+parts.length)%parts.length;go(k,true);tabs.children[k].focus();}});
+    tabs.appendChild(t);p.setAttribute("aria-labelledby",t.id);
+
+    const h=document.createElement("h4");const hb=document.createElement("button");hb.type="button";hb.innerHTML='<span class="n">'+(i+1)+'</span>'+p.dataset.title;hb.addEventListener("click",()=>{go(i,true);closeMenu();});h.appendChild(hb);drawerList.appendChild(h);
+    const ul=document.createElement("ul");
+    secs.forEach(s=>{const li=document.createElement("li");const b=document.createElement("button");b.type="button";b.textContent=s.querySelector(".sn").textContent+". "+s.dataset.t;b.addEventListener("click",()=>{go(i,false);closeMenu();setTimeout(()=>s.scrollIntoView({block:"start"}),30);});li.appendChild(b);ul.appendChild(li);});
+    drawerList.appendChild(ul);
+  });
+
+  function go(i,top){
+    current=i;
+    parts.forEach((p,k)=>p.classList.toggle("on",k===i));
+    [...tabs.children].forEach((t,k)=>{t.setAttribute("aria-selected",k===i?"true":"false");t.tabIndex=k===i?0:-1;});
+    [...drawerList.querySelectorAll("h4")].forEach((h,k)=>h.classList.toggle("cur",k===i));
+    tabs.children[i].scrollIntoView({block:"nearest",inline:"nearest"});
+    const pg=document.getElementById("pager");pg.innerHTML="";
+    if(i>0){const b=document.createElement("button");b.type="button";b.innerHTML="<small>前のパート</small>← "+parts[i-1].dataset.title;b.addEventListener("click",()=>go(i-1,true));pg.appendChild(b);}
+    if(i<parts.length-1){const b=document.createElement("button");b.type="button";b.className="next";b.innerHTML="<small>次のパート</small>"+parts[i+1].dataset.title+" →";b.addEventListener("click",()=>go(i+1,true));pg.appendChild(b);}
+    try{if(location.hash!=="#"+parts[i].id)history.replaceState(null,"","#"+parts[i].id);}catch(e){}
+    if(top)window.scrollTo(0,0);
+    document.dispatchEvent(new CustomEvent("partshown",{detail:{id:parts[i].id}}));
+  }
+  function openMenu(){body.classList.add("menu-open");drawer.setAttribute("aria-hidden","false");menuBtn.setAttribute("aria-expanded","true");document.getElementById("closeBtn").focus();}
+  function closeMenu(){body.classList.remove("menu-open");drawer.setAttribute("aria-hidden","true");menuBtn.setAttribute("aria-expanded","false");}
+  menuBtn.addEventListener("click",openMenu);
+  document.getElementById("closeBtn").addEventListener("click",()=>{closeMenu();menuBtn.focus();});
+  document.getElementById("scrim").addEventListener("click",closeMenu);
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&body.classList.contains("menu-open")){closeMenu();menuBtn.focus();}});
+  window.addEventListener("hashchange",()=>{const k=parts.findIndex(p=>"#"+p.id===location.hash);if(k>=0&&k!==current)go(k,true);});
+
+  /* 内部タブ（.itabs の button[aria-controls]） */
+  document.querySelectorAll(".itabs").forEach(box=>{
+    const bs=[...box.querySelectorAll("button")];
+    const sel=i=>bs.forEach((b,k)=>{b.setAttribute("aria-selected",k===i?"true":"false");b.tabIndex=k===i?0:-1;document.getElementById(b.getAttribute("aria-controls")).hidden=k!==i;});
+    bs.forEach((b,i)=>{b.addEventListener("click",()=>sel(i));b.addEventListener("keydown",e=>{if(e.key==="ArrowRight"){const k=(i+1)%bs.length;sel(k);bs[k].focus();}if(e.key==="ArrowLeft"){const k=(i-1+bs.length)%bs.length;sel(k);bs[k].focus();}});});
+    sel(0);
+  });
+
+  /* 確認問題・ヒント（.q の .show で .ans を開閉） */
+  document.querySelectorAll(".q").forEach(q=>{const b=q.querySelector(".show"),a=q.querySelector(".ans");if(!b||!a)return;const lab=b.textContent;b.setAttribute("aria-expanded","false");b.addEventListener("click",()=>{a.hidden=!a.hidden;b.textContent=a.hidden?lab:"閉じる";b.setAttribute("aria-expanded",a.hidden?"false":"true");});});
+
+  /* 解説と答案例の表示スイッチ */
+  const tg=document.getElementById("ansToggle"),note=document.getElementById("ansNote");
+  if(tg){
+    const setAns=on=>{document.body.classList.toggle("ans-off",!on);tg.checked=on;if(note)note.textContent=on?"オン：解説と答案例を表示しています。":"オフ：問題とヒントだけを表示しています。";};
+    tg.addEventListener("change",()=>setAns(tg.checked));
+    setAns(typeof ANSWERS_DEFAULT_ON!=="undefined"&&ANSWERS_DEFAULT_ON);
+  }
+
+  /* 解説の開閉 */
+  document.querySelectorAll(".solbtn").forEach(b=>b.addEventListener("click",()=>{const bd=b.nextElementSibling;bd.hidden=!bd.hidden;b.setAttribute("aria-expanded",bd.hidden?"false":"true");b.textContent=bd.hidden?"解説を読む（手順を追って説明）":"解説を閉じる";document.dispatchEvent(new CustomEvent("solopen"));}));
+
+  /* 相互リンク */
+  document.addEventListener("click",e=>{const a=e.target.closest("[data-goto]");if(!a)return;e.preventDefault();const t=document.getElementById(a.dataset.goto);if(!t)return;const k=parts.findIndex(p=>p.contains(t));if(k<0)return;go(k,false);setTimeout(()=>t.scrollIntoView({block:"start"}),30);});
+
+  const start=parts.findIndex(p=>"#"+p.id===location.hash);
+  go(start>=0?start:0,false);
+})();
+
+</script>
+</body>
+</html>

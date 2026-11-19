@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第3回 政治体制（1）民主主義とは｜比較政治学</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* hikakuseiji の配色：lily（青・朱・黄）と区別するため、深緑・琥珀・若草に変更 */
+/* 設計: 方眼紙に書いた講義プリント。黒インクの本文、青ペンの強調、朱ペンの書き込み、黄色の蛍光ペン。上部に固定ヘッダーとパートのタブ、左からメニューが出る */
+:root{
+  --paper:#fdfdfb;
+  --grid:#e7ede8;
+  --ink:#22252b;
+  --sub:#5e6470;
+  --line:#c9cfd8;
+  --blue:#1e5b4f;
+  --red:#b0601c;
+  --teal:#3d6a94;
+  --marker:#cce6b8;
+  --note:#f5f8ee;
+  --font-body:"BIZ UDPGothic","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  --font-hand:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  --font-math:"Times New Roman",Times,serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.95;
+  -webkit-text-size-adjust:100%;
+}
+a{color:var(--blue)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+/* ヘッダー */
+.bar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:2px solid var(--ink)}
+.bar-in{max-width:960px;margin:0 auto;padding:10px 16px 0;display:flex;align-items:center;gap:12px}
+.burger{width:42px;height:42px;border:1.5px solid var(--ink);background:var(--paper);border-radius:6px;display:grid;place-items:center;cursor:pointer;flex:none}
+.burger span{display:block;width:20px;height:2px;background:var(--ink);box-shadow:0 -6px 0 var(--ink),0 6px 0 var(--ink)}
+.course{line-height:1.35;min-width:0}
+.course small{display:block;color:var(--sub);font-size:.78rem}
+.course b{font-size:1.05rem}
+.tabs{max-width:960px;margin:8px auto 0;padding:0 16px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:1.5px solid var(--ink);border-bottom:none;background:#eef1f5;border-radius:8px 8px 0 0;padding:6px 14px 5px;cursor:pointer;font-size:.92rem;line-height:1.5;color:var(--sub);position:relative;top:2px}
+.tab .n{font-family:var(--font-math);font-weight:700;margin-right:6px;color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--paper);color:var(--ink);font-weight:700;border-bottom:2px solid var(--paper);z-index:1}
+
+/* ドロワー */
+.scrim{position:fixed;inset:0;background:rgba(20,24,32,.35);z-index:30;opacity:0;pointer-events:none;transition:opacity .2s}
+.drawer{position:fixed;top:0;left:0;bottom:0;width:min(340px,86vw);background:var(--paper);z-index:31;border-right:2px solid var(--ink);transform:translateX(-102%);transition:transform .22s ease;overflow-y:auto;padding:16px 18px 40px}
+body.menu-open .scrim{opacity:1;pointer-events:auto}
+body.menu-open .drawer{transform:none}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1.5px solid var(--ink);padding-bottom:8px;margin-bottom:10px}
+.drawer-head b{font-size:1rem}
+.close{border:1.5px solid var(--ink);background:none;border-radius:6px;width:36px;height:36px;cursor:pointer;font-size:1.2rem;line-height:1}
+.drawer h4{margin:14px 0 2px;font-size:.95rem}
+.drawer h4 button{background:none;border:none;padding:0;cursor:pointer;text-align:left;font-weight:700}
+.drawer h4 .n{font-family:var(--font-math);margin-right:6px}
+.drawer ul{list-style:none;margin:0;padding:0 0 0 12px;border-left:1.5px solid var(--line)}
+.drawer li button{background:none;border:none;padding:3px 0;cursor:pointer;color:var(--sub);text-align:left;font-size:.9rem;line-height:1.5}
+.drawer li button:hover{color:var(--blue)}
+.drawer .cur>button{color:var(--blue)}
+
+/* 本文 */
+main{max-width:960px;margin:0 auto;padding:22px 16px 80px}
+.part{display:none}
+.part.on{display:block}
+.part-head{background:var(--paper);border:1.5px solid var(--ink);border-radius:4px;padding:16px 20px;margin-bottom:26px}
+.part-head .pn{font-family:var(--font-math);font-size:.95rem;color:var(--sub)}
+.part-head h1{font-size:clamp(1.5rem,3.6vw,2rem);line-height:1.4;margin:2px 0 6px;text-wrap:balance}
+.part-head p{margin:0;color:var(--sub);max-width:42em}
+.toc-mini{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:.9rem}
+.toc-mini button{background:none;border:none;padding:0;cursor:pointer;color:var(--blue);text-decoration:underline;text-underline-offset:3px}
+
+section{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:6px 22px 24px;margin-bottom:22px;scroll-margin-top:120px}
+@media (max-width:560px){section{padding:4px 14px 18px}}
+h2{font-size:1.4rem;line-height:1.5;margin:18px 0 12px;padding-bottom:6px;border-bottom:3px double var(--ink);text-wrap:balance}
+h2 .sn{display:inline-block;min-width:1.7em;height:1.7em;line-height:1.7em;text-align:center;border:1.5px solid var(--ink);border-radius:50%;font-family:var(--font-math);font-size:1rem;margin-right:10px;vertical-align:.12em}
+h3{font-size:1.1rem;margin:24px 0 6px;text-wrap:balance}
+h3::before{content:"";display:inline-block;width:10px;height:10px;background:var(--blue);margin-right:8px;vertical-align:.05em}
+p{margin:0 0 1em;max-width:44em}
+.mk{background:linear-gradient(transparent 58%,var(--marker) 58%);font-weight:700}
+.v{font-family:var(--font-math);font-style:italic;font-size:1.1em;white-space:nowrap}
+.plus{color:var(--teal);font-weight:700}
+.minus{color:var(--red);font-weight:700}
+ul.dots,ol.steps{margin:0 0 1em;padding-left:1.4em;max-width:44em}
+ul.dots li,ol.steps li{margin:3px 0}
+
+/* 数式ボックス（教科書風に式番号を右寄せ） */
+.eq{border:1.5px solid var(--ink);background:#fff;padding:12px 18px;margin:16px 0 6px;max-width:44rem;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.eq .f{font-family:var(--font-math);font-size:1.45rem;font-style:italic}
+.eq .f sub{font-size:.65em}
+.eq .no{margin-left:auto;font-size:.85rem;color:var(--sub)}
+.eq-read{max-width:44rem;margin:0 0 16px;padding-left:20px;font-size:.95rem;color:var(--sub)}
+.eq-read::before{content:"読み方　";color:var(--blue);font-weight:700}
+
+/* 先生のメモ */
+.memo{font-family:var(--font-hand);background:var(--note);border-left:4px solid var(--red);padding:12px 16px 12px 18px;margin:16px 0;max-width:44rem;font-size:1.05rem;line-height:1.85}
+.memo .who{display:block;color:var(--red);font-weight:600;font-size:.9rem}
+/* ポイント */
+.point{border:2px solid var(--blue);border-radius:2px;padding:10px 16px;margin:20px 0 4px;max-width:44rem;position:relative}
+.point::before{content:"ポイント";position:absolute;top:-.85em;left:12px;background:var(--paper);padding:0 6px;color:var(--blue);font-weight:700;font-size:.85rem}
+.point p{margin:0}
+
+/* 帯グラフ */
+.bars{background:#fff;border:1px solid var(--line);padding:14px 16px 10px;margin:14px 0 18px;max-width:44rem}
+.bars .sw{display:flex;gap:0;margin-bottom:12px;border:1.5px solid var(--ink);border-radius:6px;overflow:hidden;width:max-content}
+.bars .sw button{border:none;background:#fff;padding:3px 14px;cursor:pointer;font-size:.88rem}
+.bars .sw button+button{border-left:1.5px solid var(--ink)}
+.bars .sw button[aria-selected="true"]{background:var(--ink);color:#fff}
+.brow{display:grid;grid-template-columns:7.2em 1fr;align-items:center;gap:10px;margin:8px 0}
+.brow .lab{font-size:.88rem;line-height:1.35}
+.track{position:relative;height:34px}
+.seg{position:absolute;top:0;bottom:0;display:flex;align-items:center;justify-content:center;font-size:.8rem;border:1.5px solid var(--ink);white-space:nowrap;overflow:hidden;font-variant-numeric:tabular-nums}
+.seg.y{background:#d9ebe2}
+.seg.c{background:#f3f4f6}.seg.i{background:#e7eaee}.seg.g{background:#d9dde3}
+.seg.gap-p{background:repeating-linear-gradient(45deg,#dde6f0,#dde6f0 5px,#fff 5px,#fff 10px);color:var(--teal);font-weight:700;border-color:var(--teal);border-style:dashed}
+.seg.gap-m{background:repeating-linear-gradient(45deg,#f5e5d3,#f5e5d3 5px,#fff 5px,#fff 10px);color:var(--red);font-weight:700;border-color:var(--red);border-style:dashed}
+.seg.b{background:#e7eaee}.seg.ri{background:#e3efd6}.seg.nx{background:#dde6f0}
+.seg-lab{position:absolute;top:0;bottom:0;display:flex;align-items:center;font-size:.85rem;white-space:nowrap}
+.bars .cap{font-size:.88rem;color:var(--sub);margin:6px 0 0}
+
+/* 表 */
+.tw{overflow-x:auto;margin:12px 0 18px}
+table{border-collapse:collapse;background:#fff;font-size:.95rem;font-variant-numeric:tabular-nums}
+th,td{border:1px solid var(--ink);padding:7px 12px;text-align:left;vertical-align:top;line-height:1.6}
+thead th{background:#eef1f5}
+td.c{text-align:center;white-space:nowrap}
+td.r{text-align:right}
+table.calc-t td{border:none;border-bottom:1px dotted var(--line);padding:3px 14px 3px 0}
+table.calc-t tr:last-child td{border-bottom:2px solid var(--ink);font-weight:700}
+
+/* 図 */
+figure{margin:14px 0 20px}
+figcaption{font-size:.85rem;color:var(--sub);margin-top:4px}
+.figbox{background:#fff;border:1px solid var(--line);padding:8px;overflow-x:auto}
+svg text{font-family:var(--font-body);fill:var(--ink)}
+svg .m{font-family:var(--font-math);font-style:italic}
+
+/* シミュレーター */
+.sim{background:#fff;border:1.5px solid var(--ink);padding:14px;margin:16px 0;display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:860px){.sim{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}}
+.grp{margin-bottom:10px}
+.grp .gl{font-size:.78rem;color:var(--sub);display:block;margin-bottom:3px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chips button{border:1.5px solid var(--ink);background:#fff;padding:2px 10px;border-radius:4px;cursor:pointer;font-size:.85rem;line-height:1.6}
+.chips button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.explain{border-top:1px dashed var(--line);padding-top:10px;margin-top:6px}
+.explain .t{font-weight:700;margin:0}
+.explain .x{font-size:.95rem;margin:4px 0}
+.explain .f{font-size:.8rem;color:var(--sub);margin:0}
+.meter{display:grid;grid-template-columns:repeat(3,1fr);border:1.5px solid var(--ink);margin:10px 0}
+.meter div{padding:6px 8px;text-align:center}
+.meter div+div{border-left:1px solid var(--ink)}
+.meter small{display:block;font-size:.75rem;color:var(--sub);line-height:1.3}
+.meter strong{font-size:1.3rem;font-family:var(--font-math);font-variant-numeric:tabular-nums}
+.sl{display:grid;grid-template-columns:7.4em 1fr 3.6em;gap:8px;align-items:center;font-size:.88rem}
+.sl input{width:100%;accent-color:var(--blue)}
+.sl output{text-align:right;font-family:var(--font-math);font-variant-numeric:tabular-nums}
+.sm{font-size:.8rem;color:var(--sub);margin:6px 0 0}
+
+/* 内部タブ（ケース別） */
+.itabs{display:flex;gap:0;border-bottom:1.5px solid var(--ink);margin:14px 0 0;overflow-x:auto}
+.itabs button{border:none;background:none;padding:6px 14px;cursor:pointer;color:var(--sub);border-bottom:3px solid transparent;margin-bottom:-1.5px;white-space:nowrap}
+.itabs button[aria-selected="true"]{color:var(--ink);font-weight:700;border-bottom-color:var(--blue)}
+.ipanel{padding:12px 0 0}
+.ipanel[hidden]{display:none}
+.case{border-left:3px solid var(--line);padding:2px 0 2px 14px;margin:0 0 16px;max-width:44rem}
+.case b{display:block}
+.case p b{display:inline}
+.case .res{font-size:.9rem;margin:2px 0}
+.case p{margin:2px 0 0;font-size:.97rem}
+
+/* 手順 */
+.flow{display:grid;grid-template-columns:1fr;gap:8px;max-width:44rem;margin:12px 0 16px;counter-reset:f}
+@media (min-width:700px){.flow{grid-template-columns:repeat(3,1fr)}}
+.flow div{border:1.5px solid var(--ink);background:#fff;padding:10px 12px;font-size:.93rem;line-height:1.7;counter-increment:f}
+.flow div::before{content:"手順" counter(f);display:block;font-weight:700;color:var(--blue);font-size:.82rem}
+
+/* 計算機 */
+.calc{background:#fff;border:1.5px solid var(--ink);padding:14px 16px;margin:14px 0;max-width:44rem}
+.calc .out{font-size:.98rem;margin-top:10px}
+.calc .chk{color:var(--sub);font-size:.88rem}
+
+/* 確認問題 */
+.q{border:1px solid var(--ink);background:#fff;margin:10px 0;max-width:46rem}
+.q .qq{padding:10px 14px;display:flex;gap:10px}
+.q .qn{font-family:var(--font-math);font-weight:700;color:var(--blue)}
+.q button.show{margin:0 14px 10px;border:1.5px solid var(--ink);background:#fff;border-radius:4px;padding:2px 12px;cursor:pointer;font-size:.85rem}
+.q .ans{border-top:1px dashed var(--line);padding:8px 14px 10px;font-family:var(--font-hand);font-size:1.05rem;background:var(--note)}
+.q .ans[hidden]{display:none}
+.q .ans::before{content:"解答　";color:var(--red);font-weight:600}
+
+/* 前後ナビ */
+.pager{display:flex;justify-content:space-between;gap:10px;margin-top:28px;flex-wrap:wrap}
+.pager button{border:1.5px solid var(--ink);background:#fff;padding:10px 16px;cursor:pointer;border-radius:4px;text-align:left;line-height:1.4;max-width:48%}
+.pager button small{display:block;color:var(--sub);font-size:.78rem}
+.pager .next{margin-left:auto;text-align:right}
+.src{font-size:.82rem;color:var(--sub);margin-top:30px;border-top:1px solid var(--line);padding-top:10px}
+
+/* キャラクター */
+.talk{display:flex;align-items:flex-end;gap:12px;margin:14px 0 18px;max-width:44rem}
+.talk img{width:118px;height:auto;flex:none}
+.talk .bubble{position:relative;background:#fff;border:2px solid var(--ink);border-radius:14px;padding:10px 16px;font-family:var(--font-hand);font-size:1.08rem;line-height:1.75;margin-bottom:30px}
+.talk .bubble::before{content:"";position:absolute;left:-12px;bottom:16px;border:6px solid transparent;border-right:8px solid var(--ink)}
+.talk .bubble::after{content:"";position:absolute;left:-8px;bottom:17px;border:5px solid transparent;border-right:7px solid #fff}
+.talk.r{flex-direction:row-reverse;margin-left:auto}
+.talk.r .bubble::before{left:auto;right:-12px;border-right-color:transparent;border-left:8px solid var(--ink)}
+.talk.r .bubble::after{left:auto;right:-8px;border-right-color:transparent;border-left:7px solid #fff}
+.part-head{display:flex;gap:16px;align-items:flex-end}
+.part-head .ph-main{flex:1;min-width:0}
+.part-head .ph-fig{flex:none;width:150px;text-align:center;margin:-6px 0 -16px}
+.part-head .ph-say{font-family:var(--font-hand);font-size:.88rem;line-height:1.5;background:#fff;border:1.5px solid var(--ink);border-radius:10px;padding:5px 8px;margin-bottom:6px;text-align:left;position:relative}
+.part-head .ph-say::after{content:"";position:absolute;left:50%;bottom:-7px;width:10px;height:10px;background:#fff;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);transform:translateX(-50%) rotate(45deg)}
+.part-head .ph-fig img{width:100%;height:auto;display:block}
+@media (max-width:560px){.talk img{width:86px}.part-head .ph-fig{width:96px}.talk .bubble{font-size:1rem}}
+.memo.withfig{display:flex;gap:14px;align-items:center}
+.memo.withfig img{width:104px;height:auto;flex:none}
+@media (max-width:560px){.memo.withfig img{width:78px}}
+
+/* 課題パート */
+.dl{margin:10px 0 16px}
+.dlbtn{display:inline-flex;align-items:center;gap:12px;border:2px solid var(--ink);background:#fff;color:var(--ink);text-decoration:none;padding:8px 16px 8px 10px;border-radius:6px;line-height:1.4;box-shadow:3px 3px 0 var(--ink)}
+.dlbtn:hover{background:#eaf3ee}
+.dlbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.dlbtn .dlico{width:34px;height:40px;background:#1e5b4f;color:#fff;font-weight:700;display:grid;place-items:center;border-radius:3px;font-family:var(--font-math);font-size:1.2rem}
+.dlbtn b{display:block}
+.dlbtn small{display:block;color:var(--sub);font-size:.8rem}
+
+.xref{font-size:.9rem;margin:6px 0 12px;max-width:44em}
+.xref::before{content:"→ ";color:var(--blue);font-weight:700}
+.xref a,.dots a{color:var(--blue);cursor:pointer}
+.kq{border:2px solid var(--ink);background:#fff;padding:12px 16px;margin:12px 0 14px;max-width:46rem}
+.kq .lab{display:inline-block;background:var(--ink);color:#fff;font-size:.8rem;padding:0 8px;border-radius:3px;margin-bottom:4px}
+.kq p{margin:4px 0}
+.memo.hint{border-left-color:var(--blue)}
+.memo.hint .who{color:var(--blue)}
+.locked{display:none;border:1.5px dashed var(--line);color:var(--sub);padding:8px 14px;max-width:44rem;font-size:.92rem;background:#fff}
+body.ans-off .locked{display:block}
+body.ans-off .sol{display:none}
+.solbtn{border:1.5px solid var(--ink);background:var(--ink);color:#fff;border-radius:4px;padding:6px 16px;cursor:pointer;margin:6px 0 10px}
+.solbtn[aria-expanded="true"]{background:#fff;color:var(--ink)}
+.step{border-top:1px dashed var(--line);padding-top:6px;margin-top:10px}
+h3.stp::before{display:none}
+h3.stp .st{display:inline-block;font-size:.8rem;background:var(--blue);color:#fff;padding:0 9px;border-radius:3px;margin-right:8px;vertical-align:.12em}
+.ansSwitch{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;border:2px solid var(--ink);background:#fff;padding:10px 14px;margin:14px 0 16px;max-width:46rem}
+.sw-l{display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:700}
+.sw-l input{position:absolute;opacity:0;width:1px;height:1px}
+.sw-ui{width:46px;height:26px;border-radius:13px;background:#c9cfd8;position:relative;flex:none;transition:background .15s}
+.sw-ui::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:left .15s}
+.sw-l input:checked+.sw-ui{background:var(--teal)}
+.sw-l input:checked+.sw-ui::after{left:23px}
+.sw-l input:focus-visible+.sw-ui{outline:2px solid var(--blue);outline-offset:2px}
+.sw-note{font-size:.88rem;color:var(--sub)}
+.gwrap{background:#fff;border:1.5px solid var(--ink);padding:12px;margin:14px 0 6px;max-width:46rem}
+.gsw{display:flex;border:1.5px solid var(--ink);border-radius:6px;overflow:hidden;width:max-content;max-width:100%;margin-bottom:8px;flex-wrap:wrap}
+.gsw button{border:none;background:#fff;padding:3px 14px;cursor:pointer;font-size:.88rem}
+.gsw button+button{border-left:1.5px solid var(--ink)}
+.gsw button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.gwrap svg{width:100%;max-width:560px;height:auto;display:block}
+.gcap{font-size:.88rem;color:var(--sub);margin:6px 0 0}
+.howto{font-size:.93rem;max-width:44rem;margin:6px 0 16px;padding-left:1.3em}
+.trap{border:2px dashed var(--red);padding:10px 16px;margin:16px 0;max-width:44rem;background:#fff}
+.trap b{color:var(--red)}
+.point.ketsu::before{content:"結論"}
+.answer{border:1.5px solid var(--ink);background:#fff;padding:14px 18px 6px;margin:20px 0 16px;max-width:46rem;position:relative}
+.answer::before{content:"答案の書き方の例";position:absolute;top:-.8em;left:12px;background:var(--ink);color:#fff;font-size:.8rem;padding:0 8px;border-radius:3px}
+.answer p{font-size:.97rem}
+.num{background:#fff;border:1px solid var(--line);padding:10px 16px;margin:14px 0;max-width:44rem}
+.num .h{font-size:.82rem;color:var(--sub);display:block}
+#kadai .brow{grid-template-columns:5.5em 1fr}
+#kadai .seg.g{background:#e3efd6}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+
+/* 数式（分数・Σ/Π/∫ の上下添字）— 全章共通 */
+.mx{font-family:var(--font-math);display:inline-flex;align-items:center;gap:.12em;vertical-align:middle;white-space:nowrap;font-size:1.08em}
+.mx i{font-style:italic}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .12em;line-height:1.25}
+.frac>span:first-child{border-bottom:1px solid currentColor;padding:0 .25em}
+.frac>span:last-child{padding:0 .25em}
+.bop{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1;margin:0 .12em}
+.bop .s{font-size:1.7em;line-height:1}
+.bop small{font-size:.62em;line-height:1.1}
+.eq .mx{font-size:1.25rem}
+.eq.mxeq .f{font-style:normal}
+.mxblock{display:block;overflow-x:auto;padding:4px 0}
+
+/* ===== hikakuseiji：回共通の部品（第1・2回で本文に書いていたものを共通化） ===== */
+.tl{border-left:3px solid var(--ink);margin:14px 0 20px 6px;padding:0 0 0 18px;max-width:46rem}
+.tl li{list-style:none;position:relative;margin:0 0 10px;line-height:1.7}
+.tl li::before{content:"";position:absolute;left:-25px;top:.55em;width:11px;height:11px;background:var(--paper);border:2.5px solid var(--blue);border-radius:50%}
+.tl li.jp::before{border-color:var(--red)}
+.tl .y{font-family:var(--font-math);font-weight:700;color:var(--blue);margin-right:.6em}
+.tl li.jp .y{color:var(--red)}
+.tl .tag{font-size:.75rem;border:1px solid currentColor;padding:0 5px;margin-left:.4em;color:var(--sub);white-space:nowrap}
+.bk{border:1.5px solid var(--ink);background:#fff;padding:10px 14px 8px;margin:12px 0;max-width:46rem}
+.bk .who{font-weight:700}
+.bk .yr{font-family:var(--font-math);font-weight:700;color:var(--blue);margin-left:.4em}
+.bk .ti{display:block;font-size:.88rem;color:var(--sub);line-height:1.6}
+.bk p{margin:6px 0 0;font-size:.97rem}
+.legend{font-size:.85rem;color:var(--sub);margin:4px 0 0}
+.legend span{display:inline-block;margin-right:14px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;border:2.5px solid var(--blue);margin-right:5px;vertical-align:-1px}
+.legend i.jp{border-color:var(--red)}
+.vv{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;max-width:44rem;margin:14px 0 18px}
+.vv div{border:1.5px solid var(--ink);background:#fff;padding:10px 12px;text-align:center;line-height:1.6}
+.vv div small{display:block;color:var(--sub);font-size:.8rem}
+.vv .ar{border:none;background:none;font-size:1.6rem;color:var(--blue);padding:0}
+.ref{border-left:3px solid var(--red);background:#fff;padding:8px 14px;margin:12px 0;max-width:46rem;font-size:.95rem}
+.ref .h{display:block;font-size:.8rem;color:var(--red);font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="scrim" id="scrim"></div>
+<nav class="drawer" id="drawer" aria-label="全体の目次" aria-hidden="true">
+  <div class="drawer-head"><b>目次</b><button class="close" id="closeBtn" aria-label="目次を閉じる">×</button></div>
+  <div id="drawerList"></div>
+</nav>
+
+<header class="bar">
+  <div class="bar-in">
+    <button class="burger" id="menuBtn" aria-label="目次を開く" aria-controls="drawer" aria-expanded="false"><span></span></button>
+    <div class="course"><small>比較政治学　地域研究・比較政治基礎</small><b>第3回　政治体制（1）民主主義とは　解説プリント</b></div>
+  </div>
+  <div class="tabs" role="tablist" aria-label="パート" id="tabs"></div>
+</header>
+
+<main>
+<!-- ===================== パート1 ===================== -->
+<div class="part" id="mondai" data-title="民主主義をめぐる問い" data-desc="アメリカ主催の「民主主義サミット」と、それに対する中国の反応から始めます。どの国が民主主義なのかを誰が決めるのか――今回の問いを確かめ、民主主義の基本的な定義を押さえます。">
+
+<section id="s1" data-t="プロローグ：民主主義サミット">
+<h2><span class="sn">1</span>プロローグ：民主主義サミットと中国の反応</h2>
+<p>アメリカのバイデン政権は、2021年12月と2023年3月に「<b>民主主義サミット</b>」を開きました。政権は世界の対立を「<span class="mk">民主主義と専制主義の闘い</span>」と位置づけ、民主主義の国々の結束を呼びかけました。</p>
+<p>これに対して中国は、サミット直前の2021年12月に次のような対応をとりました。</p>
+<div class="tw"><table>
+<thead><tr><th>日付</th><th>中国の対応</th></tr></thead>
+<tbody>
+<tr><td class="c">12月4日</td><td>国際フォーラム「民主：全人類の共通の価値」を北京で開催</td></tr>
+<tr><td class="c">12月4日</td><td>白書「中国の民主」を発表</td></tr>
+<tr><td class="c">12月5日</td><td>中国外交部が報告書「アメリカの民主状況」を発表（レジュメの付録に一部の仮訳）</td></tr>
+</tbody></table></div>
+<div class="ref"><span class="h">参考資料：中国外交部「アメリカの民主状況」の主張（要点）</span>
+<ul class="dots">
+<li>民主とは「人民が真に主人となっているか」で判断すべきで、投票の時だけでなく、広い参加や、約束が実際に果たされたかが問われる。</li>
+<li>アメリカの民主は、お金がものをいう「金権政治」、少数エリートによる支配、互いに足を引っ張る「拒否権政治」、選挙人団制度の不備などの問題を抱えている。</li>
+<li>どの国の民主制度も完全ではなく、すべての国に当てはまるモデルはない。ある国が民主的かどうかは、その国の人々が判断すべきだ。</li>
+</ul>
+<p>これは中国政府の立場から書かれた文書です。民主主義をどう定義するかが、国際政治の争点にもなっていることを示しています。</p></div>
+<div class="memo"><span class="who">メモ：審判は誰か</span>サッカーの試合なら審判がルールに従って判定する。でも「どの国が民主主義か」には、全員が認める審判もルールブックもない。アメリカは「選挙や自由」を、中国は「人民が主人になっているか」を物差しにして、お互いを評価している。物差しそのものを問うのが、今回の授業です。</div>
+<div class="point"><p>民主主義サミットをめぐる米中のやりとりは、「民主主義とは何か」「誰がそれを判定するのか」が政治的な争点であることを示している。</p></div>
+</section>
+
+<section id="s2" data-t="問題提起">
+<h2><span class="sn">2</span>問題提起：3つの問い</h2>
+<p>レジュメは、次の3つの問いを投げかけています。この回を通して考えていきましょう。</p>
+<div class="kq"><span class="lab">問い</span>
+<p>① 世界の国（地域）は、民主主義国家と権威主義国家とに<b>区分できる</b>のか？</p>
+<p>② 民主主義の<b>要件</b>とは何か？</p>
+<p>③ 民主主義は<b>測定できる</b>のか？　<b>比較できる</b>のか？</p></div>
+<p>③は、第2回で学んだ「操作化」の問題そのものです。「民主主義」という抽象的な概念を、どんな指標で測るのか――この回の後半（<a href="#s13" data-goto="s13">13節</a>）で、実際の測定の試みを見ます。</p>
+<p class="xref">操作化とは何だったか → <a href="../ch02/#kihon">第2回の2節</a></p>
+<div class="point"><p>民主主義と権威主義は分けられるのか、民主主義の要件は何か、民主主義は測定・比較できるのか――これが今回の3つの問い。</p></div>
+</section>
+
+<section id="s3" data-t="民主主義の定義と体制の区別">
+<h2><span class="sn">3</span>民主主義の定義と、ほかの体制との区別</h2>
+<div class="kq"><span class="lab">定義</span><p>国家あるいは集団の<b>権力者が全構成員</b>であり、その<b>意思決定が構成員の合意</b>によって行われる体制・政体</p></div>
+<p>これは理念としての定義です。実際の国々をこの定義で分けるのは簡単ではありません。そこで、民主主義でない体制の側から整理したのが、政治学者<b>ホアン・リンス</b>です（1975年の論文）。</p>
+<div class="tw"><table>
+<thead><tr><th>全体主義体制</th><th>権威主義体制</th></tr></thead>
+<tbody>
+<tr><td>① 排他的で、知的に洗練されたイデオロギー<br>② 単一政党などによる積極的な政治動員<br>③ 一元的な権力の中枢</td><td>① 制限された政治的多元主義<br>② 精緻なイデオロギーがない<br>③ 高度な政治的動員がない<br>④ 指導者（または少数の集団）が、予測できる一定の範囲内で権力を使う</td></tr>
+</tbody></table></div>
+<p>全体主義は社会のすみずみまで支配し、人びとを熱心に動員します。権威主義は、ある程度の多様さを残し、人びとに政治への無関心を許す――という違いです。詳しくは次回（第4回）に学びます。</p>
+<p class="xref">体制の類型の続き → <a href="../ch04/#ruikei">第4回のパート1</a></p>
+<div class="point"><p>民主主義は「全構成員が権力をもち、合意で決める」体制。リンスは、民主主義でない体制を全体主義と権威主義に分けて特徴づけた。</p></div>
+</section>
+
+<section id="s4" data-t="確認問題">
+<h2><span class="sn">4</span>確認問題</h2>
+<div class="q"><div class="qq"><span class="qn">Q1</span><span>中国外交部の報告書は、アメリカの民主のどんな点を問題にしたか。2つ挙げなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>金権政治（お金が選挙や政治を左右する）、少数エリートによる支配、拒否権政治（政治の膠着）、選挙人団制度の不備、などから2つ。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q2</span><span>リンスによる権威主義体制の4つの特徴を挙げなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>①制限された政治的多元主義、②精緻なイデオロギーの不在、③高度な政治的動員の不在、④指導者（少数の集団）による、予測可能な一定の範囲内での権力行使。</div></div>
+</section>
+</div>
+
+<!-- ===================== パート2 ===================== -->
+<div class="part" id="elite" data-title="エリート理論と多元主義" data-desc="「多数の支配」への恐れ、「結局は少数のエリートが支配している」とするエリート理論、そしてそれへの異論を見ます。中国政治に根づくエリート的な考え方も取り上げます。">
+
+<section id="s5" data-t="多数の支配への恐れ">
+<h2><span class="sn">5</span>「多数の支配」への恐れ</h2>
+<p>今では民主主義はよいものと考えられがちですが、19世紀初めの西欧では、<span class="mk">多数による支配は「数による圧政」となり、自由を抑えつける</span>と恐れられていました。</p>
+<div class="bk"><span class="who">トクヴィル『アメリカのデモクラシー』</span><span class="yr">1835</span><span class="ti">Alexis de Tocqueville, <i>De la démocratie en Amérique</i></span><p>フランスの思想家トクヴィルは、アメリカを旅して民主主義社会を観察しました。民主主義の活力を評価する一方で、多数派の意見が少数派を押しつぶす「<b>多数の専制</b>」の危険を指摘しました（用語は補足）。</p></div>
+<p>その後、<b>普通選挙</b>が広がると、次のような変化が起きたとレジュメは整理しています。</p>
+<ul class="dots">
+<li>議会に、さまざまな立場の人が選ばれるようになり、議員どうしの<b>同質性が薄れた</b>。それまでの「教養ある人どうしの話し合い」としての議会主義は<b>形骸化</b>した。</li>
+<li>大衆の多くが政治に関心をもたない<b>政治的無関心（アパシー）</b>が広がった。</li>
+</ul>
+<div class="point"><p>19世紀初めには、多数の支配は自由を脅かすと恐れられた。普通選挙の広がりとともに、議会主義の形骸化と大衆のアパシーが問題になった。</p></div>
+</section>
+
+<section id="s6" data-t="エリート理論">
+<h2><span class="sn">6</span>エリート理論：結局は少数が支配する</h2>
+<p>19世紀末から20世紀初め、民主主義が形だけになっているという見方から、<b>エリート理論</b>が生まれました。どんな社会でも、実際に支配するのは<span class="mk">少数のエリート</span>だ、という考え方です。</p>
+<div class="tw"><table>
+<thead><tr><th>人物</th><th>レジュメの作品・言葉</th><th>主張の要点（補足）</th></tr></thead>
+<tbody>
+<tr><td>パレート（1848–1923）</td><td>『社会主義体系』</td><td>エリートは入れ替わっても、少数が支配する構造は変わらない（エリートの周流）</td></tr>
+<tr><td>モスカ（1858–1941）</td><td>『支配する階級』</td><td>どんな社会にも、組織された少数の支配階級と、組織されていない多数の被支配者がいる</td></tr>
+<tr><td>ミヒェルス（1876–1936）</td><td>「寡頭制の鉄則」</td><td>民主的な理念を掲げる政党や労働組合でさえ、組織が大きくなると少数の幹部が支配するようになる</td></tr>
+<tr><td>ミルズ（1916–1962）</td><td>「パワー・エリート」</td><td>戦後アメリカでは、大企業・軍・政府の頂点にいる少数が結びつき、重要な決定を握っている</td></tr>
+</tbody></table></div>
+<div class="case"><b>アイゼンハワー大統領の退任演説（1961年1月17日）</b><p>軍人出身の大統領が、テレビ演説で、巨大な軍と軍需産業が結びついた「<b>軍産複合体</b>」が不当な影響力をもつ危険を国民に警告しました（演説の中身は補足）。ミルズの「パワー・エリート」論と重なる指摘として、レジュメに挙げられています。</p></div>
+<div class="memo"><span class="who">メモ：部活の「民主的な」運営</span>部員全員で決めるルールのはずなのに、実際には部長と数人の幹部が決めたことを、みんなが追認しているだけ――。人数が増えるほど、話し合いを回す少数の人に力が集まる。これがミヒェルスの「寡頭制の鉄則」のイメージです。</div>
+<div class="point"><p>エリート理論は、民主主義のもとでも実際には少数のエリートが支配すると主張した（パレート、モスカ、ミヒェルス、ミルズ）。</p></div>
+</section>
+
+<section id="s7" data-t="エリート理論への異論">
+<h2><span class="sn">7</span>エリート理論への異論</h2>
+<h3>多元的エリート論</h3>
+<p>エリートがいることは認めつつも、<span class="mk">エリートは一枚岩ではなく、分野ごとに複数いて競い合っている</span>と考える立場です。</p>
+<div class="bk"><span class="who">リースマン『孤独な群衆』</span><span class="yr">1950</span><span class="ti">David Riesman, <i>The Lonely Crowd</i></span><p>アメリカ人の性格の変化を論じた本です。権力についても、一つの支配層ではなく、互いに拒否し合う多くの集団に分かれていると見ました（要点は補足）。</p></div>
+<div class="bk"><span class="who">ダール『統治するのはだれか』</span><span class="yr">1961</span><span class="ti">Robert A. Dahl, <i>Who Governs?</i></span><p>アメリカの一都市（ニューヘイヴン）で、実際に誰が決定に影響を与えているかを調べました。分野ごとに影響力をもつ人が違い、<b>単一のエリートが全体を支配しているわけではない</b>と論じました。</p></div>
+<h3>手続き論的民主主義論</h3>
+<p>経済学者<b>シュンペーター</b>は、『資本主義、社会主義、民主主義』（1942年）で、民主主義を「エリートどうしが選挙で競争する<b>手続き</b>」として捉え直しました。エリートの存在を前提にしたうえで、民主主義を定義し直したのです。詳しくは <a href="#s10" data-goto="s10">10節</a> で見ます。</p>
+<div class="point"><p>多元的エリート論（リースマン、ダール）は、エリートは複数いて競い合うと論じた。シュンペーターは、民主主義をエリートの選挙競争という手続きとして定義し直した。</p></div>
+</section>
+
+<section id="s8" data-t="中国政治に根づくエリート理論">
+<h2><span class="sn">8</span>中国政治に根づくエリート的な考え方</h2>
+<p>レジュメは、中国政治にはエリート的な考え方が深く根づいていると指摘します。</p>
+<div class="case"><b>共産党の統治と「人民民主独裁」</b><p>中国の憲法は、国家を労働者階級が指導する「人民民主独裁」の国としています。人民の利益を代表する前衛としての共産党が、国家を指導する仕組みです（説明は補足）。</p></div>
+<div class="case"><b>孫文の人民三分割論</b><p>中華民国を建てた孫文は、人びとを ①先に知り先に悟る人（<b>先知先覚</b>）、②後から知り後から悟る人（<b>後知後覚</b>）、③知らず悟らない人（<b>不知不覚</b>）の3つに分けました。先に悟った少数が、多数を導くという考え方です。</p></div>
+<div class="case"><b>孟子の言葉</b><p>レジュメが引く孟子の一節は、天が人民を生んだのは、先に知り悟った者に、後から知る者を目覚めさせるためであり、自分こそがその先に悟った者として人民を目覚めさせるのだ、という趣旨です。孫文の考え方の源流が、儒教の古典にあることが分かります。</p></div>
+<p class="xref">第1回の「内在的視点」から考えると、こうした考え方を、西洋の民主主義の物差しだけで評価してよいのかも問われます → <a href="#s14" data-goto="s14">14節</a></p>
+<div class="point"><p>中国では、先に悟った少数が多数を導くという考え方（孟子、孫文）が、共産党の指導や「人民民主独裁」につながっている。</p></div>
+</section>
+
+<section id="s9" data-t="確認問題">
+<h2><span class="sn">9</span>確認問題</h2>
+<div class="q"><div class="qq"><span class="qn">Q1</span><span>ミヒェルスの「寡頭制の鉄則」とは何か。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>民主的な理念を掲げる組織（政党や労働組合）でも、組織が大きくなると少数の幹部が実権を握るようになる、という法則。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q2</span><span>ダールの『統治するのはだれか』は、エリート理論に対してどんな結論を示したか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>都市の決定過程を調べると、分野ごとに影響力をもつ人が異なり、単一のエリートが全体を支配しているわけではない（多元的）と論じた。</div></div>
+</section>
+</div>
+
+<!-- ===================== パート3 ===================== -->
+<div class="part" id="sokutei" data-title="民主主義の定義と測定" data-desc="民主主義の要件を、選挙だけで考える立場（シュンペーター）と、参加と自由を加える立場（ダール）で比べます。さらに「民主主義の質」と、実際に民主主義を測る指標を見ます。">
+
+<section id="s10" data-t="選挙による定義（最小限主義）">
+<h2><span class="sn">10</span>選挙による定義：競合的エリート民主主義モデル</h2>
+<div class="kq"><span class="lab">シュンペーターの定義（要旨）</span><p>民主主義的な方法とは、政治的な決定に至るための<b>制度的な取り決め</b>であり、その中で個人が、人々の<b>票を獲得する競争</b>を通じて決定する権力を得るものである。</p></div>
+<p>民主主義を「人民の意思を実現すること」ではなく、<span class="mk">指導者を選ぶ選挙での競争という手続き</span>として定義しています。これを<b>手続き論的民主主義</b>、または民主主義の<b>最小限主義的定義</b>と呼びます。必要最小限の条件だけで定義するからです。</p>
+<p>政治理論家の<b>デイヴィッド・ミラー</b>（1983年）も、民主主義体制は<b>選挙で競い合っているという事実</b>によって、民主主義でない体制から区別されると論じました。</p>
+<h3>この定義への批判</h3>
+<div class="tw"><table>
+<thead><tr><th>批判の論点</th><th>かみくだくと</th></tr></thead>
+<tbody>
+<tr><td>平均的な市民への過小評価</td><td>市民は選挙で指導者を選ぶだけの存在とされ、政治に参加し判断する力が軽く見られている</td></tr>
+<tr><td>多数決によるマイノリティの排除</td><td>選挙で勝った多数派の意思だけが通り、少数派の声が無視されやすい</td></tr>
+<tr><td>投票のパラドックス</td><td>3つ以上の選択肢があると、多数決の結果が「AはBより好まれ、BはCより好まれ、CはAより好まれる」と堂々めぐりになることがある。多数決が「人々の意思」を一つに決められるとは限らない（説明は補足）</td></tr>
+</tbody></table></div>
+<div class="point"><p>シュンペーターは民主主義を「票を求める選挙競争の手続き」と最小限に定義した。市民の過小評価、マイノリティの排除、投票のパラドックスなどの批判がある。</p></div>
+</section>
+
+<section id="s11" data-t="ダールのポリアーキー">
+<h2><span class="sn">11</span>選挙＋包括的な参加と自由：ダールのポリアーキー</h2>
+<p><b>ダール</b>は民主主義を「政府がすべての市民の選好に完全に応えることのできる政治システム」と考えました。しかしこれは理想であり、現実にはどの国も完全には達していません。そこで、現実の国々のうち理想に近いものを<b>ポリアーキー</b>（多数による支配）と呼びました（『ポリアーキー』1971年）。</p>
+<p>ダールは、2つの次元で体制を位置づけます。</p>
+<div class="vv">
+<div><b>自由化</b><small>公的異議申し立ての自由</small>政府に反対し、競い合う自由がどれだけあるか</div>
+<span class="ar">×</span>
+<div><b>包括性</b><small>政治参加の包括性</small>どれだけ多くの人が政治に参加できるか</div>
+</div>
+<div class="gwrap">
+  <div class="gsw" role="group" aria-label="ダールの図の切り替え"><button type="button" data-g="dahl" data-s="0" aria-pressed="true">4つの体制</button><button type="button" data-g="dahl" data-s="1" aria-pressed="false">ポリアーキーへの3つの道</button></div>
+  <svg id="gDahl" viewBox="0 0 640 400" role="img" aria-label="ダールの2つの次元と政治体制の模式図"></svg>
+  <p class="gcap" id="gDahl-cap"></p>
+</div>
+<h3>ポリアーキーの8つの基準</h3>
+<div class="tw"><table>
+<thead><tr><th>基準</th><th>基準</th></tr></thead>
+<tbody>
+<tr><td>1. 投票の権利</td><td>5. 結社の自由</td></tr>
+<tr><td>2. 公職への被選挙権</td><td>6. 表現の自由</td></tr>
+<tr><td>3. 政治指導者が民衆の支持を求めて競争する権利</td><td>7. 多様な情報源</td></tr>
+<tr><td>4. 自由かつ公正な選挙</td><td>8. 政府の政策を、投票やその他の要求の表現にもとづかせる諸制度</td></tr>
+</tbody></table></div>
+<p>シュンペーターが「選挙の競争」だけを見たのに対し、ダールは<span class="mk">選挙を支える自由（結社・表現・情報）と、参加の広さ</span>まで要件に含めました。</p>
+<div class="point"><p>ダールは、公的異議申し立ての自由（自由化）と政治参加の包括性の2つの次元で体制を位置づけ、両方が高い体制をポリアーキーと呼んだ。</p></div>
+</section>
+
+<section id="s12" data-t="民主主義の質">
+<h2><span class="sn">12</span>民主主義の質</h2>
+<p>民主主義かどうかの二択でなく、「民主主義として<b>どのくらい質が高いか</b>」を問う研究もあります。</p>
+<div class="bk"><span class="who">ダイアモンド、モルリーノ編 <i>Assessing the Quality of Democracy</i></span><span class="yr">2005</span><span class="ti">Larry Diamond &amp; Leonardo Morlino eds.</span><p>民主主義の質を、手続き・内容・結果の3つの面、8つの次元で評価しました。</p></div>
+<div class="tw"><table>
+<thead><tr><th>面</th><th>次元</th></tr></thead>
+<tbody>
+<tr><td><b>手続き</b></td><td>1. 法の支配　2. 参加　3. 競争　4. 垂直的アカウンタビリティ（有権者が選挙で政府の責任を問う）　5. 水平的アカウンタビリティ（議会・裁判所などが政府を監視する）</td></tr>
+<tr><td><b>内容</b></td><td>6. 政治的・市民的・社会経済的権利　7. 政治的・社会経済的平等</td></tr>
+<tr><td><b>結果</b></td><td>8. 政府の応答性（人々の望みに応えているか）</td></tr>
+</tbody></table></div>
+<p class="legend">アカウンタビリティの説明（かっこ内）は補足です。</p>
+<div class="bk"><span class="who">レヴァイン、モリーナ編 <i>The Quality of Democracy in Latin America</i></span><span class="yr">2011</span><span class="ti">Daniel Levine &amp; Jose E. Molina eds.</span><p>ラテンアメリカを対象に、①選挙による決定、②参加、③アカウンタビリティ、④応答性、⑤政府の主権、の5つで民主主義の質を評価しました。</p></div>
+<div class="point"><p>民主主義の質は、手続き（法の支配、参加、競争、アカウンタビリティ）、内容（権利と平等）、結果（応答性）の面から評価される。</p></div>
+</section>
+
+<section id="s13" data-t="民主主義の測定">
+<h2><span class="sn">13</span>民主主義の測定：「民主主義」の操作化</h2>
+<p>実際に世界の国々の民主主義の度合いを測る取り組みが、いくつもあります。</p>
+<div class="tw"><table>
+<thead><tr><th>指標</th><th>何を測るか</th></tr></thead>
+<tbody>
+<tr><td><b>ポリティ</b>（Polity）</td><td>①政治権力の交代をめぐる制度化された手続きがあるか、②政府の意思決定に制約があるか、③政治参加と政治的競争のあり方</td></tr>
+<tr><td><b>フリーダムハウス</b></td><td>「政治的権利」（40点）と「市民的自由」（60点）の2つの要素、合わせて100点で評価</td></tr>
+<tr><td><b>V-Dem</b></td><td>民主主義を5つの原則（選挙、自由、参加、熟議、平等）に分け、それぞれを測るためのデータを集める</td></tr>
+</tbody></table></div>
+<div class="bk"><span class="who">ダイアモンド「民主主義の後退に向き合う」（仮の題）</span><span class="yr">2015</span><span class="ti">Larry Diamond, "Facing up to the democratic recession," <i>Journal of Democracy</i>, vol.26</span><p>フリーダムハウスのデータなどをもとに、2000年代半ばから世界の民主主義が停滞・後退している（<b>民主主義の後退</b>）と論じました。レジュメには、地域ごとに政治的権利・市民的自由・法の支配を比べたグラフが載っています。</p></div>
+<p>どの指標も、何を民主主義の要件とみなすかという<span class="mk">定義の選択</span>の上に成り立っています。シュンペーター型の最小限の定義に近いものもあれば、ダールや「民主主義の質」の考え方に近いものもあります。</p>
+<div class="point"><p>ポリティ、フリーダムハウス、V-Demなどが民主主義を測定している。どれも、民主主義をどう定義するか（操作化）の選択にもとづく。</p></div>
+</section>
+
+<section id="s14" data-t="文化相対主義と民主主義">
+<h2><span class="sn">14</span>文化相対主義と民主主義</h2>
+<p>最後にレジュメは、「民主主義の物差しは普遍的か」という問いを投げかけます。</p>
+<div class="bk"><span class="who">ダニエル・ベル『「アジア的価値」とリベラル・デモクラシー―東洋と西洋の対話―』</span><span class="yr">2006</span><span class="ti">風行社（邦訳の刊行年）</span><p>欧米の自由民主主義を唯一の正解とせず、東アジアの文化的な伝統（「アジア的価値」）との対話を通じて、政治のあり方を考えようとする本です（要点は補足）。</p></div>
+<p><b>文化相対主義</b>とは、それぞれの文化には固有の価値があり、一つの文化の基準で他を裁くべきでないとする考え方です。この立場からは、西洋型の民主主義を基準に各国を測ること自体が問われます。一方で、それが人権の抑圧を正当化する理由に使われかねない、という批判もあります（後半は補足）。</p>
+<p class="xref">プロローグの米中の論争 → <a href="#s1" data-goto="s1">1節</a>　／　オリエンタリズム批判 → <a href="../ch01/#america">第1回の8節</a></p>
+<div class="point"><p>文化相対主義の立場からは、西洋型民主主義を普遍の物差しとすることが問われる。一方で、それが抑圧の正当化に使われる危険もある。</p></div>
+</section>
+
+<section id="s15" data-t="確認問題">
+<h2><span class="sn">15</span>確認問題</h2>
+<div class="q"><div class="qq"><span class="qn">Q1</span><span>シュンペーターの民主主義の定義が「最小限主義的」と呼ばれるのはなぜか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>民主主義を、人々の票を求めて指導者が競争する選挙という手続きだけで定義し、それ以上の条件（自由や平等、結果など）を含めないから。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q2</span><span>ダールのポリアーキーの2つの次元は何か。また、両方が低い体制を何と呼ぶか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>公的異議申し立ての自由（自由化）と、政治参加の包括性。両方が低い体制は「閉鎖的抑圧体制」。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q3</span><span>垂直的アカウンタビリティと水平的アカウンタビリティの違いを説明しなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>垂直的アカウンタビリティは、有権者が選挙などを通じて政府の責任を問うこと。水平的アカウンタビリティは、議会や裁判所など、国家の機関どうしが互いに監視し、責任を問うこと。</div></div>
+</section>
+</div>
+
+<!-- ===================== パート4 ===================== -->
+<div class="part" id="matome" data-title="まとめと確認" data-desc="第3回の流れを年表とキーワードで振り返り、確認問題で理解を確かめます。">
+
+<section id="s16" data-t="年表で振り返る">
+<h2><span class="sn">16</span>年表で振り返る</h2>
+<p class="legend"><span><i></i>欧米・世界の動き</span><span><i class="jp"></i>中国の動き</span></p>
+<ul class="tl">
+<li><span class="y">1835</span>トクヴィル『アメリカのデモクラシー』<span class="tag">多数の支配への恐れ</span></li>
+<li><span class="y">19世紀末〜</span>パレート、モスカ、ミヒェルスのエリート理論<span class="tag">エリート理論</span></li>
+<li class="jp"><span class="y">20世紀前半</span>孫文の人民三分割論（先知先覚・後知後覚・不知不覚）<span class="tag">エリート的発想</span></li>
+<li><span class="y">1942</span>シュンペーター『資本主義、社会主義、民主主義』<span class="tag">手続き論</span></li>
+<li><span class="y">1950</span>リースマン『孤独な群衆』<span class="tag">多元的エリート論</span></li>
+<li><span class="y">1956</span>ミルズ『パワー・エリート』（刊行年は補足）<span class="tag">エリート理論</span></li>
+<li><span class="y">1961</span>アイゼンハワー退任演説、ダール『統治するのはだれか』<span class="tag">多元的エリート論</span></li>
+<li><span class="y">1971</span>ダール『ポリアーキー』<span class="tag">定義</span></li>
+<li><span class="y">1975</span>リンス「全体主義と権威主義体制」<span class="tag">体制の区別</span></li>
+<li><span class="y">1983</span>ミラー「競合的民主主義モデル」<span class="tag">定義</span></li>
+<li><span class="y">2005</span>ダイアモンド、モルリーノ編『民主主義の質の評価』（仮の題）<span class="tag">質</span></li>
+<li><span class="y">2015</span>ダイアモンド「民主主義の後退」<span class="tag">測定</span></li>
+<li><span class="y">2021</span>第1回 民主主義サミット（12月）<span class="tag">プロローグ</span></li>
+<li class="jp"><span class="y">2021</span>白書「中国の民主」、外交部「アメリカの民主状況」（12月）<span class="tag">プロローグ</span></li>
+<li><span class="y">2023</span>第2回 民主主義サミット（3月）<span class="tag">プロローグ</span></li>
+</ul>
+<p class="legend">文献の年は原著の刊行年です。</p>
+</section>
+
+<section id="s17" data-t="キーワード一覧">
+<h2><span class="sn">17</span>キーワード一覧</h2>
+<div class="tw"><table>
+<thead><tr><th>キーワード</th><th>ひとことで</th><th>節</th></tr></thead>
+<tbody>
+<tr><td><b>全体主義体制・権威主義体制</b></td><td>リンスによる、民主主義でない体制の2つの型</td><td class="c"><a href="#s3" data-goto="s3">3</a></td></tr>
+<tr><td><b>アパシー</b></td><td>大衆の政治的無関心</td><td class="c"><a href="#s5" data-goto="s5">5</a></td></tr>
+<tr><td><b>エリート理論</b></td><td>どんな社会でも実際に支配するのは少数のエリートだとする理論</td><td class="c"><a href="#s6" data-goto="s6">6</a></td></tr>
+<tr><td><b>寡頭制の鉄則</b></td><td>大きな組織は少数の幹部の支配に行き着く（ミヒェルス）</td><td class="c"><a href="#s6" data-goto="s6">6</a></td></tr>
+<tr><td><b>パワー・エリート</b></td><td>企業・軍・政府の頂点の少数の結びつき（ミルズ）</td><td class="c"><a href="#s6" data-goto="s6">6</a></td></tr>
+<tr><td><b>多元的エリート論</b></td><td>エリートは分野ごとに複数いて競い合う</td><td class="c"><a href="#s7" data-goto="s7">7</a></td></tr>
+<tr><td><b>人民民主独裁</b></td><td>中国の憲法が定める国家のあり方。共産党が国家を指導する</td><td class="c"><a href="#s8" data-goto="s8">8</a></td></tr>
+<tr><td><b>手続き論的民主主義（最小限主義的定義）</b></td><td>民主主義を選挙競争の手続きとして定義（シュンペーター）</td><td class="c"><a href="#s10" data-goto="s10">10</a></td></tr>
+<tr><td><b>ポリアーキー</b></td><td>自由化と包括性がともに高い体制（ダール）</td><td class="c"><a href="#s11" data-goto="s11">11</a></td></tr>
+<tr><td><b>アカウンタビリティ</b></td><td>政府が責任を問われる仕組み。垂直的と水平的がある</td><td class="c"><a href="#s12" data-goto="s12">12</a></td></tr>
+<tr><td><b>民主主義の後退</b></td><td>2000年代半ばからの世界的な民主主義の停滞・後退（ダイアモンド）</td><td class="c"><a href="#s13" data-goto="s13">13</a></td></tr>
+<tr><td><b>文化相対主義</b></td><td>文化ごとの価値を認め、一つの基準で裁かない考え方</td><td class="c"><a href="#s14" data-goto="s14">14</a></td></tr>
+</tbody></table></div>
+</section>
+
+<section id="s18" data-t="確認問題">
+<h2><span class="sn">18</span>確認問題</h2>
+<p>答えを考えてから「解答を見る」を押してください。</p>
+<div class="q"><div class="qq"><span class="qn">Q1</span><span>エリート理論、多元的エリート論、手続き論的民主主義論の関係を説明しなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>エリート理論は、民主主義でも実際には少数エリートが支配すると主張した。多元的エリート論はエリートの存在を認めつつ、それが分野ごとに複数いて競い合うと反論した。手続き論的民主主義論（シュンペーター）は、エリートの存在を前提に、エリートが選挙で競争する手続きこそが民主主義だと定義し直した。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q2</span><span>シュンペーターとダールの民主主義の捉え方を比べなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>シュンペーターは、票を求める選挙競争の手続きという最小限の条件で民主主義を定義した。ダールは、選挙の競争に加えて、結社・表現の自由や多様な情報源など異議申し立ての自由と、参加の包括性まで含めてポリアーキーを定義し、より広い要件を求めた。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q3</span><span>民主主義の測定（ポリティ、フリーダムハウス、V-Dem）には、どんな難しさがあるか。第2回の内容も踏まえて説明しなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>民主主義という抽象的な概念を、測れる指標に置きかえる操作化が必要で、どの要件を含めるかという定義の選択によって結果が変わりうる。また、文化も歴史も違う国々に共通の物差しを当てはめてよいのかという問題（文化相対主義からの問い）もある。</div></div>
+</section>
+
+<section id="s19" data-t="考えてみよう">
+<h2><span class="sn">19</span>考えてみよう</h2>
+<div class="memo hint"><span class="who">問い1</span>「ある国が民主的かどうかは、その国の人々が判断すべきだ」という中国外交部の主張について、賛成できる点と疑問に思う点を考えてみよう。</div>
+<div class="memo hint"><span class="who">問い2</span>日本の民主主義を、ダールの8つの基準や「民主主義の質」の8つの次元で点検すると、どこが高く、どこに課題があるだろうか。</div>
+<div class="memo hint"><span class="who">問い3</span>選挙はあるが自由が制限されている国は、民主主義と呼べるだろうか。シュンペーターとダールの立場から、それぞれ答えてみよう。</div>
+<p class="src">このページは、第3回レジュメ「政治体制（1）民主主義とは」の内容を、初学者向けに言いかえて解説したものです。「補足」と書いた箇所は、レジュメにない一般的な説明です。仮の題は、邦訳の題がレジュメにない文献に付けた訳題です。参考資料（中国外交部の文書）は、主張の要点だけを紹介しました。</p>
+</section>
+</div>
+
+<div class="pager" id="pager"></div>
+</main>
+
+<script>
+/* 解説と答案例を最初から表示するときは true に変える */
+const ANSWERS_DEFAULT_ON=false;
+/* 第3回：ダールの2つの次元とポリアーキー */
+(function(){
+  const C={ink:"#22252b",sub:"#5e6470",blue:"#1e5b4f",red:"#b0601c",grn:"#3d6a94",line:"#c9cfd8",mk:"#cce6b8",pale:"#eef3ee"};
+  const t=(x,y,s,o={})=>`<text x="${x}" y="${y}" font-size="${o.fs||14}" text-anchor="${o.a||"start"}" ${o.w?'font-weight="700"':""} style="fill:${o.c||C.ink}">${s}</text>`;
+  const mk=k=>`<marker id="a3-${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="${C[k]}"/></marker>`;
+  const defs=`<defs>${["ink","blue","red","grn"].map(mk).join("")}</defs>`;
+  const svg=document.getElementById("gDahl"),cap=document.getElementById("gDahl-cap");
+  if(!svg)return;
+  const X0=110,Y0=340,X1=600,Y1=30;
+  const corner=(x,y,a,lab,sub,hl)=>`<rect x="${a==="end"?x-170:x}" y="${y}" width="170" height="48" fill="${hl?C.mk:"#fff"}" stroke="${C.ink}" stroke-width="1.5"/>`+t(a==="end"?x-85:x+85,y+20,lab,{a:"middle",fs:14,w:1})+t(a==="end"?x-85:x+85,y+38,sub,{a:"middle",fs:11,c:C.sub});
+  function draw(k){
+    let s=defs;
+    s+=`<line x1="${X0}" y1="${Y0}" x2="${X1}" y2="${Y0}" stroke="${C.ink}" stroke-width="1.5" marker-end="url(#a3-ink)"/>`;
+    s+=`<line x1="${X0}" y1="${Y0}" x2="${X0}" y2="${Y1}" stroke="${C.ink}" stroke-width="1.5" marker-end="url(#a3-ink)"/>`;
+    s+=t((X0+X1)/2,Y0+30,"包括性（政治参加）→ 広い",{a:"middle",fs:13,c:C.sub,w:1});
+    s+=`<text x="70" y="${(Y0+Y1)/2}" font-size="13" text-anchor="middle" font-weight="700" style="fill:${C.sub}" transform="rotate(-90 70 ${(Y0+Y1)/2})">自由化（公的異議申し立て）→ 高い</text>`;
+    s+=corner(X0+12,Y0-62,"start","閉鎖的抑圧体制","参加も自由も低い",false);
+    s+=corner(X0+12,Y1+14,"start","競争的寡頭体制","自由はあるが参加は狭い",false);
+    s+=corner(X1-12,Y0-62,"end","包括的抑圧体制","参加は広いが自由は低い",false);
+    s+=corner(X1-12,Y1+14,"end","ポリアーキー","参加も自由も高い",true);
+    if(k===1){
+      s+=`<path d="M200,276 L200,98" stroke="${C.blue}" stroke-width="3" fill="none" marker-end="url(#a3-blue)"/>`;
+      s+=`<path d="M292,68 L412,68" stroke="${C.blue}" stroke-width="3" fill="none" marker-end="url(#a3-blue)"/>`;
+      s+=t(180,200,"Ⅰ",{fs:18,w:1,c:C.blue});
+      s+=`<path d="M292,302 L412,302 M503,276 L503,98" stroke="${C.red}" stroke-width="3" fill="none" marker-end="url(#a3-red)"/>`;
+      s+=t(512,200,"Ⅱ",{fs:18,w:1,c:C.red});
+      s+=`<path d="M292,280 L414,96" stroke="${C.grn}" stroke-width="3" fill="none" stroke-dasharray="7 5" marker-end="url(#a3-grn)"/>`;
+      s+=t(360,200,"Ⅲ",{fs:18,w:1,c:C.grn});
+    }
+    svg.innerHTML=s;
+    cap.textContent=k===0?
+      "ダールの2つの次元（模式図）。横軸は政治に参加できる人の広さ、縦軸は政府に反対し競い合う自由の大きさ。両方が高い右上の体制をポリアーキーと呼ぶ。":
+      "ポリアーキーへの道（模式図・道の説明は補足）。Ⅰは先に自由化が進み、後から参加が広がる道。Ⅱは先に参加が広がり、後から自由化する道。Ⅲは両方が一気に進む近道。ダールは、Ⅰの道が安定したポリアーキーにつながりやすいと考えた。";
+  }
+  document.querySelectorAll('.gsw button[data-g="dahl"]').forEach(b=>b.addEventListener("click",()=>{
+    document.querySelectorAll('.gsw button[data-g="dahl"]').forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));draw(+b.dataset.s);}));
+  draw(0);
+})();
+
+/* hikakuseiji 共通（lily から複製）：タブ・目次・前後ナビ・確認問題・内部タブ・解説スイッチ・相互リンク
+   各章のHTMLは、.part（data-title, data-desc）と section（data-t, h2 .sn）を並べるだけでよい。
+   パートが表示されたときに "partshown" イベント（detail.id）を発行する。 */
+(function(){
+  const parts=[...document.querySelectorAll(".part")];
+  const tabs=document.getElementById("tabs");
+  const drawerList=document.getElementById("drawerList");
+  const body=document.body, menuBtn=document.getElementById("menuBtn"), drawer=document.getElementById("drawer");
+  let current=0;
+
+  parts.forEach((p,i)=>{
+    p.setAttribute("role","tabpanel");
+    const secs=[...p.querySelectorAll("section")];
+    const head=document.createElement("div");head.className="part-head";
+    head.innerHTML='<div class="ph-main"><div class="pn">Part '+(i+1)+' / '+parts.length+'</div><h1>'+p.dataset.title+'</h1><p>'+p.dataset.desc+'</p></div>';
+    const mini=document.createElement("div");mini.className="toc-mini";
+    secs.forEach(s=>{const b=document.createElement("button");b.type="button";b.textContent=s.querySelector(".sn").textContent+". "+s.dataset.t;b.addEventListener("click",()=>s.scrollIntoView({behavior:"smooth",block:"start"}));mini.appendChild(b);});
+    head.querySelector(".ph-main").appendChild(mini);p.prepend(head);
+
+    const t=document.createElement("button");t.type="button";t.className="tab";t.setAttribute("role","tab");t.id="tab-"+p.id;t.setAttribute("aria-controls",p.id);
+    t.innerHTML='<span class="n">'+(i+1)+'</span>'+p.dataset.title;
+    t.addEventListener("click",()=>go(i,true));
+    t.addEventListener("keydown",e=>{if(e.key==="ArrowRight"){const k=(i+1)%parts.length;go(k,true);tabs.children[k].focus();}if(e.key==="ArrowLeft"){const k=(i-1+parts.length)%parts.length;go(k,true);tabs.children[k].focus();}});
+    tabs.appendChild(t);p.setAttribute("aria-labelledby",t.id);
+
+    const h=document.createElement("h4");const hb=document.createElement("button");hb.type="button";hb.innerHTML='<span class="n">'+(i+1)+'</span>'+p.dataset.title;hb.addEventListener("click",()=>{go(i,true);closeMenu();});h.appendChild(hb);drawerList.appendChild(h);
+    const ul=document.createElement("ul");
+    secs.forEach(s=>{const li=document.createElement("li");const b=document.createElement("button");b.type="button";b.textContent=s.querySelector(".sn").textContent+". "+s.dataset.t;b.addEventListener("click",()=>{go(i,false);closeMenu();setTimeout(()=>s.scrollIntoView({block:"start"}),30);});li.appendChild(b);ul.appendChild(li);});
+    drawerList.appendChild(ul);
+  });
+
+  function go(i,top){
+    current=i;
+    parts.forEach((p,k)=>p.classList.toggle("on",k===i));
+    [...tabs.children].forEach((t,k)=>{t.setAttribute("aria-selected",k===i?"true":"false");t.tabIndex=k===i?0:-1;});
+    [...drawerList.querySelectorAll("h4")].forEach((h,k)=>h.classList.toggle("cur",k===i));
+    tabs.children[i].scrollIntoView({block:"nearest",inline:"nearest"});
+    const pg=document.getElementById("pager");pg.innerHTML="";
+    if(i>0){const b=document.createElement("button");b.type="button";b.innerHTML="<small>前のパート</small>← "+parts[i-1].dataset.title;b.addEventListener("click",()=>go(i-1,true));pg.appendChild(b);}
+    if(i<parts.length-1){const b=document.createElement("button");b.type="button";b.className="next";b.innerHTML="<small>次のパート</small>"+parts[i+1].dataset.title+" →";b.addEventListener("click",()=>go(i+1,true));pg.appendChild(b);}
+    try{if(location.hash!=="#"+parts[i].id)history.replaceState(null,"","#"+parts[i].id);}catch(e){}
+    if(top)window.scrollTo(0,0);
+    document.dispatchEvent(new CustomEvent("partshown",{detail:{id:parts[i].id}}));
+  }
+  function openMenu(){body.classList.add("menu-open");drawer.setAttribute("aria-hidden","false");menuBtn.setAttribute("aria-expanded","true");document.getElementById("closeBtn").focus();}
+  function closeMenu(){body.classList.remove("menu-open");drawer.setAttribute("aria-hidden","true");menuBtn.setAttribute("aria-expanded","false");}
+  menuBtn.addEventListener("click",openMenu);
+  document.getElementById("closeBtn").addEventListener("click",()=>{closeMenu();menuBtn.focus();});
+  document.getElementById("scrim").addEventListener("click",closeMenu);
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&body.classList.contains("menu-open")){closeMenu();menuBtn.focus();}});
+  window.addEventListener("hashchange",()=>{const k=parts.findIndex(p=>"#"+p.id===location.hash);if(k>=0&&k!==current)go(k,true);});
+
+  /* 内部タブ（.itabs の button[aria-controls]） */
+  document.querySelectorAll(".itabs").forEach(box=>{
+    const bs=[...box.querySelectorAll("button")];
+    const sel=i=>bs.forEach((b,k)=>{b.setAttribute("aria-selected",k===i?"true":"false");b.tabIndex=k===i?0:-1;document.getElementById(b.getAttribute("aria-controls")).hidden=k!==i;});
+    bs.forEach((b,i)=>{b.addEventListener("click",()=>sel(i));b.addEventListener("keydown",e=>{if(e.key==="ArrowRight"){const k=(i+1)%bs.length;sel(k);bs[k].focus();}if(e.key==="ArrowLeft"){const k=(i-1+bs.length)%bs.length;sel(k);bs[k].focus();}});});
+    sel(0);
+  });
+
+  /* 確認問題・ヒント（.q の .show で .ans を開閉） */
+  document.querySelectorAll(".q").forEach(q=>{const b=q.querySelector(".show"),a=q.querySelector(".ans");if(!b||!a)return;const lab=b.textContent;b.setAttribute("aria-expanded","false");b.addEventListener("click",()=>{a.hidden=!a.hidden;b.textContent=a.hidden?lab:"閉じる";b.setAttribute("aria-expanded",a.hidden?"false":"true");});});
+
+  /* 解説と答案例の表示スイッチ */
+  const tg=document.getElementById("ansToggle"),note=document.getElementById("ansNote");
+  if(tg){
+    const setAns=on=>{document.body.classList.toggle("ans-off",!on);tg.checked=on;if(note)note.textContent=on?"オン：解説と答案例を表示しています。":"オフ：問題とヒントだけを表示しています。";};
+    tg.addEventListener("change",()=>setAns(tg.checked));
+    setAns(typeof ANSWERS_DEFAULT_ON!=="undefined"&&ANSWERS_DEFAULT_ON);
+  }
+
+  /* 解説の開閉 */
+  document.querySelectorAll(".solbtn").forEach(b=>b.addEventListener("click",()=>{const bd=b.nextElementSibling;bd.hidden=!bd.hidden;b.setAttribute("aria-expanded",bd.hidden?"false":"true");b.textContent=bd.hidden?"解説を読む（手順を追って説明）":"解説を閉じる";document.dispatchEvent(new CustomEvent("solopen"));}));
+
+  /* 相互リンク */
+  document.addEventListener("click",e=>{const a=e.target.closest("[data-goto]");if(!a)return;e.preventDefault();const t=document.getElementById(a.dataset.goto);if(!t)return;const k=parts.findIndex(p=>p.contains(t));if(k<0)return;go(k,false);setTimeout(()=>t.scrollIntoView({block:"start"}),30);});
+
+  const start=parts.findIndex(p=>"#"+p.id===location.hash);
+  go(start>=0?start:0,false);
+})();
+
+</script>
+</body>
+</html>

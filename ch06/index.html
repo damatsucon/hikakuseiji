@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第6回 執政制度｜比較政治学</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* hikakuseiji の配色：lily（青・朱・黄）と区別するため、深緑・琥珀・若草に変更 */
+/* 設計: 方眼紙に書いた講義プリント。黒インクの本文、青ペンの強調、朱ペンの書き込み、黄色の蛍光ペン。上部に固定ヘッダーとパートのタブ、左からメニューが出る */
+:root{
+  --paper:#fdfdfb;
+  --grid:#e7ede8;
+  --ink:#22252b;
+  --sub:#5e6470;
+  --line:#c9cfd8;
+  --blue:#1e5b4f;
+  --red:#b0601c;
+  --teal:#3d6a94;
+  --marker:#cce6b8;
+  --note:#f5f8ee;
+  --font-body:"BIZ UDPGothic","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  --font-hand:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  --font-math:"Times New Roman",Times,serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.95;
+  -webkit-text-size-adjust:100%;
+}
+a{color:var(--blue)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+/* ヘッダー */
+.bar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:2px solid var(--ink)}
+.bar-in{max-width:960px;margin:0 auto;padding:10px 16px 0;display:flex;align-items:center;gap:12px}
+.burger{width:42px;height:42px;border:1.5px solid var(--ink);background:var(--paper);border-radius:6px;display:grid;place-items:center;cursor:pointer;flex:none}
+.burger span{display:block;width:20px;height:2px;background:var(--ink);box-shadow:0 -6px 0 var(--ink),0 6px 0 var(--ink)}
+.course{line-height:1.35;min-width:0}
+.course small{display:block;color:var(--sub);font-size:.78rem}
+.course b{font-size:1.05rem}
+.tabs{max-width:960px;margin:8px auto 0;padding:0 16px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:1.5px solid var(--ink);border-bottom:none;background:#eef1f5;border-radius:8px 8px 0 0;padding:6px 14px 5px;cursor:pointer;font-size:.92rem;line-height:1.5;color:var(--sub);position:relative;top:2px}
+.tab .n{font-family:var(--font-math);font-weight:700;margin-right:6px;color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--paper);color:var(--ink);font-weight:700;border-bottom:2px solid var(--paper);z-index:1}
+
+/* ドロワー */
+.scrim{position:fixed;inset:0;background:rgba(20,24,32,.35);z-index:30;opacity:0;pointer-events:none;transition:opacity .2s}
+.drawer{position:fixed;top:0;left:0;bottom:0;width:min(340px,86vw);background:var(--paper);z-index:31;border-right:2px solid var(--ink);transform:translateX(-102%);transition:transform .22s ease;overflow-y:auto;padding:16px 18px 40px}
+body.menu-open .scrim{opacity:1;pointer-events:auto}
+body.menu-open .drawer{transform:none}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1.5px solid var(--ink);padding-bottom:8px;margin-bottom:10px}
+.drawer-head b{font-size:1rem}
+.close{border:1.5px solid var(--ink);background:none;border-radius:6px;width:36px;height:36px;cursor:pointer;font-size:1.2rem;line-height:1}
+.drawer h4{margin:14px 0 2px;font-size:.95rem}
+.drawer h4 button{background:none;border:none;padding:0;cursor:pointer;text-align:left;font-weight:700}
+.drawer h4 .n{font-family:var(--font-math);margin-right:6px}
+.drawer ul{list-style:none;margin:0;padding:0 0 0 12px;border-left:1.5px solid var(--line)}
+.drawer li button{background:none;border:none;padding:3px 0;cursor:pointer;color:var(--sub);text-align:left;font-size:.9rem;line-height:1.5}
+.drawer li button:hover{color:var(--blue)}
+.drawer .cur>button{color:var(--blue)}
+
+/* 本文 */
+main{max-width:960px;margin:0 auto;padding:22px 16px 80px}
+.part{display:none}
+.part.on{display:block}
+.part-head{background:var(--paper);border:1.5px solid var(--ink);border-radius:4px;padding:16px 20px;margin-bottom:26px}
+.part-head .pn{font-family:var(--font-math);font-size:.95rem;color:var(--sub)}
+.part-head h1{font-size:clamp(1.5rem,3.6vw,2rem);line-height:1.4;margin:2px 0 6px;text-wrap:balance}
+.part-head p{margin:0;color:var(--sub);max-width:42em}
+.toc-mini{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:.9rem}
+.toc-mini button{background:none;border:none;padding:0;cursor:pointer;color:var(--blue);text-decoration:underline;text-underline-offset:3px}
+
+section{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:6px 22px 24px;margin-bottom:22px;scroll-margin-top:120px}
+@media (max-width:560px){section{padding:4px 14px 18px}}
+h2{font-size:1.4rem;line-height:1.5;margin:18px 0 12px;padding-bottom:6px;border-bottom:3px double var(--ink);text-wrap:balance}
+h2 .sn{display:inline-block;min-width:1.7em;height:1.7em;line-height:1.7em;text-align:center;border:1.5px solid var(--ink);border-radius:50%;font-family:var(--font-math);font-size:1rem;margin-right:10px;vertical-align:.12em}
+h3{font-size:1.1rem;margin:24px 0 6px;text-wrap:balance}
+h3::before{content:"";display:inline-block;width:10px;height:10px;background:var(--blue);margin-right:8px;vertical-align:.05em}
+p{margin:0 0 1em;max-width:44em}
+.mk{background:linear-gradient(transparent 58%,var(--marker) 58%);font-weight:700}
+.v{font-family:var(--font-math);font-style:italic;font-size:1.1em;white-space:nowrap}
+.plus{color:var(--teal);font-weight:700}
+.minus{color:var(--red);font-weight:700}
+ul.dots,ol.steps{margin:0 0 1em;padding-left:1.4em;max-width:44em}
+ul.dots li,ol.steps li{margin:3px 0}
+
+/* 数式ボックス（教科書風に式番号を右寄せ） */
+.eq{border:1.5px solid var(--ink);background:#fff;padding:12px 18px;margin:16px 0 6px;max-width:44rem;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.eq .f{font-family:var(--font-math);font-size:1.45rem;font-style:italic}
+.eq .f sub{font-size:.65em}
+.eq .no{margin-left:auto;font-size:.85rem;color:var(--sub)}
+.eq-read{max-width:44rem;margin:0 0 16px;padding-left:20px;font-size:.95rem;color:var(--sub)}
+.eq-read::before{content:"読み方　";color:var(--blue);font-weight:700}
+
+/* 先生のメモ */
+.memo{font-family:var(--font-hand);background:var(--note);border-left:4px solid var(--red);padding:12px 16px 12px 18px;margin:16px 0;max-width:44rem;font-size:1.05rem;line-height:1.85}
+.memo .who{display:block;color:var(--red);font-weight:600;font-size:.9rem}
+/* ポイント */
+.point{border:2px solid var(--blue);border-radius:2px;padding:10px 16px;margin:20px 0 4px;max-width:44rem;position:relative}
+.point::before{content:"ポイント";position:absolute;top:-.85em;left:12px;background:var(--paper);padding:0 6px;color:var(--blue);font-weight:700;font-size:.85rem}
+.point p{margin:0}
+
+/* 帯グラフ */
+.bars{background:#fff;border:1px solid var(--line);padding:14px 16px 10px;margin:14px 0 18px;max-width:44rem}
+.bars .sw{display:flex;gap:0;margin-bottom:12px;border:1.5px solid var(--ink);border-radius:6px;overflow:hidden;width:max-content}
+.bars .sw button{border:none;background:#fff;padding:3px 14px;cursor:pointer;font-size:.88rem}
+.bars .sw button+button{border-left:1.5px solid var(--ink)}
+.bars .sw button[aria-selected="true"]{background:var(--ink);color:#fff}
+.brow{display:grid;grid-template-columns:7.2em 1fr;align-items:center;gap:10px;margin:8px 0}
+.brow .lab{font-size:.88rem;line-height:1.35}
+.track{position:relative;height:34px}
+.seg{position:absolute;top:0;bottom:0;display:flex;align-items:center;justify-content:center;font-size:.8rem;border:1.5px solid var(--ink);white-space:nowrap;overflow:hidden;font-variant-numeric:tabular-nums}
+.seg.y{background:#d9ebe2}
+.seg.c{background:#f3f4f6}.seg.i{background:#e7eaee}.seg.g{background:#d9dde3}
+.seg.gap-p{background:repeating-linear-gradient(45deg,#dde6f0,#dde6f0 5px,#fff 5px,#fff 10px);color:var(--teal);font-weight:700;border-color:var(--teal);border-style:dashed}
+.seg.gap-m{background:repeating-linear-gradient(45deg,#f5e5d3,#f5e5d3 5px,#fff 5px,#fff 10px);color:var(--red);font-weight:700;border-color:var(--red);border-style:dashed}
+.seg.b{background:#e7eaee}.seg.ri{background:#e3efd6}.seg.nx{background:#dde6f0}
+.seg-lab{position:absolute;top:0;bottom:0;display:flex;align-items:center;font-size:.85rem;white-space:nowrap}
+.bars .cap{font-size:.88rem;color:var(--sub);margin:6px 0 0}
+
+/* 表 */
+.tw{overflow-x:auto;margin:12px 0 18px}
+table{border-collapse:collapse;background:#fff;font-size:.95rem;font-variant-numeric:tabular-nums}
+th,td{border:1px solid var(--ink);padding:7px 12px;text-align:left;vertical-align:top;line-height:1.6}
+thead th{background:#eef1f5}
+td.c{text-align:center;white-space:nowrap}
+td.r{text-align:right}
+table.calc-t td{border:none;border-bottom:1px dotted var(--line);padding:3px 14px 3px 0}
+table.calc-t tr:last-child td{border-bottom:2px solid var(--ink);font-weight:700}
+
+/* 図 */
+figure{margin:14px 0 20px}
+figcaption{font-size:.85rem;color:var(--sub);margin-top:4px}
+.figbox{background:#fff;border:1px solid var(--line);padding:8px;overflow-x:auto}
+svg text{font-family:var(--font-body);fill:var(--ink)}
+svg .m{font-family:var(--font-math);font-style:italic}
+
+/* シミュレーター */
+.sim{background:#fff;border:1.5px solid var(--ink);padding:14px;margin:16px 0;display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:860px){.sim{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}}
+.grp{margin-bottom:10px}
+.grp .gl{font-size:.78rem;color:var(--sub);display:block;margin-bottom:3px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chips button{border:1.5px solid var(--ink);background:#fff;padding:2px 10px;border-radius:4px;cursor:pointer;font-size:.85rem;line-height:1.6}
+.chips button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.explain{border-top:1px dashed var(--line);padding-top:10px;margin-top:6px}
+.explain .t{font-weight:700;margin:0}
+.explain .x{font-size:.95rem;margin:4px 0}
+.explain .f{font-size:.8rem;color:var(--sub);margin:0}
+.meter{display:grid;grid-template-columns:repeat(3,1fr);border:1.5px solid var(--ink);margin:10px 0}
+.meter div{padding:6px 8px;text-align:center}
+.meter div+div{border-left:1px solid var(--ink)}
+.meter small{display:block;font-size:.75rem;color:var(--sub);line-height:1.3}
+.meter strong{font-size:1.3rem;font-family:var(--font-math);font-variant-numeric:tabular-nums}
+.sl{display:grid;grid-template-columns:7.4em 1fr 3.6em;gap:8px;align-items:center;font-size:.88rem}
+.sl input{width:100%;accent-color:var(--blue)}
+.sl output{text-align:right;font-family:var(--font-math);font-variant-numeric:tabular-nums}
+.sm{font-size:.8rem;color:var(--sub);margin:6px 0 0}
+
+/* 内部タブ（ケース別） */
+.itabs{display:flex;gap:0;border-bottom:1.5px solid var(--ink);margin:14px 0 0;overflow-x:auto}
+.itabs button{border:none;background:none;padding:6px 14px;cursor:pointer;color:var(--sub);border-bottom:3px solid transparent;margin-bottom:-1.5px;white-space:nowrap}
+.itabs button[aria-selected="true"]{color:var(--ink);font-weight:700;border-bottom-color:var(--blue)}
+.ipanel{padding:12px 0 0}
+.ipanel[hidden]{display:none}
+.case{border-left:3px solid var(--line);padding:2px 0 2px 14px;margin:0 0 16px;max-width:44rem}
+.case b{display:block}
+.case p b{display:inline}
+.case .res{font-size:.9rem;margin:2px 0}
+.case p{margin:2px 0 0;font-size:.97rem}
+
+/* 手順 */
+.flow{display:grid;grid-template-columns:1fr;gap:8px;max-width:44rem;margin:12px 0 16px;counter-reset:f}
+@media (min-width:700px){.flow{grid-template-columns:repeat(3,1fr)}}
+.flow div{border:1.5px solid var(--ink);background:#fff;padding:10px 12px;font-size:.93rem;line-height:1.7;counter-increment:f}
+.flow div::before{content:"手順" counter(f);display:block;font-weight:700;color:var(--blue);font-size:.82rem}
+
+/* 計算機 */
+.calc{background:#fff;border:1.5px solid var(--ink);padding:14px 16px;margin:14px 0;max-width:44rem}
+.calc .out{font-size:.98rem;margin-top:10px}
+.calc .chk{color:var(--sub);font-size:.88rem}
+
+/* 確認問題 */
+.q{border:1px solid var(--ink);background:#fff;margin:10px 0;max-width:46rem}
+.q .qq{padding:10px 14px;display:flex;gap:10px}
+.q .qn{font-family:var(--font-math);font-weight:700;color:var(--blue)}
+.q button.show{margin:0 14px 10px;border:1.5px solid var(--ink);background:#fff;border-radius:4px;padding:2px 12px;cursor:pointer;font-size:.85rem}
+.q .ans{border-top:1px dashed var(--line);padding:8px 14px 10px;font-family:var(--font-hand);font-size:1.05rem;background:var(--note)}
+.q .ans[hidden]{display:none}
+.q .ans::before{content:"解答　";color:var(--red);font-weight:600}
+
+/* 前後ナビ */
+.pager{display:flex;justify-content:space-between;gap:10px;margin-top:28px;flex-wrap:wrap}
+.pager button{border:1.5px solid var(--ink);background:#fff;padding:10px 16px;cursor:pointer;border-radius:4px;text-align:left;line-height:1.4;max-width:48%}
+.pager button small{display:block;color:var(--sub);font-size:.78rem}
+.pager .next{margin-left:auto;text-align:right}
+.src{font-size:.82rem;color:var(--sub);margin-top:30px;border-top:1px solid var(--line);padding-top:10px}
+
+/* キャラクター */
+.talk{display:flex;align-items:flex-end;gap:12px;margin:14px 0 18px;max-width:44rem}
+.talk img{width:118px;height:auto;flex:none}
+.talk .bubble{position:relative;background:#fff;border:2px solid var(--ink);border-radius:14px;padding:10px 16px;font-family:var(--font-hand);font-size:1.08rem;line-height:1.75;margin-bottom:30px}
+.talk .bubble::before{content:"";position:absolute;left:-12px;bottom:16px;border:6px solid transparent;border-right:8px solid var(--ink)}
+.talk .bubble::after{content:"";position:absolute;left:-8px;bottom:17px;border:5px solid transparent;border-right:7px solid #fff}
+.talk.r{flex-direction:row-reverse;margin-left:auto}
+.talk.r .bubble::before{left:auto;right:-12px;border-right-color:transparent;border-left:8px solid var(--ink)}
+.talk.r .bubble::after{left:auto;right:-8px;border-right-color:transparent;border-left:7px solid #fff}
+.part-head{display:flex;gap:16px;align-items:flex-end}
+.part-head .ph-main{flex:1;min-width:0}
+.part-head .ph-fig{flex:none;width:150px;text-align:center;margin:-6px 0 -16px}
+.part-head .ph-say{font-family:var(--font-hand);font-size:.88rem;line-height:1.5;background:#fff;border:1.5px solid var(--ink);border-radius:10px;padding:5px 8px;margin-bottom:6px;text-align:left;position:relative}
+.part-head .ph-say::after{content:"";position:absolute;left:50%;bottom:-7px;width:10px;height:10px;background:#fff;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);transform:translateX(-50%) rotate(45deg)}
+.part-head .ph-fig img{width:100%;height:auto;display:block}
+@media (max-width:560px){.talk img{width:86px}.part-head .ph-fig{width:96px}.talk .bubble{font-size:1rem}}
+.memo.withfig{display:flex;gap:14px;align-items:center}
+.memo.withfig img{width:104px;height:auto;flex:none}
+@media (max-width:560px){.memo.withfig img{width:78px}}
+
+/* 課題パート */
+.dl{margin:10px 0 16px}
+.dlbtn{display:inline-flex;align-items:center;gap:12px;border:2px solid var(--ink);background:#fff;color:var(--ink);text-decoration:none;padding:8px 16px 8px 10px;border-radius:6px;line-height:1.4;box-shadow:3px 3px 0 var(--ink)}
+.dlbtn:hover{background:#eaf3ee}
+.dlbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.dlbtn .dlico{width:34px;height:40px;background:#1e5b4f;color:#fff;font-weight:700;display:grid;place-items:center;border-radius:3px;font-family:var(--font-math);font-size:1.2rem}
+.dlbtn b{display:block}
+.dlbtn small{display:block;color:var(--sub);font-size:.8rem}
+
+.xref{font-size:.9rem;margin:6px 0 12px;max-width:44em}
+.xref::before{content:"→ ";color:var(--blue);font-weight:700}
+.xref a,.dots a{color:var(--blue);cursor:pointer}
+.kq{border:2px solid var(--ink);background:#fff;padding:12px 16px;margin:12px 0 14px;max-width:46rem}
+.kq .lab{display:inline-block;background:var(--ink);color:#fff;font-size:.8rem;padding:0 8px;border-radius:3px;margin-bottom:4px}
+.kq p{margin:4px 0}
+.memo.hint{border-left-color:var(--blue)}
+.memo.hint .who{color:var(--blue)}
+.locked{display:none;border:1.5px dashed var(--line);color:var(--sub);padding:8px 14px;max-width:44rem;font-size:.92rem;background:#fff}
+body.ans-off .locked{display:block}
+body.ans-off .sol{display:none}
+.solbtn{border:1.5px solid var(--ink);background:var(--ink);color:#fff;border-radius:4px;padding:6px 16px;cursor:pointer;margin:6px 0 10px}
+.solbtn[aria-expanded="true"]{background:#fff;color:var(--ink)}
+.step{border-top:1px dashed var(--line);padding-top:6px;margin-top:10px}
+h3.stp::before{display:none}
+h3.stp .st{display:inline-block;font-size:.8rem;background:var(--blue);color:#fff;padding:0 9px;border-radius:3px;margin-right:8px;vertical-align:.12em}
+.ansSwitch{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;border:2px solid var(--ink);background:#fff;padding:10px 14px;margin:14px 0 16px;max-width:46rem}
+.sw-l{display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:700}
+.sw-l input{position:absolute;opacity:0;width:1px;height:1px}
+.sw-ui{width:46px;height:26px;border-radius:13px;background:#c9cfd8;position:relative;flex:none;transition:background .15s}
+.sw-ui::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:left .15s}
+.sw-l input:checked+.sw-ui{background:var(--teal)}
+.sw-l input:checked+.sw-ui::after{left:23px}
+.sw-l input:focus-visible+.sw-ui{outline:2px solid var(--blue);outline-offset:2px}
+.sw-note{font-size:.88rem;color:var(--sub)}
+.gwrap{background:#fff;border:1.5px solid var(--ink);padding:12px;margin:14px 0 6px;max-width:46rem}
+.gsw{display:flex;border:1.5px solid var(--ink);border-radius:6px;overflow:hidden;width:max-content;max-width:100%;margin-bottom:8px;flex-wrap:wrap}
+.gsw button{border:none;background:#fff;padding:3px 14px;cursor:pointer;font-size:.88rem}
+.gsw button+button{border-left:1.5px solid var(--ink)}
+.gsw button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.gwrap svg{width:100%;max-width:560px;height:auto;display:block}
+.gcap{font-size:.88rem;color:var(--sub);margin:6px 0 0}
+.howto{font-size:.93rem;max-width:44rem;margin:6px 0 16px;padding-left:1.3em}
+.trap{border:2px dashed var(--red);padding:10px 16px;margin:16px 0;max-width:44rem;background:#fff}
+.trap b{color:var(--red)}
+.point.ketsu::before{content:"結論"}
+.answer{border:1.5px solid var(--ink);background:#fff;padding:14px 18px 6px;margin:20px 0 16px;max-width:46rem;position:relative}
+.answer::before{content:"答案の書き方の例";position:absolute;top:-.8em;left:12px;background:var(--ink);color:#fff;font-size:.8rem;padding:0 8px;border-radius:3px}
+.answer p{font-size:.97rem}
+.num{background:#fff;border:1px solid var(--line);padding:10px 16px;margin:14px 0;max-width:44rem}
+.num .h{font-size:.82rem;color:var(--sub);display:block}
+#kadai .brow{grid-template-columns:5.5em 1fr}
+#kadai .seg.g{background:#e3efd6}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+
+/* 数式（分数・Σ/Π/∫ の上下添字）— 全章共通 */
+.mx{font-family:var(--font-math);display:inline-flex;align-items:center;gap:.12em;vertical-align:middle;white-space:nowrap;font-size:1.08em}
+.mx i{font-style:italic}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .12em;line-height:1.25}
+.frac>span:first-child{border-bottom:1px solid currentColor;padding:0 .25em}
+.frac>span:last-child{padding:0 .25em}
+.bop{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1;margin:0 .12em}
+.bop .s{font-size:1.7em;line-height:1}
+.bop small{font-size:.62em;line-height:1.1}
+.eq .mx{font-size:1.25rem}
+.eq.mxeq .f{font-style:normal}
+.mxblock{display:block;overflow-x:auto;padding:4px 0}
+
+/* ===== hikakuseiji：回共通の部品（第1・2回で本文に書いていたものを共通化） ===== */
+.tl{border-left:3px solid var(--ink);margin:14px 0 20px 6px;padding:0 0 0 18px;max-width:46rem}
+.tl li{list-style:none;position:relative;margin:0 0 10px;line-height:1.7}
+.tl li::before{content:"";position:absolute;left:-25px;top:.55em;width:11px;height:11px;background:var(--paper);border:2.5px solid var(--blue);border-radius:50%}
+.tl li.jp::before{border-color:var(--red)}
+.tl .y{font-family:var(--font-math);font-weight:700;color:var(--blue);margin-right:.6em}
+.tl li.jp .y{color:var(--red)}
+.tl .tag{font-size:.75rem;border:1px solid currentColor;padding:0 5px;margin-left:.4em;color:var(--sub);white-space:nowrap}
+.bk{border:1.5px solid var(--ink);background:#fff;padding:10px 14px 8px;margin:12px 0;max-width:46rem}
+.bk .who{font-weight:700}
+.bk .yr{font-family:var(--font-math);font-weight:700;color:var(--blue);margin-left:.4em}
+.bk .ti{display:block;font-size:.88rem;color:var(--sub);line-height:1.6}
+.bk p{margin:6px 0 0;font-size:.97rem}
+.legend{font-size:.85rem;color:var(--sub);margin:4px 0 0}
+.legend span{display:inline-block;margin-right:14px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;border:2.5px solid var(--blue);margin-right:5px;vertical-align:-1px}
+.legend i.jp{border-color:var(--red)}
+.vv{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;max-width:44rem;margin:14px 0 18px}
+.vv div{border:1.5px solid var(--ink);background:#fff;padding:10px 12px;text-align:center;line-height:1.6}
+.vv div small{display:block;color:var(--sub);font-size:.8rem}
+.vv .ar{border:none;background:none;font-size:1.6rem;color:var(--blue);padding:0}
+.ref{border-left:3px solid var(--red);background:#fff;padding:8px 14px;margin:12px 0;max-width:46rem;font-size:.95rem}
+.ref .h{display:block;font-size:.8rem;color:var(--red);font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="scrim" id="scrim"></div>
+<nav class="drawer" id="drawer" aria-label="全体の目次" aria-hidden="true">
+  <div class="drawer-head"><b>目次</b><button class="close" id="closeBtn" aria-label="目次を閉じる">×</button></div>
+  <div id="drawerList"></div>
+</nav>
+
+<header class="bar">
+  <div class="bar-in">
+    <button class="burger" id="menuBtn" aria-label="目次を開く" aria-controls="drawer" aria-expanded="false"><span></span></button>
+    <div class="course"><small>比較政治学　地域研究・比較政治基礎</small><b>第6回　執政制度　解説プリント</b></div>
+  </div>
+  <div class="tabs" role="tablist" aria-label="パート" id="tabs"></div>
+</header>
+
+<main>
+<!-- ===================== パート1 ===================== -->
+<div class="part" id="seido" data-title="3つの執政制度" data-desc="行政のトップをどう選び、議会や国民とどう関係づけるか――執政制度の3つの型、議院内閣制・大統領制・半大統領制の仕組みを比べます。">
+
+<section id="s1" data-t="執政制度とは">
+<h2><span class="sn">1</span>執政制度とは</h2>
+<div class="kq"><span class="lab">定義（建林・曽我・待鳥『比較政治制度論』）</span><p>民主主義の政治体制において、行政部門の活動を統括するトップリーダー、すなわち<b>執政長官</b>をどのように選出し、立法部門である<b>議会</b>や<b>国民</b>とどのような関係の下に置くのかについての諸ルール</p></div>
+<div class="tw"><table>
+<thead><tr><th>定義の言葉</th><th>言いかえ</th></tr></thead>
+<tbody>
+<tr><td>執政長官</td><td>行政のトップ。首相や大統領</td></tr>
+<tr><td>どのように選出し</td><td>国民が直接選ぶか、議会が選ぶか</td></tr>
+<tr><td>議会や国民とどのような関係</td><td>議会が執政長官を辞めさせられるか、執政長官が議会を解散できるか、など</td></tr>
+</tbody></table></div>
+<p>民主主義の執政制度は、<b>議院内閣制・大統領制・半大統領制</b>の3つに分けられます。下の図で仕組みを切り替えて比べてみましょう。</p>
+<div class="gwrap">
+  <div class="gsw" role="group" aria-label="執政制度の切り替え"><button type="button" data-g="exe" data-s="0" aria-pressed="true">議院内閣制</button><button type="button" data-g="exe" data-s="1" aria-pressed="false">大統領制</button><button type="button" data-g="exe" data-s="2" aria-pressed="false">半大統領制</button></div>
+  <svg id="gExe" viewBox="0 0 640 330" role="img" aria-label="執政制度の仕組みの模式図"></svg>
+  <p class="gcap" id="gExe-cap"></p>
+</div>
+<div class="point"><p>執政制度は、行政のトップの選び方と、議会・国民との関係を決めるルール。民主主義では議院内閣制・大統領制・半大統領制の3つがある。</p></div>
+</section>
+
+<section id="s2" data-t="議院内閣制">
+<h2><span class="sn">2</span>議院内閣制</h2>
+<p>イギリス、日本、イタリア、ドイツなどが採用しています。</p>
+<ul class="dots">
+<li>国民は<b>議会の議員</b>を直接選び、<b>議会が内閣</b>（首相）を選ぶ。</li>
+<li>内閣は議会に対して責任を負う。内閣は議会を<b>解散</b>でき、議会は内閣に<b>不信任決議</b>を突きつけられる。互いに抑制・均衡し合う。</li>
+<li>議会の多数派を支配する政党が内閣をつくるので、<span class="mk">行政権と立法権は首相のもとで融合する</span>。</li>
+</ul>
+<div class="memo"><span class="who">メモ：クラス委員が委員長を選ぶ</span>生徒が各クラスの委員を選び（選挙）、委員会がその中から委員長を選ぶ（首相）。委員長は委員会の多数派の支持がなければ続けられない。逆に、委員長は委員会を解散して委員を選び直させることもできる――これが議院内閣制のイメージです。</div>
+<div class="point"><p>議院内閣制では、国民が選んだ議会が内閣を選び、内閣は議会に責任を負う。行政権と立法権は首相のもとで融合する。</p></div>
+</section>
+
+<section id="s3" data-t="大統領制">
+<h2><span class="sn">3</span>大統領制</h2>
+<p>アメリカ、アルゼンチン、ブラジル、韓国、インドネシアなどが採用しています。</p>
+<ul class="dots">
+<li>国民が<b>議員</b>と<b>大統領</b>の両方を直接選ぶ（<b>二元代表制</b>）。</li>
+<li>大統領も議員も<b>任期が固定</b>されている。例外を除き、議会は大統領を辞めさせられず、大統領は議会を解散できない。</li>
+<li><span class="mk">行政権と立法権は分立する</span>。</li>
+</ul>
+<h3>大統領制のバリエーション</h3>
+<p>同じ大統領制でも、政党のあり方によって大統領の力は大きく変わります。</p>
+<div class="tw"><table>
+<thead><tr><th>状況</th><th>大統領の立場（補足）</th></tr></thead>
+<tbody>
+<tr><td>議会と大統領を<b>同じ政党</b>が支配し、党首である大統領が党内で強い権力をもつ</td><td>議会の協力を得やすく、強い指導力を発揮しやすい</td></tr>
+<tr><td>政党組織が<b>分権的</b>で、大統領が党内で強い権力をもたない</td><td>同じ党の議員でも、大統領に従うとは限らない</td></tr>
+<tr><td>議会と大統領を<b>異なる政党</b>が支配する（<b>分割政府</b>）</td><td>法案や予算が通りにくく、政治が停滞しやすい</td></tr>
+</tbody></table></div>
+<div class="point"><p>大統領制では、国民が大統領と議員を別々に選び（二元代表制）、任期は固定され、行政権と立法権が分立する。政党のあり方や分割政府かどうかで、大統領の力は大きく変わる。</p></div>
+</section>
+
+<section id="s4" data-t="半大統領制">
+<h2><span class="sn">4</span>半大統領制</h2>
+<ul class="dots">
+<li>国民が<b>議員</b>と<b>大統領</b>の両方を直接選ぶ。</li>
+<li>一方で、<b>内閣（首相）は議会に責任</b>を負う。</li>
+<li>議会から自律した<b>大統領</b>と、議会多数派の信任に頼る<b>首相</b>が、行政権を分け合う。</li>
+</ul>
+<div class="case"><b>フランスのケース</b><p>フランスの大統領は国民の直接選挙で選ばれ、首相を任命する。しかし首相は議会の信任を必要とするため、議会の多数派が大統領と違う陣営になると、大統領は反対陣営から首相を選ばざるをえない。これを<b>コアビタシオン</b>（保革共存）と呼ぶ（説明は補足）。</p></div>
+<div class="tw"><table>
+<thead><tr><th></th><th>議院内閣制</th><th>大統領制</th><th>半大統領制</th></tr></thead>
+<tbody>
+<tr><td>国民が直接選ぶもの</td><td>議員</td><td>議員と大統領</td><td>議員と大統領</td></tr>
+<tr><td>行政のトップ</td><td>首相（議会が選ぶ）</td><td>大統領</td><td>大統領と首相が分有</td></tr>
+<tr><td>議会による不信任</td><td>あり</td><td>なし（任期固定）</td><td>首相・内閣に対してあり</td></tr>
+<tr><td>行政権と立法権</td><td>融合</td><td>分立</td><td>部分的に融合</td></tr>
+<tr><td>例</td><td>イギリス、日本、ドイツ</td><td>アメリカ、韓国、ブラジル</td><td>フランス</td></tr>
+</tbody></table></div>
+<div class="point"><p>半大統領制では、国民が選ぶ大統領と、議会の信任に頼る首相が行政権を分け合う（フランス）。</p></div>
+</section>
+
+<section id="s5" data-t="確認問題">
+<h2><span class="sn">5</span>確認問題</h2>
+<div class="q"><div class="qq"><span class="qn">Q1</span><span>議院内閣制で「行政権と立法権が融合する」とは、どういうことか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>議会の多数派を支配する政党が内閣をつくるため、首相は行政のトップであると同時に議会の多数派のリーダーでもあり、行政権と立法権が首相のもとで一体になること。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q2</span><span>分割政府とは何か。それはどの執政制度で起きるか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>議会と執政府（大統領）を異なる政党が支配する状態。議会と大統領を別々に選ぶ大統領制で起きる（半大統領制でもコアビタシオンとして似た状態が起きる）。</div></div>
+</section>
+</div>
+
+<!-- ===================== パート2 ===================== -->
+<div class="part" id="yoin" data-title="制度はなぜ選ばれるのか" data-desc="ある国が、なぜ大統領制や議院内閣制を選ぶのか。構造・制度・アクターの3つの要因から考え、ロシアの強い大統領制の例を見ます。">
+
+<section id="s6" data-t="構造的要因">
+<h2><span class="sn">6</span>構造的要因</h2>
+<div class="case"><b>民族的多様性などの固定的な社会的分断</b><p>社会が民族などで深く分かれている国では、勝者がすべてを握る大統領制は対立を深めかねない。レイプハルト（1992年）は、チェコスロヴァキアが<b>議院内閣制を選んだ</b>過程を、ハンガリー、ポーランドと比べて分析した（チェコとスロヴァキアの2つの民族を念頭においた選択だったことは補足）。</p></div>
+<div class="case"><b>経済状況などの危機</b><p>ネグレット（2013年）は、ラテンアメリカ諸国で、<b>インフレ率の上昇</b>などの経済危機のときに、すばやく対応するため<b>大統領の立法権限が拡大</b>されたことを示した。</p></div>
+<div class="point"><p>社会の分断の深さや、経済危機といった構造的な条件が、執政制度の選択に影響する。</p></div>
+</section>
+
+<section id="s7" data-t="制度的要因とアクター的要因">
+<h2><span class="sn">7</span>制度的要因とアクター的要因</h2>
+<div class="case"><b>制度的要因：旧宗主国の制度的遺産</b><p>植民地だった国は、独立後も旧宗主国の制度を受け継ぎやすい。たとえばイギリスの旧植民地には議院内閣制が多い（例は補足）。</p></div>
+<h3>アクター的要因</h3>
+<p>制度は、それを決める政治家や政党の<b>合理的な選択</b>の結果でもあります（第2回の合理的選択アプローチ）。</p>
+<ul class="dots">
+<li>憲法を作る議会や、制度改革を審議する議会の議員・政党は、自分たちに有利な制度を選ぼうとする。</li>
+<li>有力な大統領候補を支える勢力が議会でどれだけ大きいか、将来の選挙がどれだけ不確実かも、選択を左右する。勝てる見込みが高ければ強い大統領を、見通しが立たなければ権力を分散する制度を選びやすい（解釈は補足）。</li>
+</ul>
+<div class="bk"><span class="who">シュガート「政党の強さと執政の強さの逆相関」（仮の題）</span><span class="yr">1998</span><span class="ti">Matthew Soberg Shugart, "The Inverse Relationship between Party Strength and Executive Strength," <i>British Journal of Political Science</i>, Vol.28, No.1</span><p>政党内部のガバナンスのあり方に注目しました。政党がまとまりを欠く（分権的な）ところでは、全国的な政策を進めるために<b>強い権限をもつ執政長官</b>が選ばれやすく、政党が強いところでは執政長官の権限は弱めに設計されやすい、という「逆相関」を論じました（要点は補足）。</p></div>
+<div class="case"><b>ロシアにおける強い大統領制の成立</b><p>溝口修平は、ソ連崩壊後のロシアで強い大統領制ができた過程を、<b>経済状況</b>と<b>地方エリートの支持</b>から分析しています。政治体制・経済体制・国家のかたちが同時に変わる「重層的体制転換」の中での制度形成として捉え直す研究です。</p></div>
+<p class="xref">合理的選択アプローチ → <a href="../ch02/#kihon">第2回の4節</a></p>
+<div class="point"><p>執政制度の選択には、旧宗主国の遺産（制度的要因）と、議員・政党の合理的選択や党内ガバナンス（アクター的要因）も影響する。</p></div>
+</section>
+
+<section id="s8" data-t="確認問題">
+<h2><span class="sn">8</span>確認問題</h2>
+<div class="q"><div class="qq"><span class="qn">Q1</span><span>ネグレットは、ラテンアメリカで大統領の立法権限が拡大した背景として何を挙げたか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>インフレ率の上昇などの経済危機。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q2</span><span>執政制度の選択に影響する要因を、構造・制度・アクターの3つに分けて1つずつ挙げなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>構造：民族的多様性などの社会的分断、または経済危機。制度：旧宗主国の制度的遺産。アクター：憲法を作る議員・政党の合理的選択、または党内ガバナンスのあり方。</div></div>
+</section>
+</div>
+
+<!-- ===================== パート3 ===================== -->
+<div class="part" id="antei" data-title="執政制度と民主主義の安定" data-desc="大統領制は民主主義を不安定にするのか。リンスの大統領制批判と、それへの異論を比べ、レジュメの暫定的な結論を確かめます。">
+
+<section id="s9" data-t="リンスの大統領制批判">
+<h2><span class="sn">9</span>リンスの大統領制批判</h2>
+<p>第3回・第4回に登場した<b>リンス</b>は、「大統領制か議院内閣制か：違いはあるのか」（1994年、仮の題）で、<span class="mk">大統領制は民主主義を不安定にしやすい</span>と論じました。</p>
+<div class="tw"><table>
+<thead><tr><th>批判の論点</th><th>かみくだくと</th></tr></thead>
+<tbody>
+<tr><td><b>任期の固定化による硬直</b></td><td>大統領が失敗しても任期中は代えられず、状況の変化に柔軟に対応できない</td></tr>
+<tr><td><b>分割政府による停滞</b></td><td>大統領と議会がどちらも「国民に選ばれた」と主張して対立すると、解決の仕組みがなく政治が止まる</td></tr>
+<tr><td><b>勝者の一人勝ち</b></td><td>大統領のポストは一つしかなく、負けた側は何も得られない。社会の亀裂が深まる</td></tr>
+<tr><td><b>煽動政治・ポピュリズムへの傾き</b></td><td>国民に直接選ばれた大統領が、議会や政党を飛び越えて大衆に訴えやすい</td></tr>
+</tbody></table></div>
+<div class="memo"><span class="who">メモ：途中で交代できないキャプテン</span>議院内閣制は、チームの調子が悪ければ途中でキャプテンを交代できる（不信任・解散）。大統領制は、シーズン中は何があってもキャプテンを代えられない。安定しているとも言えるが、こじれたときの出口がない。リンスが心配したのはこの点です。</div>
+<div class="point"><p>リンスは、任期の固定化、分割政府による停滞、勝者の一人勝ち、ポピュリズムへの傾きから、大統領制は民主主義を不安定にしやすいと批判した。</p></div>
+</section>
+
+<section id="s10" data-t="プシェヴォルスキの定量分析">
+<h2><span class="sn">10</span>プシェヴォルスキらの定量分析</h2>
+<div class="bk"><span class="who">プシェヴォルスキほか『民主主義と発展』（仮の題）</span><span class="yr">2000</span><span class="ti">Adam Przeworski et al., <i>Democracy and Development: Political Institutions and Well-Being in the World, 1950–1990</i></span><p>1950〜1990年の世界の国々のデータを統計的に分析しました。その中で、経済状況などの条件をそろえても、大統領制の民主主義は議院内閣制の民主主義より崩壊しやすい傾向があることを示し、リンスの議論を数量的に裏づけたとされます（結論の要約は補足）。</p></div>
+<p class="xref">統計分析の強みと弱み → <a href="../ch02/#kihon">第2回の4節</a></p>
+<div class="point"><p>プシェヴォルスキらの統計分析は、大統領制の民主主義の方が崩壊しやすい傾向を示したとされる。</p></div>
+</section>
+
+<section id="s11" data-t="ホロウィッツの異議">
+<h2><span class="sn">11</span>ホロウィッツによるリンスへの異議</h2>
+<p><b>ホロウィッツ</b>（<i>Journal of Democracy</i> 第1巻第4号、1990年。年は補足）は、リンスの議論に4つの点から反論しました。</p>
+<div class="tw"><table>
+<thead><tr><th>異議</th><th>かみくだくと（補足）</th></tr></thead>
+<tbody>
+<tr><td><b>地域的バイアス</b></td><td>リンスの議論は、大統領制が崩壊したラテンアメリカの例に偏っている。ほかの地域では、議院内閣制の民主主義も多く崩壊している</td></tr>
+<tr><td><b>静態的な大統領制観</b></td><td>大統領制をひとつの固まった形として見ており、さまざまな設計の工夫があることを見落としている</td></tr>
+<tr><td><b>選挙制度の設計との関係</b></td><td>大統領の選び方（たとえば、複数の地域で一定の得票を求める仕組み）を工夫すれば、大統領制でも幅広い支持を必要とさせられる</td></tr>
+<tr><td><b>勝者総取りはむしろ議院内閣制に</b></td><td>イギリス型（ウェストミンスター型）の議院内閣制では、小選挙区で多数をとった政党が議会も内閣も握るので、勝者総取りの性格はむしろ強い</td></tr>
+</tbody></table></div>
+<p class="xref">ウェストミンスター型と多数決型 → <a href="../ch05/#kiketsu">第5回の10節</a></p>
+<div class="point"><p>ホロウィッツは、地域的バイアス、静態的な大統領制観、選挙制度の設計の見落とし、勝者総取りはむしろウェストミンスター型議院内閣制に強いことを挙げて、リンスに異議を唱えた。</p></div>
+</section>
+
+<section id="s12" data-t="暫定的な結論と問題提起">
+<h2><span class="sn">12</span>暫定的な結論と問題提起</h2>
+<p>レジュメは、この論争から次の暫定的な結論を導いています。</p>
+<ol class="steps">
+<li>安定した民主主義のための執政制度に、<b>唯一の処方箋はない</b>。大統領制、議院内閣制、半大統領制のどれにも長所と短所がある。</li>
+<li>同じ制度でも、<b>政党制度や選挙制度</b>など、ほかの要因の影響で多様な姿をとる。</li>
+<li>どの制度を選ぶかは、それぞれの国・地域の<b>歴史・社会・経済の環境や政治文化</b>に影響される。環境が変われば、制度も変わりうる。</li>
+</ol>
+<div class="kq"><span class="lab">問い</span><p>非民主的な政治体制では、執政制度はどうなっているのだろうか？</p></div>
+<p>たとえば、権威主義体制にも「大統領」や「首相」がいる国は多くあります。第4回で見たように、権威主義体制が議会や選挙を備えることには意味がありました。肩書きは同じでも、その役割は民主主義体制とは違うかもしれません（手がかりは補足）。</p>
+<p class="xref">権威主義体制の制度的要因 → <a href="../ch04/#kaigi">第4回の9節</a></p>
+<div class="point"><p>民主主義を安定させる唯一の執政制度はなく、政党・選挙制度や、各国の歴史・社会・政治文化との組み合わせが重要になる。</p></div>
+</section>
+
+<section id="s13" data-t="確認問題">
+<h2><span class="sn">13</span>確認問題</h2>
+<div class="q"><div class="qq"><span class="qn">Q1</span><span>リンスが、大統領制は「勝者の一人勝ち」になりやすいと考えたのはなぜか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>大統領のポストは一つしかなく、選挙に勝った側が行政権をすべて握り、負けた側は任期中なにも得られないから。その結果、社会の亀裂が深まりやすい。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q2</span><span>ホロウィッツが、勝者総取りの性格はむしろウェストミンスター型議院内閣制に強いと言ったのはなぜか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>イギリス型の議院内閣制では、小選挙区で議会の多数をとった政党が内閣も握り、行政権と立法権を一手にできる。分立した議会がある大統領制より、勝者が得る権力が大きいから。</div></div>
+</section>
+</div>
+
+<!-- ===================== パート4 ===================== -->
+<div class="part" id="matome" data-title="まとめと確認" data-desc="第6回の流れを年表とキーワードで振り返り、確認問題で理解を確かめます。">
+
+<section id="s14" data-t="年表で振り返る">
+<h2><span class="sn">14</span>年表で振り返る</h2>
+<p class="legend"><span><i></i>欧米・世界の研究</span><span><i class="jp"></i>日本の研究</span></p>
+<ul class="tl">
+<li><span class="y">1990</span>ホロウィッツ「民主主義体制の比較」（<i>Journal of Democracy</i>）<span class="tag">リンスへの異議</span></li>
+<li><span class="y">1992</span>レイプハルト、チェコスロヴァキア・ハンガリー・ポーランドの憲法選択<span class="tag">構造的要因</span></li>
+<li><span class="y">1994</span>リンス「大統領制か議院内閣制か」<span class="tag">大統領制批判</span></li>
+<li><span class="y">1998</span>シュガート「政党の強さと執政の強さの逆相関」<span class="tag">アクター的要因</span></li>
+<li><span class="y">2000</span>プシェヴォルスキほか『民主主義と発展』<span class="tag">定量分析</span></li>
+<li class="jp"><span class="y">2008</span>建林・曽我・待鳥『比較政治制度論』（定義の引用元）<span class="tag">定義</span></li>
+<li><span class="y">2013</span>ネグレット『憲法をつくる』（仮の題）<span class="tag">構造的要因</span></li>
+<li class="jp"><span class="y">―</span>溝口修平「ロシアの『強い』大統領制？」<span class="tag">事例</span></li>
+</ul>
+<p class="legend">文献の年はレジュメに示された刊行年です（ホロウィッツの1990年は補足）。溝口論文の年はレジュメに記載がありません。</p>
+</section>
+
+<section id="s15" data-t="キーワード一覧">
+<h2><span class="sn">15</span>キーワード一覧</h2>
+<div class="tw"><table>
+<thead><tr><th>キーワード</th><th>ひとことで</th><th>節</th></tr></thead>
+<tbody>
+<tr><td><b>執政制度・執政長官</b></td><td>行政のトップの選び方と、議会・国民との関係のルール</td><td class="c"><a href="#s1" data-goto="s1">1</a></td></tr>
+<tr><td><b>議院内閣制</b></td><td>議会が内閣を選び、内閣が議会に責任を負う。行政権と立法権が融合</td><td class="c"><a href="#s2" data-goto="s2">2</a></td></tr>
+<tr><td><b>大統領制・二元代表制</b></td><td>国民が大統領と議員を別々に選ぶ。任期固定で権力が分立</td><td class="c"><a href="#s3" data-goto="s3">3</a></td></tr>
+<tr><td><b>分割政府</b></td><td>大統領と議会を異なる政党が支配する状態</td><td class="c"><a href="#s3" data-goto="s3">3</a></td></tr>
+<tr><td><b>半大統領制</b></td><td>大統領と、議会の信任に頼る首相が行政権を分有</td><td class="c"><a href="#s4" data-goto="s4">4</a></td></tr>
+<tr><td><b>コアビタシオン</b></td><td>半大統領制で、大統領と首相が異なる陣営になる状態（フランス）</td><td class="c"><a href="#s4" data-goto="s4">4</a></td></tr>
+<tr><td><b>政党の強さと執政の強さの逆相関</b></td><td>政党が弱いほど強い執政長官が選ばれやすい（シュガート）</td><td class="c"><a href="#s7" data-goto="s7">7</a></td></tr>
+<tr><td><b>大統領制批判</b></td><td>大統領制は民主主義を不安定にしやすい（リンス）</td><td class="c"><a href="#s9" data-goto="s9">9</a></td></tr>
+<tr><td><b>ウェストミンスター型</b></td><td>イギリス型の議院内閣制。多数派が権力を集中して握る</td><td class="c"><a href="#s11" data-goto="s11">11</a></td></tr>
+</tbody></table></div>
+</section>
+
+<section id="s16" data-t="確認問題">
+<h2><span class="sn">16</span>確認問題</h2>
+<p>答えを考えてから「解答を見る」を押してください。</p>
+<div class="q"><div class="qq"><span class="qn">Q1</span><span>議院内閣制、大統領制、半大統領制を、執政長官の選び方と議会との関係から比べなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>議院内閣制では国民が議員を選び、議会が内閣（首相）を選ぶ。内閣は議会に責任を負い、解散と不信任で互いに抑制し合う。大統領制では国民が大統領と議員を別々に選び、任期は固定され、不信任も解散もなく、権力は分立する。半大統領制では国民が大統領と議員を選び、大統領と、議会の信任に頼る首相が行政権を分け合う。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q2</span><span>リンスの大統領制批判と、ホロウィッツの異議を比べ、レジュメの暫定的な結論に結びつけて説明しなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>リンスは、任期の固定化、分割政府による停滞、勝者の一人勝ち、ポピュリズムへの傾きから大統領制は民主主義を不安定にすると批判した。ホロウィッツは、その議論がラテンアメリカに偏っていること、大統領制を固定的に見ていること、選挙制度の設計を見落としていること、勝者総取りはむしろウェストミンスター型議院内閣制に強いことを指摘した。この論争から、安定のための唯一の処方箋はなく、政党制度や選挙制度、各国の歴史や政治文化との組み合わせが重要だという結論が導かれる。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q3</span><span>第5回の内容とつなげて、大統領制が政党システムに与える影響を説明しなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>大統領選挙は全国で一人を選ぶため、大政党しか勝てず、政治家や有権者が大きな陣営にまとまりやすい（コックスの戦略的調整）。そのため、大統領制は政党の数を減らす方向に働きうる。逆に、政党のまとまりの強さが、大統領が実際にどれだけ力をもつかを左右する。</div></div>
+</section>
+
+<section id="s17" data-t="考えてみよう">
+<h2><span class="sn">17</span>考えてみよう</h2>
+<div class="memo hint"><span class="who">問い1</span>日本で「首相公選制」（国民が首相を直接選ぶ）を導入すると、どんな良い点と問題点があるだろうか。リンスの批判を手がかりに考えてみよう。</div>
+<div class="memo hint"><span class="who">問い2</span>アメリカの分割政府による政治の停滞は、民主主義にとって悪いことだろうか。権力の暴走を防ぐ点から見るとどうだろうか。</div>
+<div class="memo hint"><span class="who">問い3</span>権威主義体制の「大統領」や「議会」は、民主主義体制のそれとどこが違うだろうか。第4回の内容を手がかりに考えてみよう。</div>
+<p class="src">このページは、第6回レジュメ「執政制度」の内容を、初学者向けに言いかえて解説したものです。「補足」と書いた箇所は、レジュメにない一般的な説明です。仮の題は、邦訳の題がレジュメにない文献に付けた訳題です。</p>
+</section>
+</div>
+
+<div class="pager" id="pager"></div>
+</main>
+
+<script>
+/* 解説と答案例を最初から表示するときは true に変える */
+const ANSWERS_DEFAULT_ON=false;
+/* 第6回：執政制度の仕組み（模式図） */
+(function(){
+  const C={ink:"#22252b",sub:"#5e6470",blue:"#1e5b4f",red:"#b0601c",grn:"#3d6a94",line:"#c9cfd8",mk:"#cce6b8",pale:"#eef3ee"};
+  const t=(x,y,s,o={})=>`<text x="${x}" y="${y}" font-size="${o.fs||14}" text-anchor="${o.a||"start"}" ${o.w?'font-weight="700"':""} style="fill:${o.c||C.ink}">${s}</text>`;
+  const mk=k=>`<marker id="a6-${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="${C[k]}"/></marker>`;
+  const defs=`<defs>${["ink","blue","red","grn"].map(mk).join("")}</defs>`;
+  const box=(x,y,w,h,lab,sub,fill)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill||"#fff"}" stroke="${C.ink}" stroke-width="2"/>`+t(x+w/2,y+(sub?h/2-2:h/2+6),lab,{a:"middle",fs:16,w:1})+(sub?t(x+w/2,y+h/2+16,sub,{a:"middle",fs:11,c:C.sub}):"");
+  const ar=(d,k,lab,lx,ly,o={})=>`<path d="${d}" stroke="${C[k]}" stroke-width="2.5" fill="none" ${o.dash?'stroke-dasharray="6 4"':""} marker-end="url(#a6-${k})" ${o.both?`marker-start="url(#a6-${k})"`:""}/>`+(lab?t(lx,ly,lab,{a:o.a||"middle",fs:12,c:C[k],w:1}):"");
+  const svg=document.getElementById("gExe"),cap=document.getElementById("gExe-cap");
+  if(!svg)return;
+  const caps=[
+    "議院内閣制（模式図）：国民は議会だけを選び、議会が首相（内閣）を選ぶ。内閣は議会を解散でき、議会は内閣を不信任できる。議会の多数派が内閣をつくるので、行政と立法が融合する。",
+    "大統領制（模式図）：国民が大統領と議会を別々に選ぶ（二元代表制）。任期は固定で、不信任も解散もない。行政と立法は分立する。",
+    "半大統領制（模式図）：国民が大統領と議会を選ぶ。大統領が首相を任命するが、首相・内閣は議会の信任を必要とする。行政権は大統領と首相が分け合う。"];
+  function draw(k){
+    let s=defs;
+    s+=box(230,250,180,56,"国民","有権者",C.pale);
+    if(k===0){
+      s+=box(230,140,180,56,"議会","");
+      s+=box(230,30,180,56,"首相・内閣","行政のトップ",C.mk);
+      s+=ar("M320,248 L320,200","blue","選挙",348,228);
+      s+=ar("M300,138 L300,90","blue","首相を選ぶ",256,118);
+      s+=ar("M412,72 C470,72 470,160 414,162","red","解散",478,112,{a:"start"});
+      s+=ar("M228,162 C170,160 170,72 226,70","grn","不信任",160,112,{a:"end"});
+      s+=`<rect x="214" y="20" width="212" height="188" fill="none" stroke="${C.blue}" stroke-dasharray="5 4"/>`+t(320,224,"",{});
+      s+=t(436,30,"行政と立法が融合",{fs:12,c:C.blue,w:1});
+    }else if(k===1){
+      s+=box(60,90,180,56,"大統領","行政のトップ",C.mk);
+      s+=box(400,90,180,56,"議会","");
+      s+=ar("M260,250 L170,150","blue","選挙",196,210);
+      s+=ar("M380,250 L470,150","blue","選挙",444,210);
+      s+=`<line x1="250" y1="118" x2="390" y2="118" stroke="${C.ink}" stroke-width="2" stroke-dasharray="3 5"/>`+t(320,108,"分立",{a:"middle",fs:13,w:1})+t(320,138,"不信任・解散なし",{a:"middle",fs:11,c:C.sub});
+      s+=t(150,78,"任期固定",{a:"middle",fs:12,c:C.red,w:1})+t(490,78,"任期固定",{a:"middle",fs:12,c:C.red,w:1});
+    }else{
+      s+=box(40,40,170,56,"大統領","",C.mk);
+      s+=box(430,140,170,56,"議会","");
+      s+=box(235,140,170,56,"首相・内閣","",C.mk);
+      s+=ar("M250,250 L140,100","blue","選挙",170,200);
+      s+=ar("M390,250 L500,200","blue","選挙",470,240);
+      s+=ar("M212,72 C280,72 320,90 320,136","grn","任命",292,80);
+      s+=ar("M428,162 L410,162","red","",0,0);
+      s+=t(418,128,"信任・不信任",{a:"middle",fs:12,c:C.red,w:1});
+      s+=`<rect x="28" y="28" width="390" height="180" fill="none" stroke="${C.blue}" stroke-dasharray="5 4" rx="2"/>`+t(36,224,"行政権を分有",{fs:12,c:C.blue,w:1});
+    }
+    svg.innerHTML=s;cap.textContent=caps[k];
+  }
+  document.querySelectorAll('.gsw button[data-g="exe"]').forEach(b=>b.addEventListener("click",()=>{
+    document.querySelectorAll('.gsw button[data-g="exe"]').forEach(z=>z.setAttribute("aria-pressed",z===b?"true":"false"));draw(+b.dataset.s);}));
+  draw(0);
+})();
+
+/* hikakuseiji 共通（lily から複製）：タブ・目次・前後ナビ・確認問題・内部タブ・解説スイッチ・相互リンク
+   各章のHTMLは、.part（data-title, data-desc）と section（data-t, h2 .sn）を並べるだけでよい。
+   パートが表示されたときに "partshown" イベント（detail.id）を発行する。 */
+(function(){
+  const parts=[...document.querySelectorAll(".part")];
+  const tabs=document.getElementById("tabs");
+  const drawerList=document.getElementById("drawerList");
+  const body=document.body, menuBtn=document.getElementById("menuBtn"), drawer=document.getElementById("drawer");
+  let current=0;
+
+  parts.forEach((p,i)=>{
+    p.setAttribute("role","tabpanel");
+    const secs=[...p.querySelectorAll("section")];
+    const head=document.createElement("div");head.className="part-head";
+    head.innerHTML='<div class="ph-main"><div class="pn">Part '+(i+1)+' / '+parts.length+'</div><h1>'+p.dataset.title+'</h1><p>'+p.dataset.desc+'</p></div>';
+    const mini=document.createElement("div");mini.className="toc-mini";
+    secs.forEach(s=>{const b=document.createElement("button");b.type="button";b.textContent=s.querySelector(".sn").textContent+". "+s.dataset.t;b.addEventListener("click",()=>s.scrollIntoView({behavior:"smooth",block:"start"}));mini.appendChild(b);});
+    head.querySelector(".ph-main").appendChild(mini);p.prepend(head);
+
+    const t=document.createElement("button");t.type="button";t.className="tab";t.setAttribute("role","tab");t.id="tab-"+p.id;t.setAttribute("aria-controls",p.id);
+    t.innerHTML='<span class="n">'+(i+1)+'</span>'+p.dataset.title;
+    t.addEventListener("click",()=>go(i,true));
+    t.addEventListener("keydown",e=>{if(e.key==="ArrowRight"){const k=(i+1)%parts.length;go(k,true);tabs.children[k].focus();}if(e.key==="ArrowLeft"){const k=(i-1+parts.length)%parts.length;go(k,true);tabs.children[k].focus();}});
+    tabs.appendChild(t);p.setAttribute("aria-labelledby",t.id);
+
+    const h=document.createElement("h4");const hb=document.createElement("button");hb.type="button";hb.innerHTML='<span class="n">'+(i+1)+'</span>'+p.dataset.title;hb.addEventListener("click",()=>{go(i,true);closeMenu();});h.appendChild(hb);drawerList.appendChild(h);
+    const ul=document.createElement("ul");
+    secs.forEach(s=>{const li=document.createElement("li");const b=document.createElement("button");b.type="button";b.textContent=s.querySelector(".sn").textContent+". "+s.dataset.t;b.addEventListener("click",()=>{go(i,false);closeMenu();setTimeout(()=>s.scrollIntoView({block:"start"}),30);});li.appendChild(b);ul.appendChild(li);});
+    drawerList.appendChild(ul);
+  });
+
+  function go(i,top){
+    current=i;
+    parts.forEach((p,k)=>p.classList.toggle("on",k===i));
+    [...tabs.children].forEach((t,k)=>{t.setAttribute("aria-selected",k===i?"true":"false");t.tabIndex=k===i?0:-1;});
+    [...drawerList.querySelectorAll("h4")].forEach((h,k)=>h.classList.toggle("cur",k===i));
+    tabs.children[i].scrollIntoView({block:"nearest",inline:"nearest"});
+    const pg=document.getElementById("pager");pg.innerHTML="";
+    if(i>0){const b=document.createElement("button");b.type="button";b.innerHTML="<small>前のパート</small>← "+parts[i-1].dataset.title;b.addEventListener("click",()=>go(i-1,true));pg.appendChild(b);}
+    if(i<parts.length-1){const b=document.createElement("button");b.type="button";b.className="next";b.innerHTML="<small>次のパート</small>"+parts[i+1].dataset.title+" →";b.addEventListener("click",()=>go(i+1,true));pg.appendChild(b);}
+    try{if(location.hash!=="#"+parts[i].id)history.replaceState(null,"","#"+parts[i].id);}catch(e){}
+    if(top)window.scrollTo(0,0);
+    document.dispatchEvent(new CustomEvent("partshown",{detail:{id:parts[i].id}}));
+  }
+  function openMenu(){body.classList.add("menu-open");drawer.setAttribute("aria-hidden","false");menuBtn.setAttribute("aria-expanded","true");document.getElementById("closeBtn").focus();}
+  function closeMenu(){body.classList.remove("menu-open");drawer.setAttribute("aria-hidden","true");menuBtn.setAttribute("aria-expanded","false");}
+  menuBtn.addEventListener("click",openMenu);
+  document.getElementById("closeBtn").addEventListener("click",()=>{closeMenu();menuBtn.focus();});
+  document.getElementById("scrim").addEventListener("click",closeMenu);
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&body.classList.contains("menu-open")){closeMenu();menuBtn.focus();}});
+  window.addEventListener("hashchange",()=>{const k=parts.findIndex(p=>"#"+p.id===location.hash);if(k>=0&&k!==current)go(k,true);});
+
+  /* 内部タブ（.itabs の button[aria-controls]） */
+  document.querySelectorAll(".itabs").forEach(box=>{
+    const bs=[...box.querySelectorAll("button")];
+    const sel=i=>bs.forEach((b,k)=>{b.setAttribute("aria-selected",k===i?"true":"false");b.tabIndex=k===i?0:-1;document.getElementById(b.getAttribute("aria-controls")).hidden=k!==i;});
+    bs.forEach((b,i)=>{b.addEventListener("click",()=>sel(i));b.addEventListener("keydown",e=>{if(e.key==="ArrowRight"){const k=(i+1)%bs.length;sel(k);bs[k].focus();}if(e.key==="ArrowLeft"){const k=(i-1+bs.length)%bs.length;sel(k);bs[k].focus();}});});
+    sel(0);
+  });
+
+  /* 確認問題・ヒント（.q の .show で .ans を開閉） */
+  document.querySelectorAll(".q").forEach(q=>{const b=q.querySelector(".show"),a=q.querySelector(".ans");if(!b||!a)return;const lab=b.textContent;b.setAttribute("aria-expanded","false");b.addEventListener("click",()=>{a.hidden=!a.hidden;b.textContent=a.hidden?lab:"閉じる";b.setAttribute("aria-expanded",a.hidden?"false":"true");});});
+
+  /* 解説と答案例の表示スイッチ */
+  const tg=document.getElementById("ansToggle"),note=document.getElementById("ansNote");
+  if(tg){
+    const setAns=on=>{document.body.classList.toggle("ans-off",!on);tg.checked=on;if(note)note.textContent=on?"オン：解説と答案例を表示しています。":"オフ：問題とヒントだけを表示しています。";};
+    tg.addEventListener("change",()=>setAns(tg.checked));
+    setAns(typeof ANSWERS_DEFAULT_ON!=="undefined"&&ANSWERS_DEFAULT_ON);
+  }
+
+  /* 解説の開閉 */
+  document.querySelectorAll(".solbtn").forEach(b=>b.addEventListener("click",()=>{const bd=b.nextElementSibling;bd.hidden=!bd.hidden;b.setAttribute("aria-expanded",bd.hidden?"false":"true");b.textContent=bd.hidden?"解説を読む（手順を追って説明）":"解説を閉じる";document.dispatchEvent(new CustomEvent("solopen"));}));
+
+  /* 相互リンク */
+  document.addEventListener("click",e=>{const a=e.target.closest("[data-goto]");if(!a)return;e.preventDefault();const t=document.getElementById(a.dataset.goto);if(!t)return;const k=parts.findIndex(p=>p.contains(t));if(k<0)return;go(k,false);setTimeout(()=>t.scrollIntoView({block:"start"}),30);});
+
+  const start=parts.findIndex(p=>"#"+p.id===location.hash);
+  go(start>=0?start:0,false);
+})();
+
+</script>
+</body>
+</html>
