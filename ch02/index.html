@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第2回 比較政治学とは｜比較政治学</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* hikakuseiji の配色：lily（青・朱・黄）と区別するため、深緑・琥珀・若草に変更 */
+/* 設計: 方眼紙に書いた講義プリント。黒インクの本文、青ペンの強調、朱ペンの書き込み、黄色の蛍光ペン。上部に固定ヘッダーとパートのタブ、左からメニューが出る */
+:root{
+  --paper:#fdfdfb;
+  --grid:#e7ede8;
+  --ink:#22252b;
+  --sub:#5e6470;
+  --line:#c9cfd8;
+  --blue:#1e5b4f;
+  --red:#b0601c;
+  --teal:#3d6a94;
+  --marker:#cce6b8;
+  --note:#f5f8ee;
+  --font-body:"BIZ UDPGothic","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  --font-hand:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  --font-math:"Times New Roman",Times,serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.95;
+  -webkit-text-size-adjust:100%;
+}
+a{color:var(--blue)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+/* ヘッダー */
+.bar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:2px solid var(--ink)}
+.bar-in{max-width:960px;margin:0 auto;padding:10px 16px 0;display:flex;align-items:center;gap:12px}
+.burger{width:42px;height:42px;border:1.5px solid var(--ink);background:var(--paper);border-radius:6px;display:grid;place-items:center;cursor:pointer;flex:none}
+.burger span{display:block;width:20px;height:2px;background:var(--ink);box-shadow:0 -6px 0 var(--ink),0 6px 0 var(--ink)}
+.course{line-height:1.35;min-width:0}
+.course small{display:block;color:var(--sub);font-size:.78rem}
+.course b{font-size:1.05rem}
+.tabs{max-width:960px;margin:8px auto 0;padding:0 16px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:1.5px solid var(--ink);border-bottom:none;background:#eef1f5;border-radius:8px 8px 0 0;padding:6px 14px 5px;cursor:pointer;font-size:.92rem;line-height:1.5;color:var(--sub);position:relative;top:2px}
+.tab .n{font-family:var(--font-math);font-weight:700;margin-right:6px;color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--paper);color:var(--ink);font-weight:700;border-bottom:2px solid var(--paper);z-index:1}
+
+/* ドロワー */
+.scrim{position:fixed;inset:0;background:rgba(20,24,32,.35);z-index:30;opacity:0;pointer-events:none;transition:opacity .2s}
+.drawer{position:fixed;top:0;left:0;bottom:0;width:min(340px,86vw);background:var(--paper);z-index:31;border-right:2px solid var(--ink);transform:translateX(-102%);transition:transform .22s ease;overflow-y:auto;padding:16px 18px 40px}
+body.menu-open .scrim{opacity:1;pointer-events:auto}
+body.menu-open .drawer{transform:none}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1.5px solid var(--ink);padding-bottom:8px;margin-bottom:10px}
+.drawer-head b{font-size:1rem}
+.close{border:1.5px solid var(--ink);background:none;border-radius:6px;width:36px;height:36px;cursor:pointer;font-size:1.2rem;line-height:1}
+.drawer h4{margin:14px 0 2px;font-size:.95rem}
+.drawer h4 button{background:none;border:none;padding:0;cursor:pointer;text-align:left;font-weight:700}
+.drawer h4 .n{font-family:var(--font-math);margin-right:6px}
+.drawer ul{list-style:none;margin:0;padding:0 0 0 12px;border-left:1.5px solid var(--line)}
+.drawer li button{background:none;border:none;padding:3px 0;cursor:pointer;color:var(--sub);text-align:left;font-size:.9rem;line-height:1.5}
+.drawer li button:hover{color:var(--blue)}
+.drawer .cur>button{color:var(--blue)}
+
+/* 本文 */
+main{max-width:960px;margin:0 auto;padding:22px 16px 80px}
+.part{display:none}
+.part.on{display:block}
+.part-head{background:var(--paper);border:1.5px solid var(--ink);border-radius:4px;padding:16px 20px;margin-bottom:26px}
+.part-head .pn{font-family:var(--font-math);font-size:.95rem;color:var(--sub)}
+.part-head h1{font-size:clamp(1.5rem,3.6vw,2rem);line-height:1.4;margin:2px 0 6px;text-wrap:balance}
+.part-head p{margin:0;color:var(--sub);max-width:42em}
+.toc-mini{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:.9rem}
+.toc-mini button{background:none;border:none;padding:0;cursor:pointer;color:var(--blue);text-decoration:underline;text-underline-offset:3px}
+
+section{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:6px 22px 24px;margin-bottom:22px;scroll-margin-top:120px}
+@media (max-width:560px){section{padding:4px 14px 18px}}
+h2{font-size:1.4rem;line-height:1.5;margin:18px 0 12px;padding-bottom:6px;border-bottom:3px double var(--ink);text-wrap:balance}
+h2 .sn{display:inline-block;min-width:1.7em;height:1.7em;line-height:1.7em;text-align:center;border:1.5px solid var(--ink);border-radius:50%;font-family:var(--font-math);font-size:1rem;margin-right:10px;vertical-align:.12em}
+h3{font-size:1.1rem;margin:24px 0 6px;text-wrap:balance}
+h3::before{content:"";display:inline-block;width:10px;height:10px;background:var(--blue);margin-right:8px;vertical-align:.05em}
+p{margin:0 0 1em;max-width:44em}
+.mk{background:linear-gradient(transparent 58%,var(--marker) 58%);font-weight:700}
+.v{font-family:var(--font-math);font-style:italic;font-size:1.1em;white-space:nowrap}
+.plus{color:var(--teal);font-weight:700}
+.minus{color:var(--red);font-weight:700}
+ul.dots,ol.steps{margin:0 0 1em;padding-left:1.4em;max-width:44em}
+ul.dots li,ol.steps li{margin:3px 0}
+
+/* 数式ボックス（教科書風に式番号を右寄せ） */
+.eq{border:1.5px solid var(--ink);background:#fff;padding:12px 18px;margin:16px 0 6px;max-width:44rem;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.eq .f{font-family:var(--font-math);font-size:1.45rem;font-style:italic}
+.eq .f sub{font-size:.65em}
+.eq .no{margin-left:auto;font-size:.85rem;color:var(--sub)}
+.eq-read{max-width:44rem;margin:0 0 16px;padding-left:20px;font-size:.95rem;color:var(--sub)}
+.eq-read::before{content:"読み方　";color:var(--blue);font-weight:700}
+
+/* 先生のメモ */
+.memo{font-family:var(--font-hand);background:var(--note);border-left:4px solid var(--red);padding:12px 16px 12px 18px;margin:16px 0;max-width:44rem;font-size:1.05rem;line-height:1.85}
+.memo .who{display:block;color:var(--red);font-weight:600;font-size:.9rem}
+/* ポイント */
+.point{border:2px solid var(--blue);border-radius:2px;padding:10px 16px;margin:20px 0 4px;max-width:44rem;position:relative}
+.point::before{content:"ポイント";position:absolute;top:-.85em;left:12px;background:var(--paper);padding:0 6px;color:var(--blue);font-weight:700;font-size:.85rem}
+.point p{margin:0}
+
+/* 帯グラフ */
+.bars{background:#fff;border:1px solid var(--line);padding:14px 16px 10px;margin:14px 0 18px;max-width:44rem}
+.bars .sw{display:flex;gap:0;margin-bottom:12px;border:1.5px solid var(--ink);border-radius:6px;overflow:hidden;width:max-content}
+.bars .sw button{border:none;background:#fff;padding:3px 14px;cursor:pointer;font-size:.88rem}
+.bars .sw button+button{border-left:1.5px solid var(--ink)}
+.bars .sw button[aria-selected="true"]{background:var(--ink);color:#fff}
+.brow{display:grid;grid-template-columns:7.2em 1fr;align-items:center;gap:10px;margin:8px 0}
+.brow .lab{font-size:.88rem;line-height:1.35}
+.track{position:relative;height:34px}
+.seg{position:absolute;top:0;bottom:0;display:flex;align-items:center;justify-content:center;font-size:.8rem;border:1.5px solid var(--ink);white-space:nowrap;overflow:hidden;font-variant-numeric:tabular-nums}
+.seg.y{background:#d9ebe2}
+.seg.c{background:#f3f4f6}.seg.i{background:#e7eaee}.seg.g{background:#d9dde3}
+.seg.gap-p{background:repeating-linear-gradient(45deg,#dde6f0,#dde6f0 5px,#fff 5px,#fff 10px);color:var(--teal);font-weight:700;border-color:var(--teal);border-style:dashed}
+.seg.gap-m{background:repeating-linear-gradient(45deg,#f5e5d3,#f5e5d3 5px,#fff 5px,#fff 10px);color:var(--red);font-weight:700;border-color:var(--red);border-style:dashed}
+.seg.b{background:#e7eaee}.seg.ri{background:#e3efd6}.seg.nx{background:#dde6f0}
+.seg-lab{position:absolute;top:0;bottom:0;display:flex;align-items:center;font-size:.85rem;white-space:nowrap}
+.bars .cap{font-size:.88rem;color:var(--sub);margin:6px 0 0}
+
+/* 表 */
+.tw{overflow-x:auto;margin:12px 0 18px}
+table{border-collapse:collapse;background:#fff;font-size:.95rem;font-variant-numeric:tabular-nums}
+th,td{border:1px solid var(--ink);padding:7px 12px;text-align:left;vertical-align:top;line-height:1.6}
+thead th{background:#eef1f5}
+td.c{text-align:center;white-space:nowrap}
+td.r{text-align:right}
+table.calc-t td{border:none;border-bottom:1px dotted var(--line);padding:3px 14px 3px 0}
+table.calc-t tr:last-child td{border-bottom:2px solid var(--ink);font-weight:700}
+
+/* 図 */
+figure{margin:14px 0 20px}
+figcaption{font-size:.85rem;color:var(--sub);margin-top:4px}
+.figbox{background:#fff;border:1px solid var(--line);padding:8px;overflow-x:auto}
+svg text{font-family:var(--font-body);fill:var(--ink)}
+svg .m{font-family:var(--font-math);font-style:italic}
+
+/* シミュレーター */
+.sim{background:#fff;border:1.5px solid var(--ink);padding:14px;margin:16px 0;display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:860px){.sim{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}}
+.grp{margin-bottom:10px}
+.grp .gl{font-size:.78rem;color:var(--sub);display:block;margin-bottom:3px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chips button{border:1.5px solid var(--ink);background:#fff;padding:2px 10px;border-radius:4px;cursor:pointer;font-size:.85rem;line-height:1.6}
+.chips button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.explain{border-top:1px dashed var(--line);padding-top:10px;margin-top:6px}
+.explain .t{font-weight:700;margin:0}
+.explain .x{font-size:.95rem;margin:4px 0}
+.explain .f{font-size:.8rem;color:var(--sub);margin:0}
+.meter{display:grid;grid-template-columns:repeat(3,1fr);border:1.5px solid var(--ink);margin:10px 0}
+.meter div{padding:6px 8px;text-align:center}
+.meter div+div{border-left:1px solid var(--ink)}
+.meter small{display:block;font-size:.75rem;color:var(--sub);line-height:1.3}
+.meter strong{font-size:1.3rem;font-family:var(--font-math);font-variant-numeric:tabular-nums}
+.sl{display:grid;grid-template-columns:7.4em 1fr 3.6em;gap:8px;align-items:center;font-size:.88rem}
+.sl input{width:100%;accent-color:var(--blue)}
+.sl output{text-align:right;font-family:var(--font-math);font-variant-numeric:tabular-nums}
+.sm{font-size:.8rem;color:var(--sub);margin:6px 0 0}
+
+/* 内部タブ（ケース別） */
+.itabs{display:flex;gap:0;border-bottom:1.5px solid var(--ink);margin:14px 0 0;overflow-x:auto}
+.itabs button{border:none;background:none;padding:6px 14px;cursor:pointer;color:var(--sub);border-bottom:3px solid transparent;margin-bottom:-1.5px;white-space:nowrap}
+.itabs button[aria-selected="true"]{color:var(--ink);font-weight:700;border-bottom-color:var(--blue)}
+.ipanel{padding:12px 0 0}
+.ipanel[hidden]{display:none}
+.case{border-left:3px solid var(--line);padding:2px 0 2px 14px;margin:0 0 16px;max-width:44rem}
+.case b{display:block}
+.case p b{display:inline}
+.case .res{font-size:.9rem;margin:2px 0}
+.case p{margin:2px 0 0;font-size:.97rem}
+
+/* 手順 */
+.flow{display:grid;grid-template-columns:1fr;gap:8px;max-width:44rem;margin:12px 0 16px;counter-reset:f}
+@media (min-width:700px){.flow{grid-template-columns:repeat(3,1fr)}}
+.flow div{border:1.5px solid var(--ink);background:#fff;padding:10px 12px;font-size:.93rem;line-height:1.7;counter-increment:f}
+.flow div::before{content:"手順" counter(f);display:block;font-weight:700;color:var(--blue);font-size:.82rem}
+
+/* 計算機 */
+.calc{background:#fff;border:1.5px solid var(--ink);padding:14px 16px;margin:14px 0;max-width:44rem}
+.calc .out{font-size:.98rem;margin-top:10px}
+.calc .chk{color:var(--sub);font-size:.88rem}
+
+/* 確認問題 */
+.q{border:1px solid var(--ink);background:#fff;margin:10px 0;max-width:46rem}
+.q .qq{padding:10px 14px;display:flex;gap:10px}
+.q .qn{font-family:var(--font-math);font-weight:700;color:var(--blue)}
+.q button.show{margin:0 14px 10px;border:1.5px solid var(--ink);background:#fff;border-radius:4px;padding:2px 12px;cursor:pointer;font-size:.85rem}
+.q .ans{border-top:1px dashed var(--line);padding:8px 14px 10px;font-family:var(--font-hand);font-size:1.05rem;background:var(--note)}
+.q .ans[hidden]{display:none}
+.q .ans::before{content:"解答　";color:var(--red);font-weight:600}
+
+/* 前後ナビ */
+.pager{display:flex;justify-content:space-between;gap:10px;margin-top:28px;flex-wrap:wrap}
+.pager button{border:1.5px solid var(--ink);background:#fff;padding:10px 16px;cursor:pointer;border-radius:4px;text-align:left;line-height:1.4;max-width:48%}
+.pager button small{display:block;color:var(--sub);font-size:.78rem}
+.pager .next{margin-left:auto;text-align:right}
+.src{font-size:.82rem;color:var(--sub);margin-top:30px;border-top:1px solid var(--line);padding-top:10px}
+
+/* キャラクター */
+.talk{display:flex;align-items:flex-end;gap:12px;margin:14px 0 18px;max-width:44rem}
+.talk img{width:118px;height:auto;flex:none}
+.talk .bubble{position:relative;background:#fff;border:2px solid var(--ink);border-radius:14px;padding:10px 16px;font-family:var(--font-hand);font-size:1.08rem;line-height:1.75;margin-bottom:30px}
+.talk .bubble::before{content:"";position:absolute;left:-12px;bottom:16px;border:6px solid transparent;border-right:8px solid var(--ink)}
+.talk .bubble::after{content:"";position:absolute;left:-8px;bottom:17px;border:5px solid transparent;border-right:7px solid #fff}
+.talk.r{flex-direction:row-reverse;margin-left:auto}
+.talk.r .bubble::before{left:auto;right:-12px;border-right-color:transparent;border-left:8px solid var(--ink)}
+.talk.r .bubble::after{left:auto;right:-8px;border-right-color:transparent;border-left:7px solid #fff}
+.part-head{display:flex;gap:16px;align-items:flex-end}
+.part-head .ph-main{flex:1;min-width:0}
+.part-head .ph-fig{flex:none;width:150px;text-align:center;margin:-6px 0 -16px}
+.part-head .ph-say{font-family:var(--font-hand);font-size:.88rem;line-height:1.5;background:#fff;border:1.5px solid var(--ink);border-radius:10px;padding:5px 8px;margin-bottom:6px;text-align:left;position:relative}
+.part-head .ph-say::after{content:"";position:absolute;left:50%;bottom:-7px;width:10px;height:10px;background:#fff;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);transform:translateX(-50%) rotate(45deg)}
+.part-head .ph-fig img{width:100%;height:auto;display:block}
+@media (max-width:560px){.talk img{width:86px}.part-head .ph-fig{width:96px}.talk .bubble{font-size:1rem}}
+.memo.withfig{display:flex;gap:14px;align-items:center}
+.memo.withfig img{width:104px;height:auto;flex:none}
+@media (max-width:560px){.memo.withfig img{width:78px}}
+
+/* 課題パート */
+.dl{margin:10px 0 16px}
+.dlbtn{display:inline-flex;align-items:center;gap:12px;border:2px solid var(--ink);background:#fff;color:var(--ink);text-decoration:none;padding:8px 16px 8px 10px;border-radius:6px;line-height:1.4;box-shadow:3px 3px 0 var(--ink)}
+.dlbtn:hover{background:#eaf3ee}
+.dlbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.dlbtn .dlico{width:34px;height:40px;background:#1e5b4f;color:#fff;font-weight:700;display:grid;place-items:center;border-radius:3px;font-family:var(--font-math);font-size:1.2rem}
+.dlbtn b{display:block}
+.dlbtn small{display:block;color:var(--sub);font-size:.8rem}
+
+.xref{font-size:.9rem;margin:6px 0 12px;max-width:44em}
+.xref::before{content:"→ ";color:var(--blue);font-weight:700}
+.xref a,.dots a{color:var(--blue);cursor:pointer}
+.kq{border:2px solid var(--ink);background:#fff;padding:12px 16px;margin:12px 0 14px;max-width:46rem}
+.kq .lab{display:inline-block;background:var(--ink);color:#fff;font-size:.8rem;padding:0 8px;border-radius:3px;margin-bottom:4px}
+.kq p{margin:4px 0}
+.memo.hint{border-left-color:var(--blue)}
+.memo.hint .who{color:var(--blue)}
+.locked{display:none;border:1.5px dashed var(--line);color:var(--sub);padding:8px 14px;max-width:44rem;font-size:.92rem;background:#fff}
+body.ans-off .locked{display:block}
+body.ans-off .sol{display:none}
+.solbtn{border:1.5px solid var(--ink);background:var(--ink);color:#fff;border-radius:4px;padding:6px 16px;cursor:pointer;margin:6px 0 10px}
+.solbtn[aria-expanded="true"]{background:#fff;color:var(--ink)}
+.step{border-top:1px dashed var(--line);padding-top:6px;margin-top:10px}
+h3.stp::before{display:none}
+h3.stp .st{display:inline-block;font-size:.8rem;background:var(--blue);color:#fff;padding:0 9px;border-radius:3px;margin-right:8px;vertical-align:.12em}
+.ansSwitch{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;border:2px solid var(--ink);background:#fff;padding:10px 14px;margin:14px 0 16px;max-width:46rem}
+.sw-l{display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:700}
+.sw-l input{position:absolute;opacity:0;width:1px;height:1px}
+.sw-ui{width:46px;height:26px;border-radius:13px;background:#c9cfd8;position:relative;flex:none;transition:background .15s}
+.sw-ui::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:left .15s}
+.sw-l input:checked+.sw-ui{background:var(--teal)}
+.sw-l input:checked+.sw-ui::after{left:23px}
+.sw-l input:focus-visible+.sw-ui{outline:2px solid var(--blue);outline-offset:2px}
+.sw-note{font-size:.88rem;color:var(--sub)}
+.gwrap{background:#fff;border:1.5px solid var(--ink);padding:12px;margin:14px 0 6px;max-width:46rem}
+.gsw{display:flex;border:1.5px solid var(--ink);border-radius:6px;overflow:hidden;width:max-content;max-width:100%;margin-bottom:8px;flex-wrap:wrap}
+.gsw button{border:none;background:#fff;padding:3px 14px;cursor:pointer;font-size:.88rem}
+.gsw button+button{border-left:1.5px solid var(--ink)}
+.gsw button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.gwrap svg{width:100%;max-width:560px;height:auto;display:block}
+.gcap{font-size:.88rem;color:var(--sub);margin:6px 0 0}
+.howto{font-size:.93rem;max-width:44rem;margin:6px 0 16px;padding-left:1.3em}
+.trap{border:2px dashed var(--red);padding:10px 16px;margin:16px 0;max-width:44rem;background:#fff}
+.trap b{color:var(--red)}
+.point.ketsu::before{content:"結論"}
+.answer{border:1.5px solid var(--ink);background:#fff;padding:14px 18px 6px;margin:20px 0 16px;max-width:46rem;position:relative}
+.answer::before{content:"答案の書き方の例";position:absolute;top:-.8em;left:12px;background:var(--ink);color:#fff;font-size:.8rem;padding:0 8px;border-radius:3px}
+.answer p{font-size:.97rem}
+.num{background:#fff;border:1px solid var(--line);padding:10px 16px;margin:14px 0;max-width:44rem}
+.num .h{font-size:.82rem;color:var(--sub);display:block}
+#kadai .brow{grid-template-columns:5.5em 1fr}
+#kadai .seg.g{background:#e3efd6}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+
+/* 数式（分数・Σ/Π/∫ の上下添字）— 全章共通 */
+.mx{font-family:var(--font-math);display:inline-flex;align-items:center;gap:.12em;vertical-align:middle;white-space:nowrap;font-size:1.08em}
+.mx i{font-style:italic}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .12em;line-height:1.25}
+.frac>span:first-child{border-bottom:1px solid currentColor;padding:0 .25em}
+.frac>span:last-child{padding:0 .25em}
+.bop{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1;margin:0 .12em}
+.bop .s{font-size:1.7em;line-height:1}
+.bop small{font-size:.62em;line-height:1.1}
+.eq .mx{font-size:1.25rem}
+.eq.mxeq .f{font-style:normal}
+.mxblock{display:block;overflow-x:auto;padding:4px 0}
+</style>
+</head>
+<body>
+
+<div class="scrim" id="scrim"></div>
+<nav class="drawer" id="drawer" aria-label="全体の目次" aria-hidden="true">
+  <div class="drawer-head"><b>目次</b><button class="close" id="closeBtn" aria-label="目次を閉じる">×</button></div>
+  <div id="drawerList"></div>
+</nav>
+
+<header class="bar">
+  <div class="bar-in">
+    <button class="burger" id="menuBtn" aria-label="目次を開く" aria-controls="drawer" aria-expanded="false"><span></span></button>
+    <div class="course"><small>比較政治学　地域研究・比較政治基礎</small><b>第2回　比較政治学とは　解説プリント</b></div>
+  </div>
+  <div class="tabs" role="tablist" aria-label="パート" id="tabs"></div>
+</header>
+
+<main>
+<style>
+/* 第2回で使う部品：年表、文献カード、凡例（第1回と同じ形） */
+.tl{border-left:3px solid var(--ink);margin:14px 0 20px 6px;padding:0 0 0 18px;max-width:46rem}
+.tl li{list-style:none;position:relative;margin:0 0 10px;line-height:1.7}
+.tl li::before{content:"";position:absolute;left:-25px;top:.55em;width:11px;height:11px;background:var(--paper);border:2.5px solid var(--blue);border-radius:50%}
+.tl li.jp::before{border-color:var(--red)}
+.tl .y{font-family:var(--font-math);font-weight:700;color:var(--blue);margin-right:.6em}
+.tl li.jp .y{color:var(--red)}
+.tl .tag{font-size:.75rem;border:1px solid currentColor;padding:0 5px;margin-left:.4em;color:var(--sub);white-space:nowrap}
+.bk{border:1.5px solid var(--ink);background:#fff;padding:10px 14px 8px;margin:12px 0;max-width:46rem}
+.bk .who{font-weight:700}
+.bk .yr{font-family:var(--font-math);font-weight:700;color:var(--blue);margin-left:.4em}
+.bk .ti{display:block;font-size:.88rem;color:var(--sub);line-height:1.6}
+.bk p{margin:6px 0 0;font-size:.97rem}
+.legend{font-size:.85rem;color:var(--sub);margin:4px 0 0}
+.legend span{display:inline-block;margin-right:14px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;border:2.5px solid var(--blue);margin-right:5px;vertical-align:-1px}
+.legend i.jp{border-color:var(--red)}
+.vv{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;max-width:44rem;margin:14px 0 18px}
+.vv div{border:1.5px solid var(--ink);background:#fff;padding:10px 12px;text-align:center;line-height:1.6}
+.vv div small{display:block;color:var(--sub);font-size:.8rem}
+.vv .ar{border:none;background:none;font-size:1.6rem;color:var(--blue);padding:0}
+</style>
+
+<!-- ===================== パート1 ===================== -->
+<div class="part" id="kihon" data-title="比較政治学とは" data-desc="比較政治学の定義と、その中心にある「因果推論」の考え方を押さえます。独立変数と従属変数、因果効果と因果メカニズム、そして因果を推論する3つの方法を順に見ます。">
+
+<section id="s1" data-t="比較政治学の定義">
+<h2><span class="sn">1</span>比較政治学の定義</h2>
+<p>レジュメでは、比較政治学を次のように定義しています。</p>
+<div class="kq"><span class="lab">定義</span><p>世界の国・地域の政治制度や政治現象を<b>対比する</b>ことにより、政治現象に関わる<b>因果関係</b>について<b>一般理論</b>を導き出すことを目指す学問</p></div>
+<div class="tw"><table>
+<thead><tr><th>定義の言葉</th><th>言いかえ</th></tr></thead>
+<tbody>
+<tr><td>対比することにより</td><td>一つの国だけを見るのでなく、複数の国・地域を並べて、同じところと違うところを確かめる</td></tr>
+<tr><td>因果関係</td><td>「何が原因で、何が起きたのか」という関係</td></tr>
+<tr><td>一般理論</td><td>特定の国だけでなく、多くの国・地域に当てはまる説明</td></tr>
+</tbody></table></div>
+<p>レジュメでは、一般理論と各国・地域の因果関係が矢印で行き来する形で示されています。個々の国の因果関係を調べて一般理論を作り、その一般理論を別の国に当てはめて確かめ、合わなければ理論を直す――この<span class="mk">往復</span>が比較政治学の基本的な営みです。</p>
+<div class="memo"><span class="who">メモ：第1回の地域研究と比べると</span>地域研究は「一つの地域を、その内側から深く理解する」学問だった。比較政治学は「多くの国を比べて、共通の法則を見つける」ことを目指す。この2つの関係――ときに対立し、ときに歩み寄る――が、今回の大きなテーマです。</div>
+<p class="xref">地域研究の定義は <a href="../ch01/#kihon">第1回のパート1（2節）</a> で確認できます</p>
+<div class="point"><p>比較政治学は、国や地域を比べることで、政治現象の因果関係について多くの国に当てはまる一般理論を目指す。</p></div>
+</section>
+
+<section id="s2" data-t="因果推論と変数">
+<h2><span class="sn">2</span>因果推論：独立変数と従属変数</h2>
+<p>因果関係について考えることを<b>因果推論</b>（causal inference）と呼びます。因果推論では、原因と結果をそれぞれ「変数」として扱います。</p>
+<div class="vv">
+<div><b>独立変数</b><small>説明変数 independent variable</small>原因として想定されるもの</div>
+<span class="ar">→</span>
+<div><b>従属変数</b><small>被説明変数 dependent variable</small>結果として想定されるもの</div>
+</div>
+<p>第1回で見た近代化論（リプセット）の主張を、この形に当てはめると「経済発展（独立変数）→ 民主主義の安定（従属変数）」となります。</p>
+<h3>変数の「操作化」</h3>
+<p>「経済発展」や「民主主義」は抽象的な概念なので、そのままでは測れません。そこで、観察・測定できる具体的な指標として定義し直します。これを<span class="mk">操作化</span>と呼びます。</p>
+<div class="tw"><table>
+<thead><tr><th>抽象的な概念</th><th>操作化した指標の例</th></tr></thead>
+<tbody>
+<tr><td>経済発展</td><td>一人当たり GDP（レジュメの例）</td></tr>
+<tr><td>民主主義</td><td>自由で公正な選挙が行われているか、政権交代が起きているか、など（補足）</td></tr>
+<tr><td>政治参加</td><td>選挙の投票率、デモへの参加者数、など（補足）</td></tr>
+</tbody></table></div>
+<div class="memo"><span class="who">メモ：「頭のよさ」をどう測る？</span>「頭のよさ」はそのままでは測れないので、テストの点数で測ることにする。でも点数は「頭のよさ」の一部しか表していないかもしれない。操作化は研究に欠かせないが、どの指標を選ぶかで結論が変わりうる、という難しさを抱えています。</div>
+<div class="point"><p>因果推論では、原因を独立変数、結果を従属変数として扱う。抽象的な概念は、測れる指標に置きかえる（操作化）。</p></div>
+</section>
+
+<section id="s3" data-t="因果効果と因果メカニズム">
+<h2><span class="sn">3</span>因果効果と因果メカニズム</h2>
+<p>因果関係を明らかにするとは、具体的には次の2つを明らかにすることです。</p>
+<div class="case"><b>因果効果</b><p>ある要因（独立変数）が結果に<b>影響を与えるかどうか</b>、与えるなら<b>どのくらい</b>か、を推定すること。</p></div>
+<div class="case"><b>因果メカニズム</b><p>独立変数が<b>どのような道筋で</b>従属変数に影響を与えるのか、その論理的な理由を解き明かすこと。</p></div>
+<h3>反実仮想と「因果推論の根本問題」</h3>
+<p>因果効果を正確に知るには、本当は「その要因があった場合」と「なかった場合」の結果を比べる必要があります。実際には起きなかった方の状況を想定することを<b>反実仮想</b>といいます。</p>
+<p>ところが、<span class="mk">同じ対象について、要因がある場合とない場合の結果を同時に観察することはできません</span>。これを<b>因果推論の根本問題</b>と呼びます。</p>
+<div class="memo"><span class="who">メモ：かぜ薬は効いたのか</span>かぜ薬を飲んだら翌日治った。でも、飲まなかった「もう一人の自分」が治ったかどうかは、決して確かめられない。国の場合も同じで、「もしこの国が経済発展していなかったら、民主化したか」は観察できない。だから研究者は、似た別の国と比べたり、多くの国のデータを使ったりして、見えない方の結果を推し量ろうとします。</div>
+<div class="point"><p>因果効果は「影響の有無と大きさ」、因果メカニズムは「影響の道筋」。同じ対象で要因の有無を同時に観察できないこと（根本問題）が、因果推論を難しくしている。</p></div>
+</section>
+
+<section id="s4" data-t="因果推論の3つの方法">
+<h2><span class="sn">4</span>因果推論の3つの方法</h2>
+<p>レジュメは、因果推論の方法を3つに分けています。下のタブで切り替えて読んでください。</p>
+<div class="itabs" role="tablist" aria-label="因果推論の方法"><button type="button" role="tab" aria-controls="m1">1. 統計分析</button><button type="button" role="tab" aria-controls="m2">2. 数理モデル</button><button type="button" role="tab" aria-controls="m3">3. 事例研究</button></div>
+<div class="ipanel" id="m1" role="tabpanel">
+<p><b>多くの事例（ラージ N）</b>についてデータを集め、統計の手法で因果関係を推論します。代表的な手法が<b>重回帰分析</b>で、複数の要因の影響を同時に取り出して比べます。データの集め方には、質問紙で多くの人に尋ねる<b>サーベイ</b>や、新聞記事・演説などの<b>テキスト収集</b>があります。</p>
+<p>強み：多くの国・人に共通する傾向をつかめる。弱み：一つひとつの事例の事情は見えにくい。</p>
+</div>
+<div class="ipanel" id="m2" role="tabpanel" hidden>
+<p>政治に関わる人や組織（<b>アクター</b>）がどんな原理で行動し、どんな状況で決定するのかを数式で表し、そこから予測される結果を<b>演繹的に</b>（理屈から順に）導きます。</p>
+<ul class="dots">
+<li><b>合理的選択アプローチ</b>：アクターは、費用（コスト）と便益、実現できるかどうかを比べ、自分の効用（満足）が最も大きくなる行動を選ぶと考える。</li>
+<li><b>ゲーム理論</b>：複数のアクターが、互いの出方を読み合いながら合理的・戦略的に決定する。そのやりとり（戦略的相互作用）から結果を説明する。</li>
+</ul>
+<p>強み：なぜそうなるのかの理屈がはっきりする。弱み：人間が本当に合理的に行動するのかが問われる。</p>
+</div>
+<div class="ipanel" id="m3" role="tabpanel" hidden>
+<p>特定の具体的な事例を<b>詳しく分析</b>し、ある政治的な出来事が起きた因果関係を詳しく描き出します。レジュメは、ここに「<b>地域研究</b>」と添えています。第1回で見た地域研究は、この方法と深く結びついています。</p>
+<p>強み：事例の文脈や因果メカニズムを深く理解できる。弱み：少ない事例から一般理論を導くことには限界があると指摘される（<a href="#s9" data-goto="s9">9節</a>）。</p>
+</div>
+<div class="tw"><table>
+<thead><tr><th></th><th>統計分析</th><th>数理モデル</th><th>事例研究</th></tr></thead>
+<tbody>
+<tr><td>扱う事例の数</td><td>多い（ラージ N）</td><td>理論が中心</td><td>少ない（1つ〜数個）</td></tr>
+<tr><td>推論の進め方</td><td>データから傾向を取り出す</td><td>仮定から理屈で導く（演繹）</td><td>事例を詳しくたどる</td></tr>
+<tr><td>得意なこと</td><td>因果効果の大きさ</td><td>行動の理屈</td><td>因果メカニズムと文脈</td></tr>
+</tbody></table></div>
+<p class="legend">表の「強み・弱み」「得意なこと」は、理解のための補足です。</p>
+<div class="point"><p>因果推論の方法には、統計分析（多数の事例）、数理モデル（合理的選択・ゲーム理論）、事例研究（少数事例を詳しく、地域研究と結びつく）の3つがある。</p></div>
+</section>
+
+<section id="s5" data-t="確認問題">
+<h2><span class="sn">5</span>確認問題</h2>
+<div class="q"><div class="qq"><span class="qn">Q1</span><span>「教育水準が高い国ほど投票率が高い」という仮説で、独立変数と従属変数はそれぞれ何か。また、それぞれをどう操作化できるか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>独立変数は教育水準、従属変数は投票率（政治参加）。教育水準は、たとえば大学進学率や平均就学年数で測れる。投票率は、選挙の投票率という数字がそのまま指標になる。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q2</span><span>「因果推論の根本問題」とは何か。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>同じ対象について、ある要因が存在する場合と存在しない場合の結果を、同時に観察することはできないという問題。そのため、実際には起きなかった状況（反実仮想）を何らかの方法で推し量る必要がある。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q3</span><span>合理的選択アプローチとゲーム理論の違いを説明しなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>合理的選択アプローチは、アクターが費用と便益を比べて効用を最大にする行動を選ぶと考える。ゲーム理論はこの合理性を前提に、複数のアクターが互いの出方を読み合う戦略的な相互作用から結果を説明する。</div></div>
+</section>
+</div>
+
+<!-- ===================== パート2 ===================== -->
+<div class="part" id="rekishi" data-title="戦後アメリカの比較政治学" data-desc="行動論的政治学の登場から、地域研究との緊張、統計・数理モデルの発展、それへの批判と事例研究の再評価まで。「一般理論」と「地域の文脈」のあいだを行き来した流れをたどります。">
+
+<section id="s6" data-t="行動科学革命と行動論的政治学">
+<h2><span class="sn">6</span>「シカゴ学派」と行動論的政治学</h2>
+<p>戦後アメリカの政治学では、<b>行動科学革命</b>が起き、<b>行動論的政治学</b>が隆盛しました。それまでの政治学が憲法や制度の条文を中心に研究していたのに対し、行動論は<span class="mk">実際の人びとの行動を観察し、科学的に分析する</span>ことを目指しました（前半の対比は補足です）。その源流が、シカゴ大学の「シカゴ学派」です。</p>
+<div class="case"><b>チャールズ・E. メリアム（1874–1953）</b><p>シカゴ学派の中心人物です。心理学や統計学など、ほかの学問の方法を政治学に取り入れるよう唱えました（補足）。</p></div>
+<div class="case"><b>デイヴィッド・イーストン（1917–2014）</b><p>「<b>政治体系論</b>（political system）」で知られます。政治を、社会からの入力を受け取り、決定を出力する一つのシステムとして捉えました。</p></div>
+<div class="gwrap">
+  <svg id="gSys" viewBox="0 0 640 260" role="img" aria-label="イーストンの政治体系の模式図"></svg>
+  <p class="gcap">イーストンの政治体系（模式図・補足）。社会の要求や支持が「入力」として政治体系に入り、政策や決定として「出力」される。その結果が社会に影響し、新たな入力として戻ってくる（フィードバック）。</p>
+</div>
+<h3>行動論的政治学の6つの特徴</h3>
+<div class="tw"><table>
+<thead><tr><th>レジュメの言葉</th><th>意味</th></tr></thead>
+<tbody>
+<tr><td>1. 規則性・体系化</td><td>政治行動には規則性があり、それを見つけて体系的な理論にできる</td></tr>
+<tr><td>2. 立証性</td><td>主張は、観察によって確かめられなければならない</td></tr>
+<tr><td>3. 技術の追求</td><td>データを集め分析する技法を磨く</td></tr>
+<tr><td>4. 数量化</td><td>できるだけ数値で測り、表す</td></tr>
+<tr><td>5. 価値判断と経験的分析の区別</td><td>「どうあるべきか」と「実際にどうなっているか」を分ける</td></tr>
+<tr><td>6. 他の学問領域との融合</td><td>心理学・社会学・経済学などと連携する</td></tr>
+</tbody></table></div>
+<div class="point"><p>行動論的政治学は、人びとの実際の行動を、数量化や立証を重んじて科学的に分析しようとした。イーストンは政治を入力と出力のシステムとして捉えた。</p></div>
+</section>
+
+<section id="s7" data-t="比較政治学の初期の模索">
+<h2><span class="sn">7</span>行動論に基づく比較政治学の初期の模索</h2>
+<p>行動論の考え方を、国を比べる研究に持ち込もうとする動きが1950年代に始まりました。</p>
+<div class="case"><b><i>American Political Science Review</i>（1953年）</b><p>アメリカ政治学会の学会誌で、比較の前提そのものが問われました。レジュメは2つの問いを挙げています。①異なる政治システムから取り出した要素どうしを、そもそも比べられるのか。②政治学者は、制度をその国の文脈（コンテクスト）の中でしか理解できないのではないか。</p></div>
+<div class="bk"><span class="who">マクリディス『比較政治の研究』（仮の題）</span><span class="yr">1955</span><span class="ti">Roy C. Macridis, <i>The Study of Comparative Government</i></span><p>各国の制度を一つずつ記述する従来の研究から離れ、世論、利益集団、政党といった<b>変数</b>や、入力・出力の過程、変化の過程に焦点を当てて比べる比較政治学を提唱しました。</p></div>
+<p>②の問いは、第1回の「内在的視点」とつながります。<span class="mk">比べるために共通の物差しを使うことと、その国の文脈を尊重すること</span>のあいだの緊張は、この後もくり返し現れます。</p>
+<div class="point"><p>1950年代、行動論に基づく比較が模索されると同時に、「異なる国の要素を比べられるのか」「制度は文脈の中でしか理解できないのでは」という問いも出された。</p></div>
+</section>
+
+<section id="s8" data-t="脱行動論革命と1970年代の緊張">
+<h2><span class="sn">8</span>脱行動論革命と、地域研究との緊張（1960年代末〜70年代）</h2>
+<h3>行動論への批判</h3>
+<p>1960年代末から70年代にかけて、行動論は批判を受けます。価値判断を避ける「<b>価値中立性</b>」は、裏を返せば<span class="mk">今ある社会のあり方をそのまま認める（現状肯定）姿勢</span>になってしまう――という、<b>ニュー・レフト</b>（新左翼）からの批判です。ベトナム戦争や公民権運動で社会が揺れるなか、政治学は目の前の問題に答えていないと問われたのです（時代背景は補足）。</p>
+<p>政治学の内部からも見直しが起こり、行動論を代表するイーストン自身が、1969年のアメリカ政治学会で「<b>脱行動論革命</b>」を唱える演説を行いました。方法の精密さよりも、社会にとって意味のある問題に取り組むことを重んじるよう呼びかけたものです（演説の中身の要約は補足）。</p>
+<h3>地域研究と比較政治学の緊張</h3>
+<div class="bk"><span class="who">パイ編『政治学と地域研究――ライバルかパートナーか』（仮の題）</span><span class="yr">1975</span><span class="ti">Lucian W. Pye ed., <i>Political Science and Area Studies: Rivals or Partners?</i></span><p>パイは、学界で、外国の地域研究を進める人びとと、伝統的な学問分野（ディシプリン）の優位を守ろうとする人びとのあいだに緊張があると指摘しました。言いかえれば、地域や国の<b>独自性</b>を強調する研究者と、<b>一般理論</b>の発展を重んじる研究者の対立です。そのうえで、両者が歩み寄って分断を乗り越える可能性を主張しました。</p></div>
+<div class="gwrap">
+  <div class="gsw" role="group" aria-label="振り子の時期の切り替え"><button type="button" data-g="pend" data-s="0" aria-pressed="false">1950〜60年代</button><button type="button" data-g="pend" data-s="1" aria-pressed="false">1960年代末〜70年代</button><button type="button" data-g="pend" data-s="2" aria-pressed="false">1990〜2000年</button><button type="button" data-g="pend" data-s="3" aria-pressed="true">2000年代〜</button></div>
+  <svg id="gPend" viewBox="0 0 640 300" role="img" aria-label="一般理論と地域の文脈のあいだの振り子の模式図"></svg>
+  <p class="gcap" id="gPend-cap"></p>
+</div>
+<p class="legend">戦後アメリカの比較政治学が、「一般理論・方法の統一」と「地域固有の文脈」のあいだを振り子のように行き来した様子を、模式的に示した図です（位置は目安）。ボタンで時期を切り替えられます。</p>
+<div class="point"><p>1960年代末、行動論の価値中立性は現状肯定的だと批判され、イーストンは脱行動論革命を唱えた。1970年代には、地域の独自性を重んじる研究と一般理論を重んじる研究の緊張が意識された。</p></div>
+</section>
+
+<section id="s9" data-t="1990年代：一般理論志向とKKV">
+<h2><span class="sn">9</span>1990年代：一般理論志向と KKV</h2>
+<p>1990年代には、比較政治学で一般理論（ディシプリン）を目指す傾向が強まり、<b>統計分析</b>と<b>数理モデル</b>が大きく発展しました。それにともない、地域固有の文脈を重んじる研究との<span class="mk">方法をめぐる緊張が再び強まりました</span>。</p>
+<div class="bk"><span class="who">キング、コヘイン、ヴァーバ『社会科学のリサーチ・デザイン』</span><span class="yr">1994</span><span class="ti">Gary King, Robert O. Keohane, &amp; Sidney Verba, <i>Designing Social Inquiry</i>（3人の頭文字をとって「KKV」と呼ばれる）</span><p>統計分析に代表される科学的な推論のルールを、事例研究のような質的な研究にも当てはめようとした本です。多くの事例を統計で処理する方法や数理モデルを重んじ、<b>少数の事例を扱う研究には推論のうえで限界がある</b>と指摘しました。この本が挙げた例は <a href="#s16" data-goto="s16">16節</a> で取り上げます。</p></div>
+<div class="case"><b>「ペレストロイカ」運動（2000年、アメリカ政治学会）</b><p>統計や数理モデルなど特定の方法だけが正しいとされ、それが再生産されていく状態を「<b>方法論的全体主義</b>」として批判し、政治学が本来問うべき問題に向き合わなくなっていると警鐘を鳴らしました。名前は、ソ連のゴルバチョフ政権の改革（ペレストロイカ＝立て直し）にちなみます（補足）。</p></div>
+<div class="point"><p>1990年代には統計分析・数理モデルが発展し、KKV は少数事例研究の限界を指摘した。2000年の「ペレストロイカ」運動は、方法の画一化に警鐘を鳴らした。</p></div>
+</section>
+
+<section id="s10" data-t="一般理論志向・方法の画一化への批判">
+<h2><span class="sn">10</span>一般理論志向・方法の画一化への批判</h2>
+<p>レジュメは、批判の中身を3つに整理しています。</p>
+<div class="case"><b>① 現実の本質から離れた課題と事例を選んでしまう危険</b><p>使いたい方法に合う問いや事例ばかりを選ぶと、その地域で本当に重要な問題から離れてしまう。レジュメは、中東欧研究の立場からこの問題を論じた仙石学の論文（『スラヴ研究』No.53、2006年）を挙げています。</p></div>
+<div class="case"><b>② 合理的選択アプローチ、ゲーム理論を当てはめることの妥当性</b><p>人びとが本当に費用と便益を計算して行動しているのか。文化や歴史の違う社会に同じ前提を当てはめてよいのか、が問われます。</p></div>
+<div class="case"><b>③ 統計分析の妥当性</b><p>レジュメは、次のような問題を例に挙げています。</p></div>
+<div class="tw"><table>
+<thead><tr><th>問題</th><th>かみくだくと</th></tr></thead>
+<tbody>
+<tr><td>サンプリングの選択バイアス</td><td>調べる対象の選び方が偏っていると、結論も偏る（<a href="#s16" data-goto="s16">16節</a>）</td></tr>
+<tr><td>共通の変数の選択・操作化の難しさ</td><td>たとえば「民主主義」を、文化も歴史も違う国々で同じ物差しで測れるのか（<a href="#s2" data-goto="s2">2節</a>）</td></tr>
+<tr><td>交絡要因の統制とモデル設定</td><td>原因と結果の両方に影響する別の要因（交絡要因）を見落とすと、因果関係を見誤る</td></tr>
+<tr><td>相関と因果の区別</td><td>2つの数字が一緒に動くこと（相関）は、一方が他方の原因であること（因果）を意味しない</td></tr>
+</tbody></table></div>
+<div class="memo"><span class="who">メモ：アイスと水難事故</span>アイスクリームがよく売れる月ほど、水難事故が多い。でもアイスが事故の原因ではない。どちらも「暑さ」が原因で増えている。この「暑さ」が交絡要因です。相関があるだけでは因果とは言えません（補足の例）。</div>
+<div class="point"><p>一般理論志向への批判は、①方法に合わせた課題・事例選び、②合理的選択やゲーム理論の妥当性、③統計分析の妥当性（選択バイアス、変数の操作化、交絡要因、相関と因果）に向けられた。</p></div>
+</section>
+
+<section id="s11" data-t="事例研究の再評価">
+<h2><span class="sn">11</span>事例研究の再評価</h2>
+<p>こうした批判を受けて、事例研究が見直されます。</p>
+<div class="bk"><span class="who">ジョージ、ベネット『社会科学のケース・スタディ：理論形成のための定性的手法』</span><span class="yr">2005</span><span class="ti">Alexander L. George and Andrew Bennett, <i>Case Studies and Theory Development in the Social Sciences</i></span><p>事例研究は統計分析の「劣った代わり」ではなく、理論を作り、確かめるための独自の強みをもつ方法だと論じました。とくに、原因から結果に至る道筋を一つひとつたどる<b>過程追跡</b>（プロセス・トレーシング）によって、因果メカニズムを明らかにできる点を重んじます（手法名は補足）。</p></div>
+<p class="xref">因果メカニズムとは何だったか → <a href="#s3" data-goto="s3">3節</a></p>
+<div class="point"><p>2000年代には、事例研究が理論形成のための独自の方法として再評価された（ジョージとベネット）。</p></div>
+</section>
+
+<section id="s12" data-t="確認問題">
+<h2><span class="sn">12</span>確認問題</h2>
+<div class="q"><div class="qq"><span class="qn">Q1</span><span>行動論的政治学の「価値中立性」は、なぜ批判されたのか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>価値判断を避けて現状を記述・分析するだけでは、結果として今ある社会のあり方を認める現状肯定的な姿勢になってしまう、とニュー・レフトなどから批判されたから。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q2</span><span>パイ編の1975年の本は、どのような対立を指摘し、どんな可能性を主張したか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>地域や国の独自性を強調する研究者（地域研究）と、一般理論の発展を重んじる研究者（ディシプリン）の対立を指摘し、両者が歩み寄って分断を乗り越える可能性を主張した。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q3</span><span>「相関関係」と「因果関係」の違いを、例を挙げて説明しなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>相関は2つのものが一緒に変化すること、因果は一方が他方を引き起こすこと。たとえばアイスの売上と水難事故は一緒に増えるが、どちらも暑さという交絡要因によるもので、アイスが事故の原因ではない。</div></div>
+</section>
+</div>
+
+<!-- ===================== パート3 ===================== -->
+<div class="part" id="houhou" data-title="方法論の模索" data-desc="対立を乗り越えようとする新しい方法として、歴史的制度論と比較歴史分析を見ます。最後に、KKV が挙げた東欧の例で「選択バイアス」を具体的に考えます。">
+
+<section id="s13" data-t="歴史的制度論">
+<h2><span class="sn">13</span>歴史的制度論</h2>
+<p><b>歴史的制度論</b>は、<b>新制度論</b>の一つの流れです。制度がどのような歴史をたどって作られたのか、そしてそれがその後の政治的な選択や制度の変化にどう影響するのかを重んじます。とくに次の3点に注目します。</p>
+<div class="tw"><table>
+<thead><tr><th>キーワード</th><th>意味</th></tr></thead>
+<tbody>
+<tr><td><b>経路依存性</b></td><td>いったんある道を選ぶと、その後の選択がその道に縛られ、別の道に移りにくくなること</td></tr>
+<tr><td><b>決定的分岐点</b></td><td>その後の長い道筋を決めてしまう、歴史の重要な分かれ目（戦争、革命、建国など）</td></tr>
+<tr><td><b>制度とコンテクストの相互作用</b></td><td>制度は歴史的・社会的な文脈の中で働き、文脈もまた制度によって形づくられる</td></tr>
+</tbody></table></div>
+<div class="memo"><span class="who">メモ：キーボードの配列</span>パソコンのキーボードの文字の並び（QWERTY配列）は、もっと打ちやすい配列が考えられても変わらない。最初に広まった配列にみんなが慣れ、機械もそれに合わせて作られてきたから。最初の選択が後まで残るのが経路依存性です（よく使われる例で、補足です）。</div>
+<div class="bk"><span class="who">ピアソン、スコチポル「現代政治学における歴史的制度論」（仮の題）</span><span class="yr">2002</span><span class="ti">P. Pierson and T. Skocpol, "Historical Institutionalism in Contemporary Political Science," in Katznelson and Milner eds., <i>Political Science: The State of the Discipline</i></span><p>制度の変化を、歴史の中での文脈の変化に注目して捉えます。そのためには、現実の多様さと複雑さを踏まえ、さまざまな理論と方法を目的に合わせて使い分ける必要がある。そうすることで、見えにくかった問題や「意図しなかった効果」も含めた長い時間軸での因果推論に取り組み、現実にとって意味のある<b>大きな問い（big question）</b>に答えられる、と論じました。</p></div>
+<div class="point"><p>歴史的制度論は、制度の歴史的な形成過程とその後への影響を重んじ、経路依存性、決定的分岐点、制度と文脈の相互作用に注目する。</p></div>
+</section>
+
+<section id="s14" data-t="比較歴史分析">
+<h2><span class="sn">14</span>比較歴史分析</h2>
+<p><b>比較歴史分析</b>は、歴史的な文脈と、出来事が起きた<span class="mk">時間的な順序やタイミング</span>を重んじながら、一定の範囲の事例について因果関係を推論し、体系的に比べるアプローチです。</p>
+<div class="memo"><span class="who">メモ：順番が違えば結果も違う</span>たとえば「先に議会ができて、後から多くの人が選挙権を得た国」と「多くの人が選挙権を得た後で議会が整った国」では、同じ制度がそろっても、政治の姿が違ってくるかもしれない。比較歴史分析は、こうした「順序とタイミング」を因果の説明に組み込みます（たとえは補足）。</div>
+<p>「一定の範囲の事例について」という点も大事です。すべての国に当てはまる法則をいきなり目指すのでなく、<span class="mk">説明が通用する範囲（射程）を限ったうえで</span>比べます。</p>
+<div class="point"><p>比較歴史分析は、歴史的な文脈と出来事の順序・タイミングを重んじ、射程を限った範囲で因果関係を推論し、体系的に比べる。</p></div>
+</section>
+
+<section id="s15" data-t="地域研究と比較政治学の接合">
+<h2><span class="sn">15</span>地域研究と比較政治学の接合</h2>
+<p>ここまでの流れから、レジュメは2つの結論を示しています。</p>
+<div class="case"><b>① 方法を選ぶ理由を説明できるようにする</b><p>どの方法にも強みと弱みがある。だから研究者は常に、<b>なぜ自分がその方法をとるのか</b>を説明し、ほかの方法からの批判にも答えられるよう準備しておく必要がある。</p></div>
+<div class="case"><b>② 地域研究と比較政治学をつなぐ</b><p>地域固有の文脈を<b>内側から理解</b>したうえで因果関係を明らかにし、そこから<b>ほかの事例にも当てはまる一般性</b>を探る。</p></div>
+<div class="bk"><span class="who">レイティン「比較政治学：下位分野の現状」（仮の題）</span><span class="yr">2002</span><span class="ti">D. D. Laitin, "Comparative Politics: The State of the Subdiscipline," in Katznelson and Milner eds., <i>Political Science: The State of the Discipline</i></span><p>比較政治学という分野の到達点と課題を整理した論文として、レジュメが挙げています（内容の詳細は授業での説明を確認してください）。</p></div>
+<div class="tw"><table>
+<thead><tr><th></th><th>地域研究</th><th>比較政治学（一般理論志向）</th><th>接合の姿</th></tr></thead>
+<tbody>
+<tr><td>重んじること</td><td>地域の独自性・文脈</td><td>多くの国に当てはまる法則</td><td>文脈の理解を踏まえた一般性</td></tr>
+<tr><td>主な方法</td><td>事例研究、言語・フィールドワーク</td><td>統計分析、数理モデル</td><td>方法を目的に合わせて使い分ける</td></tr>
+<tr><td>弱みとされる点</td><td>一般化しにくい</td><td>現実の本質から離れやすい</td><td>方法を選ぶ理由を説明する責任</td></tr>
+</tbody></table></div>
+<p class="xref">第1回の地域研究の「内在的視点」 → <a href="../ch01/#kihon">第1回のパート1</a></p>
+<div class="point"><p>地域固有の文脈を内側から理解して因果関係を明らかにし、そこからほかの事例にも通じる一般性を探る――地域研究と比較政治学の接合がめざされている。</p></div>
+</section>
+
+<section id="s16" data-t="事例で考える：選択バイアス">
+<h2><span class="sn">16</span>事例で考える：選択バイアス（KKV の例）</h2>
+<p>レジュメの最後のページには、KKV が挙げた例が載っています。要点を整理します。</p>
+<div class="kq"><span class="lab">設定</span><p>ある研究者が、カトリックの伝統があり、戦後ソ連の支配を受けた東欧の3か国に関心をもつ。1970〜80年代、3か国の政治には大きな違いがあった。</p></div>
+<div class="tw"><table>
+<thead><tr><th>国</th><th>1970〜80年代に起きたこと</th></tr></thead>
+<tbody>
+<tr><td>ポーランド</td><td>広く組織された反政府運動「<b>連帯</b>」が生まれた</td></tr>
+<tr><td>チェコスロヴァキア</td><td>規模はずっと小さいが活動的な知識人の集団「<b>憲章77</b>」が組織された</td></tr>
+<tr><td>ハンガリー</td><td>大きな国民運動は起きなかった</td></tr>
+</tbody></table></div>
+<p>研究の課題は「<span class="mk">この違いはなぜ生まれたのか</span>」。つまり従属変数は「反政府運動の大きさ」です。ところが、1か国の研究に1年かかるため、調べられるのは2か国だけ。研究者はたまたまチェコ語とポーランド語ができたので、チェコスロヴァキアとポーランドを選びました。</p>
+<div class="gwrap">
+  <div class="gsw" role="group" aria-label="事例の選び方の切り替え"><button type="button" data-g="sel" data-s="0" aria-pressed="true">① 3か国すべて</button><button type="button" data-g="sel" data-s="1" aria-pressed="false">② 言語で2か国を選ぶ</button><button type="button" data-g="sel" data-s="2" aria-pressed="false">③ ハンガリーを補助調査</button></div>
+  <svg id="gSel" viewBox="0 0 640 300" role="img" aria-label="選択バイアスの模式図"></svg>
+  <p class="gcap" id="gSel-cap"></p>
+</div>
+<h3>何が問題なのか</h3>
+<p>選んだ2か国は、どちらも何らかの運動が起きた国です。運動が起きなかったハンガリーが抜け落ちたことで、<span class="mk">見ている従属変数の幅（ばらつき）が狭くなっています</span>。選び方のルール（言語の知識）が、たまたま従属変数と結びついてしまったのです。これが<b>選択バイアス</b>です。</p>
+<p>KKV によれば、従属変数の幅が体系的に狭められていると、原因の効果（因果効果）は<b>実際より小さく見積もられ</b>がちになります。「運動がまったく起きなかった国」を見ないままでは、何が運動の有無を分けたのかを十分に捉えられないからです。</p>
+<h3>どうすればよいか</h3>
+<ol class="steps">
+<li>自分の研究に選択バイアスがあることを<b>認める</b>。</li>
+<li>バイアスがどちらの方向に働いているかを<b>判断する</b>。</li>
+<li>少なくとも部分的にバイアスを<b>補正し</b>、結論に一定の<b>限定をつける</b>。</li>
+<li>ハンガリーについても、少なくとも<b>補助的な調査</b>をする。そうすれば、バイアスが自分の仮説に有利に働いているのか、不利に働いているのかが分かる。</li>
+</ol>
+<div class="memo"><span class="who">メモ：第1回とのつながり</span>第1回では、地域研究には現地の言語が欠かせないことを学んだ。この例は、その言語の知識が「どの国を調べるか」を左右し、思わぬ偏りを生むことを示しています。地域研究の強みと、比較政治学の方法への意識をどう両立させるか――今回のテーマそのものです。</div>
+<div class="point"><p>事例の選び方が従属変数と結びつくと、結果の幅が狭まり、因果効果が過小評価されやすい（選択バイアス）。偏りを認めて方向を見極め、結論を限定し、補助的な調査で確かめることが大切。</p></div>
+</section>
+
+<section id="s17" data-t="確認問題">
+<h2><span class="sn">17</span>確認問題</h2>
+<div class="q"><div class="qq"><span class="qn">Q1</span><span>「経路依存性」と「決定的分岐点」を、それぞれ説明しなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>経路依存性は、いったん選んだ道によってその後の選択が縛られ、別の道に移りにくくなること。決定的分岐点は、その後の長い道筋を決めてしまう歴史上の重要な分かれ目のこと。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q2</span><span>KKV の東欧の例で、研究者の事例の選び方にはどんな問題があったか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>言語の知識という選択ルールで、運動が起きたポーランドとチェコスロヴァキアだけを選び、運動が起きなかったハンガリーを外した。選び方が従属変数（運動の大きさ）と相関しているため、従属変数の幅が狭まり、因果効果が過小評価されるおそれがある（選択バイアス）。</div></div>
+</section>
+</div>
+
+<!-- ===================== パート4 ===================== -->
+<div class="part" id="matome" data-title="まとめと確認" data-desc="第2回の流れを年表とキーワードで振り返り、確認問題で理解を確かめます。参考になる教科書も紹介します。">
+
+<section id="s18" data-t="年表で振り返る">
+<h2><span class="sn">18</span>年表で振り返る</h2>
+<p class="legend"><span><i></i>アメリカ・世界の動き</span><span><i class="jp"></i>日本の動き</span></p>
+<ul class="tl">
+<li><span class="y">戦後</span>シカゴ学派による行動科学革命（メリアム、イーストン）<span class="tag">行動論</span></li>
+<li><span class="y">1953</span><i>American Political Science Review</i> で比較の可能性が問われる<span class="tag">初期の模索</span></li>
+<li><span class="y">1955</span>マクリディス <i>The Study of Comparative Government</i><span class="tag">初期の模索</span></li>
+<li><span class="y">1960年代末</span>ニュー・レフトによる行動論批判<span class="tag">批判</span></li>
+<li><span class="y">1969</span>イーストン「脱行動論革命」演説（アメリカ政治学会）<span class="tag">批判</span></li>
+<li><span class="y">1975</span>パイ編 <i>Political Science and Area Studies: Rivals or Partners?</i><span class="tag">緊張と歩み寄り</span></li>
+<li><span class="y">1994</span>キング、コヘイン、ヴァーバ <i>Designing Social Inquiry</i>（KKV）<span class="tag">一般理論志向</span></li>
+<li><span class="y">2000</span>「ペレストロイカ」運動（アメリカ政治学会）<span class="tag">批判</span></li>
+<li><span class="y">2002</span>ピアソン、スコチポル「歴史的制度論」、レイティン「比較政治学」<span class="tag">方法論の模索</span></li>
+<li class="jp"><span class="y">2004</span>KKV の邦訳『社会科学のリサーチ・デザイン』</li>
+<li><span class="y">2005</span>ジョージ、ベネット <i>Case Studies and Theory Development</i><span class="tag">事例研究の再評価</span></li>
+<li class="jp"><span class="y">2006</span>仙石学「中東欧研究と比較政治学」（『スラヴ研究』）<span class="tag">批判</span></li>
+<li class="jp"><span class="y">2013</span>ジョージ、ベネットの邦訳『社会科学のケース・スタディ』</li>
+</ul>
+<p class="legend">年は原著の刊行年です（邦訳は別に記しました）。</p>
+</section>
+
+<section id="s19" data-t="キーワード一覧">
+<h2><span class="sn">19</span>キーワード一覧</h2>
+<div class="tw"><table>
+<thead><tr><th>キーワード</th><th>ひとことで</th><th>節</th></tr></thead>
+<tbody>
+<tr><td><b>比較政治学</b></td><td>国・地域を比べて、政治の因果関係について一般理論を目指す学問</td><td class="c"><a href="#s1" data-goto="s1">1</a></td></tr>
+<tr><td><b>独立変数・従属変数</b></td><td>原因として想定するもの・結果として想定するもの</td><td class="c"><a href="#s2" data-goto="s2">2</a></td></tr>
+<tr><td><b>操作化</b></td><td>抽象的な概念を、測れる具体的な指標として定義すること</td><td class="c"><a href="#s2" data-goto="s2">2</a></td></tr>
+<tr><td><b>因果効果・因果メカニズム</b></td><td>影響の有無と大きさ・影響が伝わる道筋</td><td class="c"><a href="#s3" data-goto="s3">3</a></td></tr>
+<tr><td><b>因果推論の根本問題</b></td><td>同じ対象で、要因がある場合とない場合を同時に観察できないこと</td><td class="c"><a href="#s3" data-goto="s3">3</a></td></tr>
+<tr><td><b>合理的選択・ゲーム理論</b></td><td>費用と便益から行動を説明する・複数のアクターの読み合いから結果を説明する</td><td class="c"><a href="#s4" data-goto="s4">4</a></td></tr>
+<tr><td><b>行動論的政治学</b></td><td>実際の行動を、数量化や立証を重んじて科学的に分析する政治学</td><td class="c"><a href="#s6" data-goto="s6">6</a></td></tr>
+<tr><td><b>政治体系論</b></td><td>政治を入力と出力のシステムとして捉えるイーストンの理論</td><td class="c"><a href="#s6" data-goto="s6">6</a></td></tr>
+<tr><td><b>脱行動論革命</b></td><td>社会にとって意味のある問題に向き合うよう求めたイーストンの呼びかけ（1969）</td><td class="c"><a href="#s8" data-goto="s8">8</a></td></tr>
+<tr><td><b>ペレストロイカ運動</b></td><td>方法の画一化（方法論的全体主義）への警鐘（2000）</td><td class="c"><a href="#s9" data-goto="s9">9</a></td></tr>
+<tr><td><b>交絡要因</b></td><td>原因と結果の両方に影響し、因果関係を見誤らせる別の要因</td><td class="c"><a href="#s10" data-goto="s10">10</a></td></tr>
+<tr><td><b>歴史的制度論</b></td><td>制度の歴史的な形成とその後への影響を重んじる新制度論の一つ</td><td class="c"><a href="#s13" data-goto="s13">13</a></td></tr>
+<tr><td><b>経路依存性・決定的分岐点</b></td><td>最初の選択がその後を縛ること・その後を決める歴史の分かれ目</td><td class="c"><a href="#s13" data-goto="s13">13</a></td></tr>
+<tr><td><b>比較歴史分析</b></td><td>文脈と順序・タイミングを重んじ、射程を限って比べる方法</td><td class="c"><a href="#s14" data-goto="s14">14</a></td></tr>
+<tr><td><b>選択バイアス</b></td><td>事例の選び方が結果と結びつき、推論が偏ること</td><td class="c"><a href="#s16" data-goto="s16">16</a></td></tr>
+</tbody></table></div>
+</section>
+
+<section id="s20" data-t="確認問題">
+<h2><span class="sn">20</span>確認問題</h2>
+<p>答えを考えてから「解答を見る」を押してください。</p>
+<div class="q"><div class="qq"><span class="qn">Q1</span><span>統計分析、数理モデル、事例研究の3つの方法について、それぞれの特徴と、批判されうる点を説明しなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>統計分析は多数の事例のデータから因果効果を推論するが、選択バイアス、変数の操作化の難しさ、交絡要因、相関と因果の区別などの問題がある。数理モデルはアクターの合理的な行動から結果を演繹するが、その前提を異なる社会に当てはめることの妥当性が問われる。事例研究は文脈と因果メカニズムを深く描けるが、少数事例から一般化することには推論上の限界があると指摘される。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q2</span><span>戦後アメリカの比較政治学で、地域研究との関係はどのように変わってきたか。時期を追って説明しなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>1950年代は行動論に基づき一般的な比較が模索されたが、文脈の中でしか理解できないのではという問いもあった。1960年代末〜70年代は行動論が批判され、パイが地域研究と一般理論派の緊張と歩み寄りの可能性を論じた。1990年代は統計分析・数理モデルが発展し、KKVが少数事例研究の限界を指摘して緊張が再燃した。2000年のペレストロイカ運動以降は方法の画一化が批判され、事例研究が再評価され、歴史的制度論や比較歴史分析などで両者の接合がめざされている。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q3</span><span>歴史的制度論は、なぜ地域研究と比較政治学をつなぐ方法になりうるのか。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>制度の歴史的な形成過程や、制度と歴史的・社会的な文脈の相互作用を重んじるため、地域固有の文脈を踏まえることができる。同時に、経路依存性や決定的分岐点といった概念を使って因果関係を説明し、さまざまな方法を使い分けながら、ほかの事例にも通じる大きな問いに答えようとするから。</div></div>
+<div class="q"><div class="qq"><span class="qn">Q4</span><span>選択バイアスとは何か。KKV の東欧の例を使って説明し、研究者がとるべき対応を述べなさい。</span></div><button class="show" type="button">解答を見る</button><div class="ans" hidden>事例の選び方が従属変数と結びつき、推論が偏ること。東欧の例では、言語の知識で運動の起きたポーランドとチェコスロヴァキアだけを選んだため、運動の起きなかったハンガリーが抜け、従属変数の幅が狭まって因果効果が過小評価されるおそれがある。対応としては、バイアスを認め、その方向を判断し、部分的に補正して結論を限定し、ハンガリーについても補助的に調査する。</div></div>
+</section>
+
+<section id="s21" data-t="考えてみよう">
+<h2><span class="sn">21</span>考えてみよう</h2>
+<p>正解が一つに決まらない問いです。授業の後で、自分の考えをまとめてみましょう。</p>
+<div class="memo hint"><span class="who">問い1</span>「経済が発展すると民主化する」という仮説を、あなたならどの方法（統計分析、数理モデル、事例研究）で確かめるか。その方法を選ぶ理由と、ほかの方法から受けそうな批判を考えてみよう。</div>
+<div class="memo hint"><span class="who">問い2</span>「民主主義」を、文化も歴史も違う国々で同じ物差しで測ることはできるだろうか。できるとしたら何を指標にし、できないとしたら何が問題になるだろうか。</div>
+<div class="memo hint"><span class="who">問い3</span>あなたが関心をもつ国の政治について、「決定的分岐点」になったと思う出来事を一つ挙げ、それがその後の政治をどう方向づけたか考えてみよう。</div>
+</section>
+
+<section id="s22" data-t="参考：比較政治学の教科書">
+<h2><span class="sn">22</span>参考：比較政治学の教科書</h2>
+<p>レジュメで紹介されている教科書です。</p>
+<ul class="dots">
+<li>久保慶一・末近浩太・高橋百合子『比較政治学の考え方』有斐閣（レジュメの表記は［第3版］2020年）</li>
+<li>建林正彦・曽我謙悟・待鳥聡史『比較政治制度論』有斐閣（レジュメの表記は［第10版］2020年）</li>
+<li>粕谷祐子『比較政治学』ミネルヴァ書房、2014年</li>
+</ul>
+<p class="src">このページは、第2回レジュメ「比較政治学とは」の内容を、初学者向けに言いかえて解説したものです。「補足」と書いた箇所は、レジュメにない一般的な説明です。仮の題は、邦訳の題がレジュメにない文献に付けた訳題です。文献の年は原著の刊行年です。講義の録音は、この版の作成には使っていません。</p>
+</section>
+</div>
+
+<div class="pager" id="pager"></div>
+</main>
+
+<script>
+/* 解説と答案例を最初から表示するときは true に変える */
+const ANSWERS_DEFAULT_ON=false;
+/* 第2回：イーストンの政治体系／振り子の模式図／選択バイアスの模式図 */
+(function(){
+  const C={ink:"#22252b",sub:"#5e6470",blue:"#1e5b4f",red:"#b0601c",grn:"#3d6a94",line:"#c9cfd8",mk:"#cce6b8",pale:"#eef3ee"};
+  const t=(x,y,s,o={})=>`<text x="${x}" y="${y}" font-size="${o.fs||14}" text-anchor="${o.a||"start"}" ${o.w?'font-weight="700"':""} style="fill:${o.c||C.ink}">${s}</text>`;
+  const mk=k=>`<marker id="a2-${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="${C[k]}"/></marker>`;
+  const defs=`<defs>${["ink","blue","red","grn","sub"].map(mk).join("")}</defs>`;
+  const ar=(d,k,w=2,dash="")=>`<path d="${d}" stroke="${C[k]}" stroke-width="${w}" fill="none" ${dash?`stroke-dasharray="${dash}"`:""} marker-end="url(#a2-${k})"/>`;
+
+  /* イーストンの政治体系 */
+  const sys=document.getElementById("gSys");
+  if(sys){
+    let s=defs;
+    s+=`<rect x="10" y="10" width="620" height="240" fill="${C.pale}" stroke="${C.line}" stroke-dasharray="6 4"/>`+t(24,32,"環境（社会・経済・国際関係）",{fs:12,c:C.sub});
+    s+=`<rect x="235" y="78" width="170" height="80" fill="#fff" stroke="${C.ink}" stroke-width="2"/>`+t(320,112,"政治体系",{a:"middle",fs:16,w:1})+t(320,134,"（決定を行う仕組み）",{a:"middle",fs:12,c:C.sub});
+    s+=t(40,96,"入力",{fs:15,w:1,c:C.blue})+t(40,116,"要求",{fs:13})+t(40,136,"支持",{fs:13});
+    s+=ar("M90,118 L230,118","blue",3);
+    s+=t(510,96,"出力",{fs:15,w:1,c:C.red})+t(510,116,"決定",{fs:13})+t(510,136,"政策",{fs:13});
+    s+=ar("M410,118 L500,118","red",3);
+    s+=ar("M545,150 C545,215 70,215 70,152","grn",2,"6 4");
+    s+=t(320,238,"フィードバック（結果が新たな要求・支持になる）",{a:"middle",fs:13,c:C.grn,w:1});
+    sys.innerHTML=s;
+  }
+
+  /* 振り子：一般理論 ⇔ 地域の文脈 */
+  const pend=document.getElementById("gPend"),pcap=document.getElementById("gPend-cap");
+  const P=[
+    {x:110,y:95,lab:"行動論・比較の模索",cap:"1950〜60年代：行動論に基づき、国を超えて比べられる一般的な比較政治学がめざされた（一般理論の側へ）。"},
+    {x:250,y:200,lab:"脱行動論・パイの問題提起",cap:"1960年代末〜70年代：行動論の価値中立性が批判され、地域研究との緊張と歩み寄りが論じられた（文脈の側へ振れる）。"},
+    {x:400,y:70,lab:"KKV・統計と数理モデル",cap:"1990年代：統計分析・数理モデルが発展し、KKVが少数事例研究の限界を指摘した（再び一般理論・方法の統一の側へ）。2000年にはペレストロイカ運動が画一化に警鐘を鳴らした。"},
+    {x:545,y:150,lab:"事例研究の再評価・接合",cap:"2000年代〜：事例研究が再評価され、歴史的制度論や比較歴史分析によって、文脈の理解と一般性の両立（接合）がめざされている。"}];
+  function drawPend(k){
+    let s=defs;
+    s+=`<rect x="60" y="40" width="560" height="60" fill="${C.pale}"/>`+t(614,60,"一般理論・方法の統一",{a:"end",fs:13,w:1,c:C.blue});
+    s+=`<rect x="60" y="190" width="560" height="60" fill="#f6efe6"/>`+t(614,244,"地域固有の文脈",{a:"end",fs:13,w:1,c:C.red});
+    s+=`<line x1="60" y1="145" x2="620" y2="145" stroke="${C.line}" stroke-dasharray="4 4"/>`+t(70,140,"接合",{fs:12,c:C.sub});
+    s+=`<line x1="60" y1="270" x2="620" y2="270" stroke="${C.ink}"/>`;
+    ["1950","1970","1990","2000","2010"].forEach((y,i)=>{const x=[110,250,400,470,545][i];s+=`<line x1="${x}" y1="266" x2="${x}" y2="274" stroke="${C.ink}"/>`+t(x,290,y,{a:"middle",fs:12,c:C.sub});});
+    let d="M"+P[0].x+","+P[0].y;for(let i=1;i<=k;i++){const a=P[i-1],b=P[i];d+=` C${(a.x+b.x)/2},${a.y} ${(a.x+b.x)/2},${b.y} ${b.x},${b.y}`;}
+    s+=`<path d="${d}" stroke="${C.ink}" stroke-width="2" fill="none"/>`;
+    P.forEach((p,i)=>{const on=i===k,vis=i<=k;
+      s+=`<circle cx="${p.x}" cy="${p.y}" r="${on?9:6}" fill="${vis?(on?C.ink:"#fff"):"#fff"}" stroke="${vis?C.ink:C.line}" stroke-width="2"/>`;
+      if(vis)s+=t(i===0?p.x-12:p.x,p.y+(p.y<145?-14:24),p.lab,{a:i===3?"end":(i===0?"start":"middle"),fs:12,w:on,c:on?C.ink:C.sub});});
+    pend.innerHTML=s;pcap.textContent=P[k].cap;
+  }
+
+  /* 選択バイアス */
+  const sel=document.getElementById("gSel"),scap=document.getElementById("gSel-cap");
+  const N=[{n:"ポーランド",m:"「連帯」",v:180},{n:"チェコスロヴァキア",m:"「憲章77」",v:95},{n:"ハンガリー",m:"大きな運動なし",v:6}];
+  const SC=[
+    "① 3か国すべてを見ると、反政府運動の大きさ（従属変数）は「大きい」から「ほぼない」まで広く散らばっている。",
+    "② 言語の知識で2か国を選ぶと、運動の起きなかったハンガリーが抜け落ち、見ている従属変数の幅が狭くなる。選び方が結果と結びついている（選択バイアス）。",
+    "③ ハンガリーを補助的に調べると、狭められていた幅の下側が見え、バイアスが仮説に有利・不利のどちらに働いていたかを確かめられる。"];
+  function drawSel(k){
+    let s=defs;const base=250,x0=[150,300,450];
+    s+=`<line x1="80" y1="${base}" x2="600" y2="${base}" stroke="${C.ink}" stroke-width="1.5"/>`;
+    s+=`<line x1="80" y1="${base}" x2="80" y2="30" stroke="${C.ink}" stroke-width="1.5" marker-end="url(#a2-ink)"/>`;
+    s+=t(90,30,"反政府運動の大きさ（従属変数）",{fs:12,c:C.sub});
+    N.forEach((c,i)=>{const x=x0[i],h=c.v,picked=i<2||k===0,aux=i===2&&k===2;
+      const fill=picked?(i===0?C.blue:C.grn):(aux?"#fff":"#f1f2f4");
+      const st=picked?"none":(aux?C.red:C.line);
+      s+=`<rect x="${x-40}" y="${base-h}" width="80" height="${Math.max(h,3)}" fill="${fill}" stroke="${st}" stroke-width="2" ${aux?'stroke-dasharray="6 4"':""}/>`;
+      s+=t(x,base+20,c.n,{a:"middle",fs:13,w:picked||aux,c:picked||aux?C.ink:C.line});
+      s+=t(x,base-h-8,c.m,{a:"middle",fs:12,c:picked||aux?C.ink:C.line});
+      if(k===1&&i===2)s+=t(x,base-40,"調べない",{a:"middle",fs:13,c:C.sub,w:1});
+      if(aux)s+=t(x,base-40,"補助調査",{a:"middle",fs:13,c:C.red,w:1});
+    });
+    const top=base-180,bot=k===1?base-95:base-6;
+    s+=`<line x1="560" y1="${top}" x2="560" y2="${bot}" stroke="${k===1?C.red:C.ink}" stroke-width="2.5" marker-start="url(#a2-${k===1?"red":"ink"})" marker-end="url(#a2-${k===1?"red":"ink"})"/>`;
+    s+=t(570,(top+bot)/2-6,k===1?"見ている":"結果の",{fs:12,c:k===1?C.red:C.ink,w:1})+t(570,(top+bot)/2+10,k===1?"幅が狭い":"幅",{fs:12,c:k===1?C.red:C.ink,w:1});
+    s+=t(80,288,"棒の高さは説明のための目安（架空の値）",{fs:11,c:C.sub});
+    sel.innerHTML=s;scap.textContent=SC[k];
+  }
+
+  const R={pend:drawPend,sel:drawSel};
+  document.querySelectorAll(".gsw button").forEach(b=>b.addEventListener("click",()=>{
+    const g=b.dataset.g;document.querySelectorAll('.gsw button[data-g="'+g+'"]').forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));
+    if(R[g])R[g](+b.dataset.s);}));
+  if(pend)drawPend(3);
+  if(sel)drawSel(0);
+})();
+
+/* hikakuseiji 共通（lily から複製）：タブ・目次・前後ナビ・確認問題・内部タブ・解説スイッチ・相互リンク
+   各章のHTMLは、.part（data-title, data-desc）と section（data-t, h2 .sn）を並べるだけでよい。
+   パートが表示されたときに "partshown" イベント（detail.id）を発行する。 */
+(function(){
+  const parts=[...document.querySelectorAll(".part")];
+  const tabs=document.getElementById("tabs");
+  const drawerList=document.getElementById("drawerList");
+  const body=document.body, menuBtn=document.getElementById("menuBtn"), drawer=document.getElementById("drawer");
+  let current=0;
+
+  parts.forEach((p,i)=>{
+    p.setAttribute("role","tabpanel");
+    const secs=[...p.querySelectorAll("section")];
+    const head=document.createElement("div");head.className="part-head";
+    head.innerHTML='<div class="ph-main"><div class="pn">Part '+(i+1)+' / '+parts.length+'</div><h1>'+p.dataset.title+'</h1><p>'+p.dataset.desc+'</p></div>';
+    const mini=document.createElement("div");mini.className="toc-mini";
+    secs.forEach(s=>{const b=document.createElement("button");b.type="button";b.textContent=s.querySelector(".sn").textContent+". "+s.dataset.t;b.addEventListener("click",()=>s.scrollIntoView({behavior:"smooth",block:"start"}));mini.appendChild(b);});
+    head.querySelector(".ph-main").appendChild(mini);p.prepend(head);
+
+    const t=document.createElement("button");t.type="button";t.className="tab";t.setAttribute("role","tab");t.id="tab-"+p.id;t.setAttribute("aria-controls",p.id);
+    t.innerHTML='<span class="n">'+(i+1)+'</span>'+p.dataset.title;
+    t.addEventListener("click",()=>go(i,true));
+    t.addEventListener("keydown",e=>{if(e.key==="ArrowRight"){const k=(i+1)%parts.length;go(k,true);tabs.children[k].focus();}if(e.key==="ArrowLeft"){const k=(i-1+parts.length)%parts.length;go(k,true);tabs.children[k].focus();}});
+    tabs.appendChild(t);p.setAttribute("aria-labelledby",t.id);
+
+    const h=document.createElement("h4");const hb=document.createElement("button");hb.type="button";hb.innerHTML='<span class="n">'+(i+1)+'</span>'+p.dataset.title;hb.addEventListener("click",()=>{go(i,true);closeMenu();});h.appendChild(hb);drawerList.appendChild(h);
+    const ul=document.createElement("ul");
+    secs.forEach(s=>{const li=document.createElement("li");const b=document.createElement("button");b.type="button";b.textContent=s.querySelector(".sn").textContent+". "+s.dataset.t;b.addEventListener("click",()=>{go(i,false);closeMenu();setTimeout(()=>s.scrollIntoView({block:"start"}),30);});li.appendChild(b);ul.appendChild(li);});
+    drawerList.appendChild(ul);
+  });
+
+  function go(i,top){
+    current=i;
+    parts.forEach((p,k)=>p.classList.toggle("on",k===i));
+    [...tabs.children].forEach((t,k)=>{t.setAttribute("aria-selected",k===i?"true":"false");t.tabIndex=k===i?0:-1;});
+    [...drawerList.querySelectorAll("h4")].forEach((h,k)=>h.classList.toggle("cur",k===i));
+    tabs.children[i].scrollIntoView({block:"nearest",inline:"nearest"});
+    const pg=document.getElementById("pager");pg.innerHTML="";
+    if(i>0){const b=document.createElement("button");b.type="button";b.innerHTML="<small>前のパート</small>← "+parts[i-1].dataset.title;b.addEventListener("click",()=>go(i-1,true));pg.appendChild(b);}
+    if(i<parts.length-1){const b=document.createElement("button");b.type="button";b.className="next";b.innerHTML="<small>次のパート</small>"+parts[i+1].dataset.title+" →";b.addEventListener("click",()=>go(i+1,true));pg.appendChild(b);}
+    try{if(location.hash!=="#"+parts[i].id)history.replaceState(null,"","#"+parts[i].id);}catch(e){}
+    if(top)window.scrollTo(0,0);
+    document.dispatchEvent(new CustomEvent("partshown",{detail:{id:parts[i].id}}));
+  }
+  function openMenu(){body.classList.add("menu-open");drawer.setAttribute("aria-hidden","false");menuBtn.setAttribute("aria-expanded","true");document.getElementById("closeBtn").focus();}
+  function closeMenu(){body.classList.remove("menu-open");drawer.setAttribute("aria-hidden","true");menuBtn.setAttribute("aria-expanded","false");}
+  menuBtn.addEventListener("click",openMenu);
+  document.getElementById("closeBtn").addEventListener("click",()=>{closeMenu();menuBtn.focus();});
+  document.getElementById("scrim").addEventListener("click",closeMenu);
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&body.classList.contains("menu-open")){closeMenu();menuBtn.focus();}});
+  window.addEventListener("hashchange",()=>{const k=parts.findIndex(p=>"#"+p.id===location.hash);if(k>=0&&k!==current)go(k,true);});
+
+  /* 内部タブ（.itabs の button[aria-controls]） */
+  document.querySelectorAll(".itabs").forEach(box=>{
+    const bs=[...box.querySelectorAll("button")];
+    const sel=i=>bs.forEach((b,k)=>{b.setAttribute("aria-selected",k===i?"true":"false");b.tabIndex=k===i?0:-1;document.getElementById(b.getAttribute("aria-controls")).hidden=k!==i;});
+    bs.forEach((b,i)=>{b.addEventListener("click",()=>sel(i));b.addEventListener("keydown",e=>{if(e.key==="ArrowRight"){const k=(i+1)%bs.length;sel(k);bs[k].focus();}if(e.key==="ArrowLeft"){const k=(i-1+bs.length)%bs.length;sel(k);bs[k].focus();}});});
+    sel(0);
+  });
+
+  /* 確認問題・ヒント（.q の .show で .ans を開閉） */
+  document.querySelectorAll(".q").forEach(q=>{const b=q.querySelector(".show"),a=q.querySelector(".ans");if(!b||!a)return;const lab=b.textContent;b.setAttribute("aria-expanded","false");b.addEventListener("click",()=>{a.hidden=!a.hidden;b.textContent=a.hidden?lab:"閉じる";b.setAttribute("aria-expanded",a.hidden?"false":"true");});});
+
+  /* 解説と答案例の表示スイッチ */
+  const tg=document.getElementById("ansToggle"),note=document.getElementById("ansNote");
+  if(tg){
+    const setAns=on=>{document.body.classList.toggle("ans-off",!on);tg.checked=on;if(note)note.textContent=on?"オン：解説と答案例を表示しています。":"オフ：問題とヒントだけを表示しています。";};
+    tg.addEventListener("change",()=>setAns(tg.checked));
+    setAns(typeof ANSWERS_DEFAULT_ON!=="undefined"&&ANSWERS_DEFAULT_ON);
+  }
+
+  /* 解説の開閉 */
+  document.querySelectorAll(".solbtn").forEach(b=>b.addEventListener("click",()=>{const bd=b.nextElementSibling;bd.hidden=!bd.hidden;b.setAttribute("aria-expanded",bd.hidden?"false":"true");b.textContent=bd.hidden?"解説を読む（手順を追って説明）":"解説を閉じる";document.dispatchEvent(new CustomEvent("solopen"));}));
+
+  /* 相互リンク */
+  document.addEventListener("click",e=>{const a=e.target.closest("[data-goto]");if(!a)return;e.preventDefault();const t=document.getElementById(a.dataset.goto);if(!t)return;const k=parts.findIndex(p=>p.contains(t));if(k<0)return;go(k,false);setTimeout(()=>t.scrollIntoView({block:"start"}),30);});
+
+  const start=parts.findIndex(p=>"#"+p.id===location.hash);
+  go(start>=0?start:0,false);
+})();
+
+</script>
+</body>
+</html>
