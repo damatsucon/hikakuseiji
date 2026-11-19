@@ -49,14 +49,20 @@ footer{max-width:880px;margin:0 auto;padding:0 16px 40px;font-size:.8rem;color:v
 .nlm a{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;font-weight:700;padding:8px 18px;border:2px solid var(--blue)}
 .nlm a:hover{background:#fff;color:var(--blue)}
 .nlm p{margin:0;font-size:.9rem;color:var(--sub);line-height:1.6;flex:1 1 16rem}
+.hero{display:grid;grid-template-columns:1fr 190px;gap:8px 24px;align-items:end}
+.hero figure{margin:0;align-self:start}
+.hero img{width:190px;height:auto;display:block;mix-blend-mode:multiply}
+@media (max-width:640px){.hero{grid-template-columns:1fr 110px}.hero img{width:110px}}
 </style>
 </head>
 <body>
 <header class="bar"><div class="bar-in"><small>比較政治学　地域研究・比較政治基礎</small><b>解説プリント　目次</b></div></header>
 <main>
+<div class="hero"><div>
 <h1>回を選んでください</h1>
 <p class="lead">各回のページは、講義のレジュメの内容を、政治学を学びはじめた人向けに言いかえてまとめた<span class="mk">解説</span>です。人物や文献の背景、用語の意味を補いながら、講義の流れを追えるようにしています。</p>
 <div class="memo"><b>使い方</b>授業の前後に解説を読み、各パートの最後の確認問題で理解を確かめましょう。上部のタブでパートを切り替え、左上のメニューから全体の目次を開けます。</div>
+</div><figure><img src="img/sensei.webp" alt="講義担当の先生のイラスト" width="420" height="574"></figure></div>
 
 <div class="nlm"><a href="https://notebooklm.google.com/notebook/bc440ad9-7f8f-493b-9296-72222789f859" target="_blank" rel="noopener">NotebookLM で質問する →</a><p>講義の資料をもとに、AI に質問できるノートブック（Google NotebookLM）が別のタブで開きます。Google アカウントでのログインが必要です。</p></div>
 
