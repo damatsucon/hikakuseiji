@@ -8,18 +8,19 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
 <style>
+/* hikakuseiji の配色：lily（青・朱・黄）と区別するため、深緑・琥珀・若草に変更 */
 /* 設計: 方眼紙に書いた講義プリント。黒インクの本文、青ペンの強調、朱ペンの書き込み、黄色の蛍光ペン。上部に固定ヘッダーとパートのタブ、左からメニューが出る */
 :root{
   --paper:#fdfdfb;
-  --grid:#e9eef3;
+  --grid:#e7ede8;
   --ink:#22252b;
   --sub:#5e6470;
   --line:#c9cfd8;
-  --blue:#1f4e9c;
-  --red:#c8361f;
-  --teal:#0b6b5d;
-  --marker:#fff1a6;
-  --note:#fffbe3;
+  --blue:#1e5b4f;
+  --red:#b0601c;
+  --teal:#3d6a94;
+  --marker:#cce6b8;
+  --note:#f5f8ee;
   --font-body:"BIZ UDPGothic","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
   --font-hand:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
   --font-math:"Times New Roman",Times,serif;
@@ -119,11 +120,11 @@ ul.dots li,ol.steps li{margin:3px 0}
 .brow .lab{font-size:.88rem;line-height:1.35}
 .track{position:relative;height:34px}
 .seg{position:absolute;top:0;bottom:0;display:flex;align-items:center;justify-content:center;font-size:.8rem;border:1.5px solid var(--ink);white-space:nowrap;overflow:hidden;font-variant-numeric:tabular-nums}
-.seg.y{background:#dfe8f6}
+.seg.y{background:#d9ebe2}
 .seg.c{background:#f3f4f6}.seg.i{background:#e7eaee}.seg.g{background:#d9dde3}
-.seg.gap-p{background:repeating-linear-gradient(45deg,#d6efe9,#d6efe9 5px,#fff 5px,#fff 10px);color:var(--teal);font-weight:700;border-color:var(--teal);border-style:dashed}
-.seg.gap-m{background:repeating-linear-gradient(45deg,#f8ddd7,#f8ddd7 5px,#fff 5px,#fff 10px);color:var(--red);font-weight:700;border-color:var(--red);border-style:dashed}
-.seg.b{background:#e7eaee}.seg.ri{background:#fde9a8}.seg.nx{background:#d6efe9}
+.seg.gap-p{background:repeating-linear-gradient(45deg,#dde6f0,#dde6f0 5px,#fff 5px,#fff 10px);color:var(--teal);font-weight:700;border-color:var(--teal);border-style:dashed}
+.seg.gap-m{background:repeating-linear-gradient(45deg,#f5e5d3,#f5e5d3 5px,#fff 5px,#fff 10px);color:var(--red);font-weight:700;border-color:var(--red);border-style:dashed}
+.seg.b{background:#e7eaee}.seg.ri{background:#e3efd6}.seg.nx{background:#dde6f0}
 .seg-lab{position:absolute;top:0;bottom:0;display:flex;align-items:center;font-size:.85rem;white-space:nowrap}
 .bars .cap{font-size:.88rem;color:var(--sub);margin:6px 0 0}
 
@@ -228,9 +229,9 @@ svg .m{font-family:var(--font-math);font-style:italic}
 /* 課題パート */
 .dl{margin:10px 0 16px}
 .dlbtn{display:inline-flex;align-items:center;gap:12px;border:2px solid var(--ink);background:#fff;color:var(--ink);text-decoration:none;padding:8px 16px 8px 10px;border-radius:6px;line-height:1.4;box-shadow:3px 3px 0 var(--ink)}
-.dlbtn:hover{background:#eef2fa}
+.dlbtn:hover{background:#eaf3ee}
 .dlbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
-.dlbtn .dlico{width:34px;height:40px;background:#2b579a;color:#fff;font-weight:700;display:grid;place-items:center;border-radius:3px;font-family:var(--font-math);font-size:1.2rem}
+.dlbtn .dlico{width:34px;height:40px;background:#1e5b4f;color:#fff;font-weight:700;display:grid;place-items:center;border-radius:3px;font-family:var(--font-math);font-size:1.2rem}
 .dlbtn b{display:block}
 .dlbtn small{display:block;color:var(--sub);font-size:.8rem}
 
@@ -276,7 +277,7 @@ h3.stp .st{display:inline-block;font-size:.8rem;background:var(--blue);color:#ff
 .num{background:#fff;border:1px solid var(--line);padding:10px 16px;margin:14px 0;max-width:44rem}
 .num .h{font-size:.82rem;color:var(--sub);display:block}
 #kadai .brow{grid-template-columns:5.5em 1fr}
-#kadai .seg.g{background:#fde9a8}
+#kadai .seg.g{background:#e3efd6}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 
 /* 数式（分数・Σ/Π/∫ の上下添字）— 全章共通 */
@@ -599,7 +600,7 @@ h3.stp .st{display:inline-block;font-size:.8rem;background:var(--blue);color:#ff
 const ANSWERS_DEFAULT_ON=false;
 /* 第1回：発展の見方の図（近代化論／ハンチントン／アンチテーゼ） */
 (function(){
-  const C={ink:"#22252b",sub:"#5e6470",blue:"#1f4e9c",red:"#c8361f",grn:"#0b6b5d",line:"#c9cfd8",mk:"#fff1a6"};
+  const C={ink:"#22252b",sub:"#5e6470",blue:"#1e5b4f",red:"#b0601c",grn:"#3d6a94",line:"#c9cfd8",mk:"#cce6b8"};
   const svg=document.getElementById("gDev"),cap=document.getElementById("gDev-cap");
   if(!svg)return;
   const t=(x,y,s,o={})=>`<text x="${x}" y="${y}" font-size="${o.fs||14}" text-anchor="${o.a||"start"}" ${o.w?'font-weight="700"':""} style="fill:${o.c||C.ink}">${s}</text>`;
